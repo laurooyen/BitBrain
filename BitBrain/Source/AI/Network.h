@@ -6,6 +6,8 @@
 
 #include "../Util/Math/Matrix.h"
 
+#include "ActivationFunctions.h"
+
 namespace BB
 {
 	/// Class representing a neural network.
@@ -14,7 +16,7 @@ namespace BB
 	{
 	public:
 
-		Network(const std::vector<int>& layers, double learningRate);
+		Network(const std::vector<int>& layers, const std::vector<AF>& af, double learningRate);
 
 		Matrix Compute(const std::vector<double>& input);
 		void Learn(const std::vector<double>& output);
@@ -33,5 +35,7 @@ namespace BB
 
 		std::vector<Matrix> dW; ///< Derivatives of weights
 		std::vector<Matrix> dB; ///< Derivatives of biases
+
+		std::vector<AF> mAF;
 	};
 }

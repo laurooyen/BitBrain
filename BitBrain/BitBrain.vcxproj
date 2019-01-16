@@ -123,12 +123,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\AI\ActivationFunctions.cpp" />
     <ClCompile Include="Source\AI\Network.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MNIST\MNIST.cpp" />
     <ClCompile Include="Source\Util\Math\Matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\AI\ActivationFunctions.h" />
     <ClInclude Include="Source\AI\Network.h" />
     <ClInclude Include="Source\MNIST\MNIST.h" />
     <ClInclude Include="Source\Util\CoreTypes.h" />

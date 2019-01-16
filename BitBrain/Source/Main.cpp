@@ -49,7 +49,12 @@ int main()
 	MNIST testData("Resource/MNIST/TestingImages.bin", "Resource/MNIST/TestingLabels.bin");
 
 	// Init network.
-	Network network({ 784, 15, 10 }, 0.75);
+	Network network
+	(
+		{ 784, 15, 10 },				// Layer count
+		{ AF::Sigmoid, AF::Sigmoid },	// Activation functions
+		0.75							// Learning rate
+	);
 
 	// Train network.
 	std::cout << "Training network:\n" << std::endl;;
