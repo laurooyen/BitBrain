@@ -3,42 +3,14 @@
 #include <cmath>
 #include <time.h>
 #include <iostream>
+#include <algorithm>
 
 #include "MNIST/MNIST.h"
 #include "AI/Network.h"
 
 using namespace BB;
 
-// --------------------------------
-// GLOBAL VARIABLES
-// --------------------------------
-
 int GEpochs = 1;
-
-// --------------------------------
-// FUNCTIONS
-// --------------------------------
-
-int GetClassification(const std::vector<double>& v)
-{
-	double max = 0.0f;
-	double index = 0;
-
-	for (int i = 0; i < v.size(); i++)
-	{
-		if (v[i] > max)
-		{
-			max = v[i];
-			index = i;
-		}
-	}
-
-	return index;
-}
-
-// --------------------------------
-// MAIN FUNCTION
-// --------------------------------
 
 int main()
 {
@@ -82,7 +54,7 @@ int main()
 		if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
 
 		Matrix m = network.Compute(testData.GetImage(i));
-		int result = GetClassification(m[0]);
+		int result = std::max_element(m[0].begin(), m[0].end()) - m[0].begin();
 
 		if (result == testData.GetLabel(i)) correct++;
 	}
