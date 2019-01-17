@@ -82,7 +82,7 @@ int main()
 		if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
 
 		Matrix m = network.Compute(testData.GetImage(i));
-		int result = GetClassification(m.elements[0]);
+		int result = GetClassification(m[0]);
 
 		if (result == testData.GetLabel(i)) correct++;
 	}

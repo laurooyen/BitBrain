@@ -73,6 +73,53 @@ namespace BB
 		return r;
 	}
 
+	// Operators
+
+	std::vector<double>& Matrix::operator[](unsigned int row)
+	{
+		return elements[row];
+	}
+
+	double& Matrix::operator() (unsigned int row, unsigned int col)
+	{
+		return elements[row][col];
+	}
+
+	const double& Matrix::operator() (unsigned int row, unsigned int col) const
+	{
+		return elements[row][col];
+	}
+
+	Matrix Matrix::operator- () const
+	{
+		Matrix r(rows, cols);
+
+		for (int row = 0; row < rows; row++)
+		{
+			for (int col = 0; col < cols; col++)
+			{
+				r.elements[row][col] = -elements[row][col];
+			}
+		}
+
+		return r;
+	}
+
+	Matrix operator* (float lhs, const Matrix& rhs)
+	{
+		Matrix r(rhs.rows, rhs.cols);
+
+		for (int row = 0; row < rhs.rows; row++)
+		{
+			for (int col = 0; col < rhs.cols; col++)
+			{
+				r.elements[row][col] = lhs * rhs.elements[row][col];
+			}
+		}
+
+		return r;
+	}
+
 	// Arithmetic operators
 
 	Matrix Matrix::operator+ (const Matrix& rhs) const
@@ -188,5 +235,17 @@ namespace BB
 	Matrix& Matrix::operator/= (double rhs)
 	{
 		return *this = *this / rhs;
+	}
+
+	// Relational operators
+
+	bool Matrix::operator== (const Matrix& rhs) const
+	{
+		return elements == rhs.elements;
+	}
+
+	bool Matrix::operator!= (const Matrix& rhs) const
+	{
+		return elements != rhs.elements;
 	}
 }

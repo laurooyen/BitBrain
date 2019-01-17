@@ -10,7 +10,7 @@ namespace BB
 
 	class Matrix
 	{
-	public:
+	private:
 
 		int rows; ///< Number of rows.
 		int cols; ///< Number of columns.
@@ -37,6 +37,16 @@ namespace BB
 		/// Calculates the entrywise product aka Hadamard product.
 		Matrix MultiplyEntries(const Matrix& m) const;
 
+		// Operators
+
+		std::vector<double>& operator[] (unsigned int row);
+
+		double& operator() (unsigned int row, unsigned int col);
+		const double& operator() (unsigned int row, unsigned int col) const;
+
+		Matrix operator- () const;
+		friend Matrix operator* (float lhs, const Matrix& rhs);
+
 		// Arithmetic operators
 
 		Matrix operator+ (const Matrix& rhs) const;
@@ -54,5 +64,10 @@ namespace BB
 
 		Matrix& operator*= (double rhs);
 		Matrix& operator/= (double rhs);
+
+		// Relational operators
+
+		bool operator== (const Matrix& rhs) const;
+		bool operator!= (const Matrix& rhs) const;
 	};
 }
