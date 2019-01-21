@@ -25,9 +25,9 @@ namespace BB
 
 	Network::Network(const std::vector<int>& layers, double learningRate)
 	{
-		srand(time(NULL));
+		srand((unsigned int)time(NULL));
 
-		mLayerCount = layers.size();
+		mLayerCount = (int)layers.size();
 		mLearningRate = learningRate;
 
 		N = std::vector<Matrix>(mLayerCount);

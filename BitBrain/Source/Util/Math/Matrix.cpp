@@ -10,7 +10,7 @@ namespace BB
 	// Constructors
 
 	Matrix::Matrix()
-		: rows(0.0f), cols(0.0f) {}
+		: rows(0), cols(0) {}
 
 	Matrix::Matrix(int rows, int cols)
 		: rows(rows), cols(cols)
@@ -19,7 +19,7 @@ namespace BB
 	}
 
 	Matrix::Matrix(const std::vector<std::vector<double>>& elements)
-		: rows(elements.size()), cols(elements[0].size())
+		: rows((int)elements.size()), cols((int)elements[0].size())
 	{
 		this->elements = elements;
 	}
@@ -166,7 +166,7 @@ namespace BB
 		{
 			for (int col = 0; col < rhs.cols; col++)
 			{
-				float sum = 0.0f;
+				double sum = 0.0f;
 
 				for (int i = 0; i < cols; i++)
 				{

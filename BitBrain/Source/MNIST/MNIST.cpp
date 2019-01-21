@@ -66,11 +66,11 @@ namespace BB
 		mImages.reserve(mSize);
 
 		uint8* temp = new uint8[mRows * mCols];
-		for (int i = 0; i < mSize; ++i)
+		for (unsigned int i = 0; i < mSize; ++i)
 		{
 			file.read(reinterpret_cast<char*>(temp), mRows * mCols);
 			std::vector<double> image(mRows * mCols);
-			for (int j = 0; j < mRows * mCols; ++j)
+			for (unsigned int j = 0; j < mRows * mCols; ++j)
 			{
 				image[j] = temp[j] / 255.0f;
 			}
@@ -103,7 +103,7 @@ namespace BB
 
 		mLabels.reserve(mSize);
 
-		for (int i = 0; i < mSize; i++)
+		for (unsigned int i = 0; i < mSize; i++)
 		{
 			int8 label;
 			file.read(reinterpret_cast<char*>(&label), sizeof(label));

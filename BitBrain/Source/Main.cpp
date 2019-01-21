@@ -24,7 +24,7 @@ int main()
 	Network network({ 784, 15, 10 }, 0.75);
 
 	// Train network.
-	std::cout << "Training network:\n" << std::endl;;
+	std::cout << "Training network:\n" << std::endl;
 
 	for (int i = 0; i < GEpochs; i++)
 	{
@@ -54,7 +54,7 @@ int main()
 		if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
 
 		Matrix m = network.Compute(testData.GetImage(i));
-		int result = std::max_element(m[0].begin(), m[0].end()) - m[0].begin();
+		int result = (int)(std::max_element(m[0].begin(), m[0].end()) - m[0].begin());
 
 		if (result == testData.GetLabel(i)) correct++;
 	}
