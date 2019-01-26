@@ -7,13 +7,16 @@
 
 #include "MNIST/MNIST.h"
 #include "AI/Network.h"
+#include "AI/Image.h"
+#include "AI/SymbolExtractor.h"
 
 using namespace BB;
 
-int GEpochs = 1;
-
-int main()
+void NetworkTest()
 {
+	// Global settings.
+	int epochs = 1;
+
 	// Load Data.
 	std::cout << "Loading data.\n" << std::endl;
 
@@ -26,7 +29,7 @@ int main()
 	// Train network.
 	std::cout << "Training network:\n" << std::endl;
 
-	for (int i = 0; i < GEpochs; i++)
+	for (int i = 0; i < epochs; i++)
 	{
 		std::cout << "  Epoch #" << i << "\n";
 
@@ -64,6 +67,23 @@ int main()
 	// Print accuracy.
 	double accuracy = ((double)correct / (double)testData.Size()) * 100.0f;
 	std::cout << "Accuracy: " << accuracy << "%\n" << std::endl;
+}
+
+void BoundingBoxTest()
+{
+	Image image("Resource/BoundingBox/Digits.png", 1);
+
+	SymbolExtractor extractor;
+
+	extractor.MarkIslands(&image);
+
+	std::cout << extractor.GetDebugInfo().str() << std::endl;
+}
+
+int main()
+{
+	NetworkTest();
+	//BoundingBoxTest();
 
 	// Wait to close program.
 	system("PAUSE");
