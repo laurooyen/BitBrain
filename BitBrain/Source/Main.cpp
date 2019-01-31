@@ -13,7 +13,7 @@ using namespace BB;
 // GLOBAL VARIABLES
 // --------------------------------
 
-int GEpochs = 1;
+int GEpochs = 5;
 
 // --------------------------------
 // FUNCTIONS
@@ -51,9 +51,9 @@ int main()
 	// Init network.
 	Network network
 	(
-		{ 784, 15, 10 },				// Layer count
-		{ AF::Sigmoid, AF::Sigmoid },	// Activation functions
-		0.75							// Learning rate
+		{ 784, 70, 70, 10 },				// Layer count
+		{ AF::ReLU, AF::ReLU, AF::Softmax },	// Activation functions
+		0.0025							// Learning rate
 	);
 
 	// Train network.
@@ -73,30 +73,33 @@ int main()
 			network.Compute(trainData.GetImage(j));
 			network.Learn(out);
 		}
+
+		std::cout << std::endl;
+
+		// Test network.
+		std::cout << "Testing network:\n" << std::endl;
+
+		int correct = 0;
+
+		for (int i = 0; i < testData.Size(); i++)
+		{
+			if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
+
+			Matrix m = network.Compute(testData.GetImage(i));
+			int result = GetClassification(m.elements[0]);
+
+			if (result == testData.GetLabel(i)) correct++;
+		}
+
+		std::cout << std::endl;
+
+		// Print accuracy.
+		double accuracy = ((double)correct / (double)testData.Size()) * 100.0f;
+		std::cout << "Accuracy: " << accuracy << "%\n" << std::endl;
+
 	}
 
-	std::cout << std::endl;
 
-	// Test network.
-	std::cout << "Testing network:\n" << std::endl;
-
-	int correct = 0;
-
-	for (int i = 0; i < testData.Size(); i++)
-	{
-		if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
-
-		Matrix m = network.Compute(testData.GetImage(i));
-		int result = GetClassification(m.elements[0]);
-
-		if (result == testData.GetLabel(i)) correct++;
-	}
-
-	std::cout << std::endl;
-
-	// Print accuracy.
-	double accuracy = ((double)correct / (double)testData.Size()) * 100.0f;
-	std::cout << "Accuracy: " << accuracy << "%\n" << std::endl;
 
 	// Wait to close program.
 	system("PAUSE");

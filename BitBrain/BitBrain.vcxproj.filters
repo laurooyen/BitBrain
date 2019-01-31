@@ -51,4 +51,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\MNIST\TrainingLabels.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\MNIST\TestingImages.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\MNIST\TestingLabels.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\MNIST\TrainingImages.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

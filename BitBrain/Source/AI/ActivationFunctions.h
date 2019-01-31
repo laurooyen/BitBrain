@@ -16,7 +16,8 @@ namespace BB
 	{
 		Sigmoid,
 		Softmax, // TODO(Jonathan): Not implemented yet.
-		ReLU
+		ReLU,
+		LeakyReLU
 	};
 
 	static Matrix Sigmoid(const Matrix& m);
@@ -27,6 +28,9 @@ namespace BB
 
 	static Matrix ReLU(const Matrix& m);
 	static Matrix DeriveReLU(const Matrix& m);
+
+	static Matrix LeakyReLU(const Matrix& m);
+	static Matrix DeriveLeakyReLU(const Matrix& m);
 
 	// DETAILS
 

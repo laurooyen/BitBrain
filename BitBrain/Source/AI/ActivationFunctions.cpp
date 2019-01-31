@@ -26,22 +26,45 @@ namespace BB
 
 	static Matrix DeriveSigmoid(const Matrix& m)
 	{
-		return m.Foreach([](double x) {
-			double s = 1.0f / (1.0f + exp(-x));
-			return s * (1.0f - s);
-		});
+		Matrix s = Sigmoid(m);
+		Matrix r(m.cols, m.cols);
+
+		for (int diag = 0; diag < r.cols; diag++)
+		{
+			r.elements[diag][diag] = s.elements[0][diag] * (1 - s.elements[0][diag]);
+		}
+
+		return r;
 	}
 
 	Matrix Softmax(const Matrix& m)
 	{
-		// TODO(Jonathan): Implement this.
-		return Matrix();
+		Matrix r = m;
+
+		//make inputs smaller so exponential doesn't explode out of bounds
+		for (int i = 0; i < r.cols; i++)
+		{
+			r.elements[0][i] -= m.LargestElem();
+		}
+
+		r = r.Foreach(exp);
+		r = r / r.TotalSum();
+
+		return r;
 	}
 
 	Matrix DeriveSoftmax(const Matrix& m)
 	{
-		// TODO(Jonathan): Implement this.
-		return Matrix();
+		Matrix s = Softmax(m);
+		Matrix r(m.cols, m.cols);
+		for (int row = 0; row < r.rows; row++)
+		{
+			for (int col = 0; col < r.cols; col++)
+			{
+				r.elements[row][col] = s.elements[0][row] * ((row == col ? 1.0 : 0.0) - s.elements[0][col]);
+			}
+		}
+		return r;
 	}
 
 	Matrix ReLU(const Matrix& m)
@@ -53,10 +76,36 @@ namespace BB
 
 	Matrix DeriveReLU(const Matrix& m)
 	{
+		Matrix r(m.cols, m.cols);
+
+		for (int diag = 0; diag < r.cols; diag++)
+		{
+			r.elements[diag][diag] = (m.elements[0][diag] > 0) ? 1.0 : 0.0;
+		}
+
+		return r;
+	}
+
+	Matrix LeakyReLU(const Matrix& m)
+	{
 		return m.Foreach([](double x) {
-			return (x > 0) ? 1.0 : 0.0;
+			return (x > 0) ? x : 0.1*x;
 		});
 	}
+
+	Matrix DeriveLeakyReLU(const Matrix& m)
+	{
+		Matrix r(m.cols, m.cols);
+
+		for (int diag = 0; diag < r.cols; diag++)
+		{
+			r.elements[diag][diag] = (m.elements[0][diag] > 0) ? 1.0 : 0.1;
+		}
+
+		return r;
+
+	}
+
 
 	// INTERNAL DETAILS
 
@@ -66,13 +115,15 @@ namespace BB
 	{
 		Sigmoid,
 		Softmax,
-		ReLU
+		ReLU,
+		LeakyReLU
 	};
 
 	const ActivationFunction GDeriveAF[] =
 	{
 		DeriveSigmoid,
 		DeriveSoftmax,
-		DeriveReLU
+		DeriveReLU,
+		DeriveLeakyReLU
 	};
 }

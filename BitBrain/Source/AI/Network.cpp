@@ -43,7 +43,6 @@ namespace BB
 	Matrix Network::Compute(const std::vector<double>& input)
 	{
 		N[0] = Matrix({ input });
-
 		for (int i = 1; i < mLayerCount; i++)
 		{
 			N[i] = GCalculateAF[(int)mAF[i - 1]](N[i - 1] * W[i - 1] + B[i - 1]);
@@ -58,11 +57,11 @@ namespace BB
 
 		// Calculate derivatives for biases.
 
-		dB[mLayerCount - 2] = (N[mLayerCount - 1] - Y).MultiplyEntries(GDeriveAF[(int)mAF[mLayerCount - 2]](N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]));
+		dB[mLayerCount - 2] = (N[mLayerCount - 1] - Y) * (GDeriveAF[(int)mAF[mLayerCount - 2]](N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]));
 
 		for (int i = mLayerCount - 3; i >= 0; i--)
 		{
-			dB[i] = (dB[i + 1] * W[i + 1].Transposed()).MultiplyEntries(GDeriveAF[(int)mAF[i]](N[i] * W[i] + B[i]));
+			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)mAF[i]](N[i] * W[i] + B[i]));
 		}
 
 		// Calculate derivatives for weights.
