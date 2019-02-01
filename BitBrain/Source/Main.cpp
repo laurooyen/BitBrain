@@ -10,10 +10,24 @@
 
 using namespace BB;
 
+void ProgressBar(const char* text, int progress, int total, int barWidth = 50)
+{
+	float percentage = (float)progress / (float)total;
+
+	std::cout << text << " [";
+
+	for (int i = 0; i < barWidth; i++)
+	{
+		std::cout << ((i > percentage * barWidth) ? "-" : "#");
+	}
+
+	std::cout << "] " << (percentage * 100 + 1) << " %\r" << std::flush;
+}
+
 int main()
 {
 	// Global settings.
-	int epochs = 1;
+	int epochs = 5;
 
 	// Load Data.
 	std::cout << "Loading data.\n" << std::endl;
@@ -32,15 +46,17 @@ int main()
 	);
 
 	// Train network.
-	std::cout << "Training network:\n" << std::endl;
+	std::cout << "Training network.\n" << std::endl;
 
 	for (int i = 0; i < epochs; i++)
 	{
-		std::cout << "  Epoch #" << i << "\n";
+		std::cout << "  Epoch #" << (i + 1) << "\n\n";
+
+		// Train network
 
 		for (int j = 0; j < trainData.Size(); j++)
 		{
-			if (j % 6000 == 0) std::cout << "    Sample #" << j << "\n";
+			if (j % (trainData.Size() / 100) == 0) ProgressBar("    Training", j, trainData.Size());
 
 			std::vector<double> out(10, 0.0f);
 			out[trainData.GetLabel(j)] = 1.0f;
@@ -52,13 +68,12 @@ int main()
 		std::cout << std::endl;
 
 		// Test network.
-		std::cout << "Testing network:\n" << std::endl;
 
 		int correct = 0;
 
 		for (int i = 0; i < testData.Size(); i++)
 		{
-			if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
+			if (i % (testData.Size() / 100) == 0) ProgressBar("    Testing ", i, testData.Size());
 
 			Matrix m = network.Compute(testData.GetImage(i));
 			int result = (int)(std::max_element(m[0].begin(), m[0].end()) - m[0].begin());
@@ -69,8 +84,11 @@ int main()
 		std::cout << std::endl;
 
 		// Print accuracy.
+
 		double accuracy = ((double)correct / (double)testData.Size()) * 100.0f;
-		std::cout << "Accuracy: " << accuracy << "%\n" << std::endl;
+		std::cout << "    Accuracy " << accuracy << " %\n";
+		
+		std::cout << std::endl;
 	}
 
 	// Wait to close program.
