@@ -29,9 +29,9 @@ namespace BB
 		Matrix s = Sigmoid(m);
 		Matrix r(m.cols, m.cols);
 
-		for (int diagonal = 0; diagonal < r.cols; diagonal++)
+		for (int diag = 0; diag < r.cols; diag++)
 		{
-			r.elements[diagonal][diagonal] = s.elements[0][diagonal] * (1 - s.elements[0][diagonal]);
+			r.elements[diag][diag] = s.elements[0][diag] * (1 - s.elements[0][diag]);
 		}
 
 		return r;
@@ -41,13 +41,12 @@ namespace BB
 	{
 		Matrix r = m;
 
-		// Make inputs smaller so exponential doesn't explode out of bounds
+		//make inputs smaller so exponential doesn't explode out of bounds
 		for (int i = 0; i < r.cols; i++)
 		{
-			r.elements[0][i] -= m.LargestElement();
+			r.elements[0][i] = exp(r.elements[0][i] - m.LargestElem());
 		}
 
-		r = r.Foreach(exp);
 		r = r / r.TotalSum();
 
 		return r;
@@ -57,7 +56,6 @@ namespace BB
 	{
 		Matrix s = Softmax(m);
 		Matrix r(m.cols, m.cols);
-
 		for (int row = 0; row < r.rows; row++)
 		{
 			for (int col = 0; col < r.cols; col++)
@@ -65,7 +63,6 @@ namespace BB
 				r.elements[row][col] = s.elements[0][row] * ((row == col ? 1.0 : 0.0) - s.elements[0][col]);
 			}
 		}
-
 		return r;
 	}
 
@@ -105,7 +102,9 @@ namespace BB
 		}
 
 		return r;
+
 	}
+
 
 	// INTERNAL DETAILS
 

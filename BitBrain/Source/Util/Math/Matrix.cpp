@@ -10,7 +10,7 @@ namespace BB
 	// Constructors
 
 	Matrix::Matrix()
-		: rows(0), cols(0) {}
+		: rows(0.0f), cols(0.0f) {}
 
 	Matrix::Matrix(int rows, int cols)
 		: rows(rows), cols(cols)
@@ -19,7 +19,7 @@ namespace BB
 	}
 
 	Matrix::Matrix(const std::vector<std::vector<double>>& elements)
-		: rows((int)elements.size()), cols((int)elements[0].size())
+		: rows(elements.size()), cols(elements[0].size())
 	{
 		this->elements = elements;
 	}
@@ -76,7 +76,6 @@ namespace BB
 	double Matrix::TotalSum() const
 	{
 		double r = 0.0;
-
 		for (int row = 0; row < rows; row++)
 		{
 			for (int col = 0; col < cols; col++)
@@ -84,14 +83,12 @@ namespace BB
 				r += elements[row][col];
 			}
 		}
-
 		return r;
 	}
 
-	double Matrix::LargestElement() const
+	double Matrix::LargestElem() const
 	{
 		double r = 0.0;
-
 		for (int row = 0; row < rows; row++)
 		{
 			for (int col = 0; col < cols; col++)
@@ -99,54 +96,6 @@ namespace BB
 				if (elements[row][col] > r) r = elements[row][col];
 			}
 		}
-
-		return r;
-	}
-
-	// Operators
-
-	std::vector<double>& Matrix::operator[](unsigned int row)
-	{
-		return elements[row];
-	}
-
-	double& Matrix::operator() (unsigned int row, unsigned int col)
-	{
-		return elements[row][col];
-	}
-
-	const double& Matrix::operator() (unsigned int row, unsigned int col) const
-	{
-		return elements[row][col];
-	}
-
-	Matrix Matrix::operator- () const
-	{
-		Matrix r(rows, cols);
-
-		for (int row = 0; row < rows; row++)
-		{
-			for (int col = 0; col < cols; col++)
-			{
-				r.elements[row][col] = -elements[row][col];
-			}
-		}
-
-		return r;
-	}
-
-	Matrix operator* (float lhs, const Matrix& rhs)
-	{
-		Matrix r(rhs.rows, rhs.cols);
-
-		for (int row = 0; row < rhs.rows; row++)
-		{
-			for (int col = 0; col < rhs.cols; col++)
-			{
-				r.elements[row][col] = lhs * rhs.elements[row][col];
-			}
-		}
-
 		return r;
 	}
 
@@ -196,7 +145,7 @@ namespace BB
 		{
 			for (int col = 0; col < rhs.cols; col++)
 			{
-				double sum = 0.0f;
+				float sum = 0.0f;
 
 				for (int i = 0; i < cols; i++)
 				{
@@ -265,17 +214,5 @@ namespace BB
 	Matrix& Matrix::operator/= (double rhs)
 	{
 		return *this = *this / rhs;
-	}
-
-	// Relational operators
-
-	bool Matrix::operator== (const Matrix& rhs) const
-	{
-		return elements == rhs.elements;
-	}
-
-	bool Matrix::operator!= (const Matrix& rhs) const
-	{
-		return elements != rhs.elements;
 	}
 }

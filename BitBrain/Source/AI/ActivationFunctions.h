@@ -7,7 +7,6 @@
 namespace BB
 {
 	// IMPORTANT
-	//
 	// Follow these steps to add new Activation Functions.
 	//   - Add the new item to the AF enum class below.
 	//   - Create the definitions and implementations for the AF and its derivative.
@@ -16,7 +15,7 @@ namespace BB
 	enum class AF
 	{
 		Sigmoid,
-		Softmax,
+		Softmax, // TODO(Jonathan): Not implemented yet.
 		ReLU,
 		LeakyReLU
 	};

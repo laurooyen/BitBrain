@@ -12,12 +12,14 @@ namespace BB
 		return (double)(rand() % 10000 + 1) / 10000 - 0.5;
 	}
 
-	Network::Network(const std::vector<int>& layers, const std::vector<AF>& af, double learningRate)
+	Network::Network(const std::vector<int>& layers, const std::vector<AF>& af, int costf, double learningRate, double lambda)
 	{
-		srand((unsigned int)time(NULL));
+		srand(time(NULL));
 
-		mLayerCount = (int)layers.size();
+		mLayerCount = layers.size();
 		mLearningRate = learningRate;
+		mLambda = lambda;
+		mCostf = costf;
 
 		mAF = af;
 
@@ -55,9 +57,25 @@ namespace BB
 	{
 		Matrix Y({ output });
 
-		// Calculate derivatives for biases.
+		Matrix dCdO;
+		switch (mCostf)
+		{
+			case 0:		//Euclidean distance cost derivative
+			default:
+				dCdO = (N[mLayerCount - 1] - Y);
+				break;
 
-		dB[mLayerCount - 2] = (N[mLayerCount - 1] - Y) * (GDeriveAF[(int)mAF[mLayerCount - 2]](N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]));
+			case 1:		//Cross-Entropy cost derivative
+				dCdO = Y * -1;
+				for (int i = 0; i < dCdO.cols; i++)
+				{
+					dCdO.elements[0][i] /= N[mLayerCount - 1].elements[0][i];
+				}
+				break;
+		}
+
+		// Calculate derivatives for biases.
+		dB[mLayerCount - 2] = dCdO * (GDeriveAF[(int)mAF[mLayerCount - 2]](N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]));
 
 		for (int i = mLayerCount - 3; i >= 0; i--)
 		{
@@ -68,7 +86,7 @@ namespace BB
 
 		for (int i = 0; i < mLayerCount - 1; i++)
 		{
-			dW[i] = N[i].Transposed() * dB[i];
+			dW[i] = N[i].Transposed() * dB[i] + W[i] * mLambda; // + W * lambda = L2 regularization
 		}
 
 		// Change the weights and biases.

@@ -16,7 +16,7 @@ namespace BB
 	{
 	public:
 
-		Network(const std::vector<int>& layers, const std::vector<AF>& af, double learningRate);
+		Network(const std::vector<int>& layers, const std::vector<AF>& af, int costf, double learningRate, double lambda);
 
 		Matrix Compute(const std::vector<double>& input);
 		void Learn(const std::vector<double>& output);
@@ -24,7 +24,9 @@ namespace BB
 	private:
 
 		int mLayerCount;
+		int mCostf;
 		double mLearningRate;
+		double mLambda;
 
 		std::vector<Matrix> N; ///< Neurons
 		std::vector<Matrix> W; ///< Weights
