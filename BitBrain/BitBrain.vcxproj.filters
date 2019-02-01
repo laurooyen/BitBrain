@@ -27,6 +27,9 @@
     <ClCompile Include="Source\AI\Network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\AI\ActivationFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\MNIST\MNIST.h">
@@ -44,5 +47,22 @@
     <ClInclude Include="Source\AI\Network.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\AI\ActivationFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\MNIST\TrainingLabels.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\MNIST\TestingImages.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\MNIST\TestingLabels.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resource\MNIST\TrainingImages.bin">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

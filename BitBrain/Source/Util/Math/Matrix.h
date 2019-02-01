@@ -10,7 +10,7 @@ namespace BB
 
 	class Matrix
 	{
-	private:
+	public:
 
 		int rows; ///< Number of rows.
 		int cols; ///< Number of columns.
@@ -36,6 +36,12 @@ namespace BB
 
 		/// Calculates the entrywise product aka Hadamard product.
 		Matrix MultiplyEntries(const Matrix& m) const;
+
+		/// Calculates the total sum of all matrix elements.
+		double TotalSum() const;
+
+		/// Returns the largest element from the matrix.
+		double LargestElement() const;
 
 		// Operators
 

@@ -21,7 +21,12 @@ int main()
 	MNIST testData("Resource/MNIST/TestingImages.bin", "Resource/MNIST/TestingLabels.bin");
 
 	// Init network.
-	Network network({ 784, 15, 10 }, 0.75);
+	Network network
+	(
+		{ 784, 15, 10 },				// Layer count
+		{ AF::Sigmoid, AF::Sigmoid },	// Activation functions
+		0.75							// Learning rate
+	);
 
 	// Train network.
 	std::cout << "Training network:\n" << std::endl;
@@ -40,30 +45,30 @@ int main()
 			network.Compute(trainData.GetImage(j));
 			network.Learn(out);
 		}
+
+		std::cout << std::endl;
+
+		// Test network.
+		std::cout << "Testing network:\n" << std::endl;
+
+		int correct = 0;
+
+		for (int i = 0; i < testData.Size(); i++)
+		{
+			if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
+			
+			Matrix m = network.Compute(testData.GetImage(i));
+			int result = (int)(std::max_element(m[0].begin(), m[0].end()) - m[0].begin());
+
+			if (result == testData.GetLabel(i)) correct++;
+		}
+
+		std::cout << std::endl;
+
+		// Print accuracy.
+		double accuracy = ((double)correct / (double)testData.Size()) * 100.0f;
+		std::cout << "Accuracy: " << accuracy << "%\n" << std::endl;
 	}
-
-	std::cout << std::endl;
-
-	// Test network.
-	std::cout << "Testing network:\n" << std::endl;
-
-	int correct = 0;
-
-	for (int i = 0; i < testData.Size(); i++)
-	{
-		if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
-
-		Matrix m = network.Compute(testData.GetImage(i));
-		int result = (int)(std::max_element(m[0].begin(), m[0].end()) - m[0].begin());
-
-		if (result == testData.GetLabel(i)) correct++;
-	}
-
-	std::cout << std::endl;
-
-	// Print accuracy.
-	double accuracy = ((double)correct / (double)testData.Size()) * 100.0f;
-	std::cout << "Accuracy: " << accuracy << "%\n" << std::endl;
 
 	// Wait to close program.
 	system("PAUSE");

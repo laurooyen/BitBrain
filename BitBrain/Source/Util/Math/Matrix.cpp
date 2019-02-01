@@ -73,6 +73,36 @@ namespace BB
 		return r;
 	}
 
+	double Matrix::TotalSum() const
+	{
+		double r = 0.0;
+
+		for (int row = 0; row < rows; row++)
+		{
+			for (int col = 0; col < cols; col++)
+			{
+				r += elements[row][col];
+			}
+		}
+
+		return r;
+	}
+
+	double Matrix::LargestElement() const
+	{
+		double r = 0.0;
+
+		for (int row = 0; row < rows; row++)
+		{
+			for (int col = 0; col < cols; col++)
+			{
+				if (elements[row][col] > r) r = elements[row][col];
+			}
+		}
+
+		return r;
+	}
+
 	// Operators
 
 	std::vector<double>& Matrix::operator[](unsigned int row)

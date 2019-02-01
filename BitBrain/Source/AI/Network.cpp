@@ -12,23 +12,16 @@ namespace BB
 		return (double)(rand() % 10000 + 1) / 10000 - 0.5;
 	}
 
-	static double Sigmoid(double x)
-	{
-		return 1.0f / (1.0f + exp(-x));
-	}
-
-	static double DeriveSigmoid(double x)
-	{
-		double s = Sigmoid(x);
-		return s * (1.0f - s);
-	}
-
-	Network::Network(const std::vector<int>& layers, double learningRate)
+	Network::Network(const std::vector<int>& layers, const std::vector<AF>& af, double learningRate)
 	{
 		srand((unsigned int)time(NULL));
 
 		mLayerCount = (int)layers.size();
 		mLearningRate = learningRate;
+
+		mAF = af;
+
+		// TODO(Lauro): assert(layers.size() == af.size() + 1);
 
 		N = std::vector<Matrix>(mLayerCount);
 		W = std::vector<Matrix>(mLayerCount - 1);
@@ -50,10 +43,9 @@ namespace BB
 	Matrix Network::Compute(const std::vector<double>& input)
 	{
 		N[0] = Matrix({ input });
-
 		for (int i = 1; i < mLayerCount; i++)
 		{
-			N[i] = (N[i - 1] * W[i - 1] + B[i - 1]).Foreach(Sigmoid);
+			N[i] = GCalculateAF[(int)mAF[i - 1]](N[i - 1] * W[i - 1] + B[i - 1]);
 		}
 
 		return N[mLayerCount - 1];
@@ -65,11 +57,11 @@ namespace BB
 
 		// Calculate derivatives for biases.
 
-		dB[mLayerCount - 2] = (N[mLayerCount - 1] - Y).MultiplyEntries((N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]).Foreach(DeriveSigmoid));
+		dB[mLayerCount - 2] = (N[mLayerCount - 1] - Y) * (GDeriveAF[(int)mAF[mLayerCount - 2]](N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]));
 
 		for (int i = mLayerCount - 3; i >= 0; i--)
 		{
-			dB[i] = (dB[i + 1] * W[i + 1].Transposed()).MultiplyEntries((N[i] * W[i] + B[i]).Foreach(DeriveSigmoid));
+			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)mAF[i]](N[i] * W[i] + B[i]));
 		}
 
 		// Calculate derivatives for weights.
