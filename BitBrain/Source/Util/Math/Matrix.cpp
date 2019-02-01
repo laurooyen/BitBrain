@@ -76,6 +76,7 @@ namespace BB
 	double Matrix::TotalSum() const
 	{
 		double r = 0.0;
+
 		for (int row = 0; row < rows; row++)
 		{
 			for (int col = 0; col < cols; col++)
@@ -83,12 +84,14 @@ namespace BB
 				r += elements[row][col];
 			}
 		}
+
 		return r;
 	}
 
-	double Matrix::LargestElem() const
+	double Matrix::LargestElement() const
 	{
 		double r = 0.0;
+
 		for (int row = 0; row < rows; row++)
 		{
 			for (int col = 0; col < cols; col++)
@@ -96,6 +99,7 @@ namespace BB
 				if (elements[row][col] > r) r = elements[row][col];
 			}
 		}
+
 		return r;
 	}
 

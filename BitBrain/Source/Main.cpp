@@ -13,7 +13,7 @@ using namespace BB;
 // GLOBAL VARIABLES
 // --------------------------------
 
-int GEpochs = 5;
+int GEpochs = 1;
 
 // --------------------------------
 // FUNCTIONS
@@ -51,9 +51,9 @@ int main()
 	// Init network.
 	Network network
 	(
-		{ 784, 70, 70, 10 },				// Layer count
-		{ AF::ReLU, AF::ReLU, AF::Softmax },	// Activation functions
-		0.0025							// Learning rate
+		{ 784, 15, 10 },				// Layer count
+		{ AF::Sigmoid, AF::Sigmoid },	// Activation functions
+		0.75							// Learning rate
 	);
 
 	// Train network.
@@ -98,8 +98,6 @@ int main()
 		std::cout << "Accuracy: " << accuracy << "%\n" << std::endl;
 
 	}
-
-
 
 	// Wait to close program.
 	system("PAUSE");

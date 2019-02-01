@@ -40,8 +40,8 @@ namespace BB
 		/// Calculates the total sum of all matrix elements.
 		double TotalSum() const;
 
-		/// Returns the largest element from the matrix
-		double LargestElem() const;
+		/// Returns the largest element from the matrix.
+		double LargestElement() const;
 
 		// Arithmetic operators
 
