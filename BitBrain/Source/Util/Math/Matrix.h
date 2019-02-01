@@ -40,8 +40,18 @@ namespace BB
 		/// Calculates the total sum of all matrix elements.
 		double TotalSum() const;
 
-		/// Returns the largest element from the matrix
-		double LargestElem() const;
+		/// Returns the largest element from the matrix.
+		double LargestElement() const;
+
+		// Operators
+
+		std::vector<double>& operator[] (unsigned int row);
+
+		double& operator() (unsigned int row, unsigned int col);
+		const double& operator() (unsigned int row, unsigned int col) const;
+
+		Matrix operator- () const;
+		friend Matrix operator* (float lhs, const Matrix& rhs);
 
 		// Arithmetic operators
 
@@ -60,5 +70,10 @@ namespace BB
 
 		Matrix& operator*= (double rhs);
 		Matrix& operator/= (double rhs);
+
+		// Relational operators
+
+		bool operator== (const Matrix& rhs) const;
+		bool operator!= (const Matrix& rhs) const;
 	};
 }

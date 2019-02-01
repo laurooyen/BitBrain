@@ -14,13 +14,12 @@ namespace BB
 
 	Network::Network(const std::vector<int>& layers, const std::vector<AF>& af, int costf, double learningRate, double lambda)
 	{
-		srand(time(NULL));
+		srand((unsigned int)time(NULL));
 
-		mLayerCount = layers.size();
+		mLayerCount = (int)layers.size();
 		mLearningRate = learningRate;
 		mLambda = lambda;
 		mCostf = costf;
-
 		mAF = af;
 
 		// TODO(Lauro): assert(layers.size() == af.size() + 1);
@@ -83,7 +82,6 @@ namespace BB
 		}
 
 		// Calculate derivatives for weights.
-
 		for (int i = 0; i < mLayerCount - 1; i++)
 		{
 			dW[i] = N[i].Transposed() * dB[i] + W[i] * mLambda; // + W * lambda = L2 regularization

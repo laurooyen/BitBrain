@@ -3,6 +3,7 @@
 #include <cmath>
 #include <time.h>
 #include <iostream>
+#include <algorithm>
 
 #include "MNIST/MNIST.h"
 #include "AI/Network.h"
@@ -15,30 +16,6 @@ using namespace BB;
 
 int GEpochs = 20;
 
-// --------------------------------
-// FUNCTIONS
-// --------------------------------
-
-int GetClassification(const std::vector<double>& v)
-{
-	double max = 0.0f;
-	double index = 0;
-
-	for (int i = 0; i < v.size(); i++)
-	{
-		if (v[i] > max)
-		{
-			max = v[i];
-			index = i;
-		}
-	}
-
-	return index;
-}
-
-// --------------------------------
-// MAIN FUNCTION
-// --------------------------------
 
 int main()
 {
@@ -51,7 +28,7 @@ int main()
 	// Init network.
 	Network network
 	(
-		{ 784, 75, 10 },			// Layer count
+		{ 784, 15, 10 },			// Layer count
 		{ AF::ReLU, AF::Softmax },	// Activation functions
 		1,							// Cost function ID (0: euclid. dist., 1: multiclass cross-entropy) (yeah sure its an int, im too lazy. And who cares about readable code, right?)
 		0.01f,						// Learning rate
@@ -59,7 +36,7 @@ int main()
 	);
 
 	// Train network.
-	std::cout << "Training network:\n" << std::endl;;
+	std::cout << "Training network:\n" << std::endl;
 
 	for (int i = 0; i < GEpochs; i++)
 	{
@@ -88,7 +65,7 @@ int main()
 			if (i % 1000 == 0) std::cout << "  Sample #" << i << "\n";
 
 			Matrix m = network.Compute(testData.GetImage(i));
-			int result = GetClassification(m.elements[0]);
+			int result = (int)(std::max_element(m[0].begin(), m[0].end()) - m[0].begin());
 
 			if (result == testData.GetLabel(i)) correct++;
 		}

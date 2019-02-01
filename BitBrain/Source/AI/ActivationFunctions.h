@@ -15,9 +15,9 @@ namespace BB
 	enum class AF
 	{
 		Sigmoid,
-		Softmax, // TODO(Jonathan): Not implemented yet.
+		Softmax,
 		ReLU,
-		LeakyReLU
+		LeakyReLU //Todo(Jonathan) test this (not sure if it works well)
 	};
 
 	static Matrix Sigmoid(const Matrix& m);
