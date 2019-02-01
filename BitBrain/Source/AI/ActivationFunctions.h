@@ -6,18 +6,12 @@
 
 namespace BB
 {
-	// IMPORTANT
-	// Follow these steps to add new Activation Functions.
-	//   - Add the new item to the AF enum class below.
-	//   - Create the definitions and implementations for the AF and its derivative.
-	//   - Add the functions created above to the calculateAF[] and deriveAF[] arrays in the .cpp file.
-
 	enum class AF
 	{
 		Sigmoid,
 		Softmax,
 		ReLU,
-		LeakyReLU //Todo(Jonathan) test this (not sure if it works well)
+		LeakyReLU // TODO(Jonathan): Test this (not sure if it works well).
 	};
 
 	static Matrix Sigmoid(const Matrix& m);
@@ -34,7 +28,7 @@ namespace BB
 
 	// DETAILS
 
-	typedef Matrix(*ActivationFunction)(const Matrix&);
+	typedef Matrix(*ActivationFunction)(const Matrix& m);
 
 	extern const ActivationFunction GCalculateAF[];
 	extern const ActivationFunction GDeriveAF[];

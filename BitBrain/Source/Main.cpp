@@ -10,15 +10,11 @@
 
 using namespace BB;
 
-// --------------------------------
-// GLOBAL VARIABLES
-// --------------------------------
-
-int GEpochs = 20;
-
-
 int main()
 {
+	// Global settings.
+	int epochs = 1;
+
 	// Load Data.
 	std::cout << "Loading data.\n" << std::endl;
 
@@ -30,15 +26,15 @@ int main()
 	(
 		{ 784, 15, 10 },			// Layer count
 		{ AF::ReLU, AF::Softmax },	// Activation functions
-		1,							// Cost function ID (0: euclid. dist., 1: multiclass cross-entropy) (yeah sure its an int, im too lazy. And who cares about readable code, right?)
-		0.01f,						// Learning rate
-		0.0005						// Regularization param
+		CF::CrossEntropy,			// Cost function
+		0.01,						// Learning rate
+		0.0005						// Regularization lambda
 	);
 
 	// Train network.
 	std::cout << "Training network:\n" << std::endl;
 
-	for (int i = 0; i < GEpochs; i++)
+	for (int i = 0; i < epochs; i++)
 	{
 		std::cout << "  Epoch #" << i << "\n";
 
@@ -75,7 +71,6 @@ int main()
 		// Print accuracy.
 		double accuracy = ((double)correct / (double)testData.Size()) * 100.0f;
 		std::cout << "Accuracy: " << accuracy << "%\n" << std::endl;
-
 	}
 
 	// Wait to close program.

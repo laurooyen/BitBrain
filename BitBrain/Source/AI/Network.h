@@ -7,6 +7,7 @@
 #include "../Util/Math/Matrix.h"
 
 #include "ActivationFunctions.h"
+#include "CostFunctions.h"
 
 namespace BB
 {
@@ -16,7 +17,7 @@ namespace BB
 	{
 	public:
 
-		Network(const std::vector<int>& layers, const std::vector<AF>& af, int costf, double learningRate, double lambda);
+		Network(const std::vector<int>& layers, const std::vector<AF>& af, CF cf, double learningRate, double lambda);
 
 		Matrix Compute(const std::vector<double>& input);
 		void Learn(const std::vector<double>& output);
@@ -24,20 +25,17 @@ namespace BB
 	private:
 
 		int mLayerCount;
-		int mCostf;
 		double mLearningRate;
 		double mLambda;
+
+		std::vector<AF> mAF;
+		CF mCF;
 
 		std::vector<Matrix> N; ///< Neurons
 		std::vector<Matrix> W; ///< Weights
 		std::vector<Matrix> B; ///< Biases
 
-		// TODO(Lauro): Consider removing dW and dB to save allocations.
-		// These are temporary variables only used by the learn function.
-
 		std::vector<Matrix> dW; ///< Derivatives of weights
 		std::vector<Matrix> dB; ///< Derivatives of biases
-
-		std::vector<AF> mAF;
 	};
 }

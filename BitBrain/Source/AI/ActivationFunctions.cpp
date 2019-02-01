@@ -15,7 +15,7 @@ namespace BB
 		return (a > b) ? a : b;
 	}
 
-	// Implementations of the Activation Functions
+	// Implementations of the Activation Functions.
 
 	static Matrix Sigmoid(const Matrix& m)
 	{
@@ -90,7 +90,7 @@ namespace BB
 	Matrix LeakyReLU(const Matrix& m)
 	{
 		return m.Foreach([](double x) {
-			return (x > 0) ? x : 0.1*x;
+			return (x > 0) ? x : 0.1 * x;
 		});
 	}
 
@@ -105,7 +105,6 @@ namespace BB
 
 		return r;
 	}
-
 
 	// INTERNAL DETAILS
 
