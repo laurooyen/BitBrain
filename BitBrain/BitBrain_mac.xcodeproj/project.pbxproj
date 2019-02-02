@@ -19,17 +19,19 @@
 		46A5F3752205A4FB00C01D56 /* Rectangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46A5F36A2205A4FB00C01D56 /* Rectangle.cpp */; };
 		46A5F3762205A4FB00C01D56 /* Functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46A5F36D2205A4FB00C01D56 /* Functions.cpp */; };
 		46A5F3772205A4FB00C01D56 /* MNIST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46A5F3712205A4FB00C01D56 /* MNIST.cpp */; };
+		46A5F3802205AC1600C01D56 /* Resource in CopyFiles */ = {isa = PBXBuildFile; fileRef = 46A5F37F2205AC1000C01D56 /* Resource */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		46A5F33D2205A31500C01D56 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				46A5F3802205AC1600C01D56 /* Resource in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -60,6 +62,7 @@
 		46A5F36E2205A4FB00C01D56 /* CoreTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreTypes.h; sourceTree = "<group>"; };
 		46A5F3702205A4FB00C01D56 /* MNIST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNIST.h; sourceTree = "<group>"; };
 		46A5F3712205A4FB00C01D56 /* MNIST.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNIST.cpp; sourceTree = "<group>"; };
+		46A5F37F2205AC1000C01D56 /* Resource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resource; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +79,7 @@
 		46A5F3362205A31500C01D56 = {
 			isa = PBXGroup;
 			children = (
+				46A5F37F2205AC1000C01D56 /* Resource */,
 				46A5F3782205A7CE00C01D56 /* Source */,
 				46A5F3402205A31500C01D56 /* Products */,
 			);
