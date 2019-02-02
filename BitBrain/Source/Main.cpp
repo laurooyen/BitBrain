@@ -35,8 +35,8 @@ void ProgressBar(const char* text, int progress, int total, int barWidth = 50, i
 
 int main()
 {
-	NetworkTest();
-	//HandwritingTest();
+	//NetworkTest();
+	HandwritingTest();
 	//BoundingBoxTest();
 
 	// Wait to close program.
@@ -125,7 +125,14 @@ void HandwritingTest()
 	MNIST trainData("Resource/MNIST/TrainingImages.bin", "Resource/MNIST/TrainingLabels.bin");
 
 	// Init network.
-	Network network({ 784, 15, 10 }, 0.75);
+	Network network
+	(
+		{ 784, 15, 10 },				// Layer count
+		{ AF::Sigmoid, AF::Sigmoid },	// Activation functions
+		CF::EuclideanDistance,			// Cost function
+		0.75,							// Learning rate
+		0.0005							// Regularization lambda
+	);
 
 	// Train network.
 	std::cout << "Training network:\n" << std::endl;
@@ -148,7 +155,7 @@ void HandwritingTest()
 		}
 	}
 
-	std::cout << std::endl;
+	std::cout << "\n" << std::endl;
 
 	// Handwriting test.
 	std::cout << "Handwriting test:\n" << std::endl;
