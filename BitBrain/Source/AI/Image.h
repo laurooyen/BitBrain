@@ -19,6 +19,8 @@ namespace BB
 
 		const uint8* GetPixels() const { return mPixels; }
 
+		const uint8 GetRaw(unsigned int i) const { return mPixels[i]; }
+
 		const uint8 GetPixel(unsigned int x, unsigned int y, unsigned int channel = 0) const;
 
 		int Width() const { return mWidth; }

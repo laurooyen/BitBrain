@@ -73,6 +73,9 @@ namespace BB
 			for (unsigned int j = 0; j < mRows * mCols; ++j)
 			{
 				image[j] = temp[j] / 255.0f;
+
+				// TODO(Lauro): Test to see if this works better.
+				// image[j] = (temp[j] > 0) ? 1.0 : 0.0;
 			}
 			mImages.push_back(image);
 		}
