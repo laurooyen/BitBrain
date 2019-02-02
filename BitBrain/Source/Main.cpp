@@ -10,18 +10,21 @@
 
 using namespace BB;
 
-void ProgressBar(const char* text, int progress, int total, int barWidth = 50)
+void ProgressBar(const char* text, int progress, int total, int barWidth = 50, int updateFrequency = 50)
 {
-	float percentage = (float)progress / (float)total;
-
-	std::cout << text << " [";
-
-	for (int i = 0; i < barWidth; i++)
+	if (progress % (total / updateFrequency) == 0)
 	{
-		std::cout << ((i > percentage * barWidth) ? "-" : "#");
-	}
+		float percentage = (float)progress / (float)total;
 
-	std::cout << "] " << (percentage * 100 + 1) << " %\r" << std::flush;
+		std::cout << text << " [";
+
+		for (int i = 0; i < barWidth; i++)
+		{
+			std::cout << ((i < percentage * barWidth) ? "#" : "-");
+		}
+
+		std::cout << "] " << (percentage * 100) << " %\r" << std::flush;
+	}
 }
 
 int main()
@@ -56,7 +59,7 @@ int main()
 
 		for (int j = 0; j < trainData.Size(); j++)
 		{
-			if (j % (trainData.Size() / 100) == 0) ProgressBar("    Training", j, trainData.Size());
+			ProgressBar("    Training", j + 1, trainData.Size());
 
 			std::vector<double> out(10, 0.0f);
 			out[trainData.GetLabel(j)] = 1.0f;
@@ -73,7 +76,7 @@ int main()
 
 		for (int i = 0; i < testData.Size(); i++)
 		{
-			if (i % (testData.Size() / 100) == 0) ProgressBar("    Testing ", i, testData.Size());
+			ProgressBar("    Testing ", i + 1, testData.Size());
 
 			Matrix m = network.Compute(testData.GetImage(i));
 			int result = (int)(std::max_element(m[0].begin(), m[0].end()) - m[0].begin());
