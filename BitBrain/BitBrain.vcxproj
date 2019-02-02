@@ -158,6 +158,7 @@
     <ClInclude Include="Source\AI\SymbolExtractor.h" />
     <ClInclude Include="Source\MNIST\MNIST.h" />
     <ClInclude Include="Source\ThirdParty\stb_image.h" />
+    <ClInclude Include="Source\Util\Containers\Array2D.h" />
     <ClInclude Include="Source\Util\CoreTypes.h" />
     <ClInclude Include="Source\Util\Endianness.h" />
     <ClInclude Include="Source\Util\Math\Functions.h" />

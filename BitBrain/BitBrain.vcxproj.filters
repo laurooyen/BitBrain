@@ -92,6 +92,9 @@
     <ClInclude Include="Source\AI\CostFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Util\Containers\Array2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\MNIST\TrainingLabels.bin">

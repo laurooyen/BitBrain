@@ -43,7 +43,7 @@ namespace BB
 
 	Matrix Network::Compute(const std::vector<double>& input)
 	{
-		N[0] = Matrix({ input });
+		N[0] = Matrix(input);
 
 		for (int i = 1; i < mLayerCount; i++)
 		{
@@ -55,7 +55,7 @@ namespace BB
 
 	void Network::Learn(const std::vector<double>& output)
 	{
-		Matrix dCdO = GCalculateCF[(int)mCF](N[mLayerCount - 1], Matrix({ output }));
+		Matrix dCdO = GCalculateCF[(int)mCF](N[mLayerCount - 1], Matrix(output));
 
 		// Calculate derivatives for biases.
 

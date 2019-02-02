@@ -35,8 +35,8 @@ void ProgressBar(const char* text, int progress, int total, int barWidth = 50, i
 
 int main()
 {
-	//NetworkTest();
-	HandwritingTest();
+	NetworkTest();
+	//HandwritingTest();
 	//BoundingBoxTest();
 
 	// Wait to close program.
@@ -99,7 +99,7 @@ void NetworkTest()
 			ProgressBar("    Testing ", i + 1, testData.Size());
 
 			Matrix m = network.Compute(testData.GetImage(i));
-			int result = (int)(std::max_element(m[0].begin(), m[0].end()) - m[0].begin());
+			int result = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
 
 			if (result == testData.GetLabel(i)) correct++;
 		}
@@ -173,7 +173,7 @@ void HandwritingTest()
 	}
 
 	Matrix m = network.Compute(myTestData);
-	int myResult = (int)(std::max_element(m[0].begin(), m[0].end()) - m[0].begin());
+	int myResult = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
 
 	std::cout << "  Classifiction: " << myResult << std::endl;
 

@@ -15,9 +15,9 @@ namespace BB
 	{
 		Matrix dCdO = -T;
 
-		for (int i = 0; i < dCdO.cols; i++)
+		for (int i = 0; i < dCdO.Cols(); i++)
 		{
-			dCdO.elements[0][i] /= Y.elements[0][i];
+			dCdO(0, i) /= Y(0, i);
 		}
 
 		return dCdO;

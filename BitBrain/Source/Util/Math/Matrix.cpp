@@ -10,31 +10,53 @@ namespace BB
 	// Constructors
 
 	Matrix::Matrix()
-		: rows(0), cols(0) {}
-
-	Matrix::Matrix(int rows, int cols)
-		: rows(rows), cols(cols)
 	{
-		this->elements = std::vector<std::vector<double>>(rows, std::vector<double>(cols));
+		mElements = Array2D<double>(0, 0);
 	}
 
-	Matrix::Matrix(const std::vector<std::vector<double>>& elements)
-		: rows((int)elements.size()), cols((int)elements[0].size())
+	Matrix::Matrix(int rows, int cols)
 	{
-		this->elements = elements;
+		mElements = Array2D<double>(rows, cols);
+	}
+
+	Matrix::Matrix(const std::vector<double>& row)
+	{
+		mElements = Array2D<double>(row);
+	}
+
+	// Getters
+
+	int Matrix::Rows() const
+	{
+		return (int)mElements.Rows();
+	}
+
+	int Matrix::Cols() const
+	{
+		return (int)mElements.Cols();
+	}
+
+	int Matrix::Size() const
+	{
+		return (int)mElements.Size();
+	}
+
+	Array2D<double>& Matrix::Elements()
+	{
+		return mElements;
 	}
 
 	// Calculations
 
 	Matrix Matrix::Transposed() const
 	{
-		Matrix r(cols, rows);
+		Matrix r(Cols(), Rows());
 
-		for (int col = 0; col < cols; col++)
+		for (int col = 0; col < Cols(); col++)
 		{
-			for (int row = 0; row < rows; row++)
+			for (int row = 0; row < Rows(); row++)
 			{
-				r.elements[col][row] = elements[row][col];
+				r(col, row) = mElements(row, col);
 			}
 		}
 
@@ -43,14 +65,11 @@ namespace BB
 
 	Matrix Matrix::Foreach(double(*function)(double)) const
 	{
-		Matrix r(rows, cols);
+		Matrix r(Rows(), Cols());
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				r.elements[row][col] = (*function)(elements[row][col]);
-			}
+			r(i) = (*function)(mElements(i));
 		}
 
 		return r;
@@ -58,16 +77,13 @@ namespace BB
 
 	Matrix Matrix::MultiplyEntries(const Matrix& m) const
 	{
-		assert(rows == m.rows && cols == m.cols);
+		assert(Rows() == m.Rows() && Cols() == m.Cols());
 
-		Matrix r(rows, cols);
+		Matrix r(Rows(), Cols());
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				r.elements[row][col] = elements[row][col] * m.elements[row][col];
-			}
+			r(i) = mElements(i) * m(i);
 		}
 
 		return r;
@@ -77,12 +93,9 @@ namespace BB
 	{
 		double r = 0.0;
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				r += elements[row][col];
-			}
+			r += mElements(i);
 		}
 
 		return r;
@@ -92,12 +105,9 @@ namespace BB
 	{
 		double r = 0.0;
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				if (elements[row][col] > r) r = elements[row][col];
-			}
+			if (mElements(i) > r) r = mElements(i);
 		}
 
 		return r;
@@ -105,31 +115,33 @@ namespace BB
 
 	// Operators
 
-	std::vector<double>& Matrix::operator[](unsigned int row)
+	double & Matrix::operator()(unsigned int idx)
 	{
-		return elements[row];
+		return mElements(idx);
+	}
+
+	const double & Matrix::operator()(unsigned int idx) const
+	{
+		return mElements(idx);
 	}
 
 	double& Matrix::operator() (unsigned int row, unsigned int col)
 	{
-		return elements[row][col];
+		return mElements(row, col);
 	}
 
 	const double& Matrix::operator() (unsigned int row, unsigned int col) const
 	{
-		return elements[row][col];
+		return mElements(row, col);
 	}
 
 	Matrix Matrix::operator- () const
 	{
-		Matrix r(rows, cols);
+		Matrix r(Rows(), Cols());
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				r.elements[row][col] = -elements[row][col];
-			}
+			r(i) = -mElements(i);
 		}
 
 		return r;
@@ -137,14 +149,11 @@ namespace BB
 
 	Matrix operator* (float lhs, const Matrix& rhs)
 	{
-		Matrix r(rhs.rows, rhs.cols);
+		Matrix r(rhs.Rows(), rhs.Cols());
 
-		for (int row = 0; row < rhs.rows; row++)
+		for (int i = 0; i < rhs.Size(); i++)
 		{
-			for (int col = 0; col < rhs.cols; col++)
-			{
-				r.elements[row][col] = lhs * rhs.elements[row][col];
-			}
+			r(i) = lhs * rhs(i);
 		}
 
 		return r;
@@ -154,16 +163,13 @@ namespace BB
 
 	Matrix Matrix::operator+ (const Matrix& rhs) const
 	{
-		assert(rows == rhs.rows && cols == rhs.cols);
+		assert(Rows() == rhs.Rows() && Cols() == rhs.Cols());
 
-		Matrix r(rows, cols);
+		Matrix r(Rows(), Cols());
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				r.elements[row][col] = elements[row][col] + rhs.elements[row][col];
-			}
+			r(i) = mElements(i) + rhs(i);
 		}
 
 		return r;
@@ -171,16 +177,13 @@ namespace BB
 
 	Matrix Matrix::operator- (const Matrix& rhs) const
 	{
-		assert(rows == rhs.rows && cols == rhs.cols);
+		assert(Rows() == rhs.Rows() && Cols() == rhs.Cols());
 
-		Matrix r(rows, cols);
+		Matrix r(Rows(), Cols());
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				r.elements[row][col] = elements[row][col] - rhs.elements[row][col];
-			}
+			r(i) = mElements(i) - rhs(i);
 		}
 
 		return r;
@@ -188,22 +191,22 @@ namespace BB
 
 	Matrix Matrix::operator* (const Matrix& rhs) const
 	{
-		assert(cols == rhs.rows);
+		assert(Cols() == rhs.Rows());
 
-		Matrix r(rows, rhs.cols);
+		Matrix r(Rows(), rhs.Cols());
 
-		for (int row = 0; row < rows; row++)
+		for (int row = 0; row < Rows(); row++)
 		{
-			for (int col = 0; col < rhs.cols; col++)
+			for (int col = 0; col < rhs.Cols(); col++)
 			{
-				double sum = 0.0f;
+				double sum = 0.0;
 
-				for (int i = 0; i < cols; i++)
+				for (int i = 0; i < Cols(); i++)
 				{
-					sum += elements[row][i] * rhs.elements[i][col];
+					sum += mElements(row, i) * rhs(i, col);
 				}
 
-				r.elements[row][col] = sum;
+				r(row, col) = sum;
 			}
 		}
 
@@ -212,14 +215,11 @@ namespace BB
 
 	Matrix Matrix::operator* (double rhs) const
 	{
-		Matrix r(rows, cols);
+		Matrix r(Rows(), Cols());
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				r.elements[row][col] = elements[row][col] * rhs;
-			}
+			r(i) = mElements(i) * rhs;
 		}
 
 		return r;
@@ -227,14 +227,11 @@ namespace BB
 
 	Matrix Matrix::operator/ (double rhs) const
 	{
-		Matrix r(rows, cols);
+		Matrix r(Rows(), Cols());
 
-		for (int row = 0; row < rows; row++)
+		for (int i = 0; i < Size(); i++)
 		{
-			for (int col = 0; col < cols; col++)
-			{
-				r.elements[row][col] = elements[row][col] / rhs;
-			}
+			r(i) = mElements(i) / rhs;
 		}
 
 		return r;
@@ -271,11 +268,11 @@ namespace BB
 
 	bool Matrix::operator== (const Matrix& rhs) const
 	{
-		return elements == rhs.elements;
+		return mElements == rhs.mElements;
 	}
 
 	bool Matrix::operator!= (const Matrix& rhs) const
 	{
-		return elements != rhs.elements;
+		return mElements != rhs.mElements;
 	}
 }

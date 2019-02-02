@@ -4,19 +4,17 @@
 
 #include <vector>
 
+#include "../Containers/Array2D.h"
+
 namespace BB
 {
 	/// Class representing a NxM matrix in a row-major format.
 
 	class Matrix
 	{
-	public:
+	private:
 
-		int rows; ///< Number of rows.
-		int cols; ///< Number of columns.
-
-		/// Interpreted as [row][column]
-		std::vector<std::vector<double>> elements;
+		Array2D<double> mElements;
 
 	public:
 
@@ -24,7 +22,15 @@ namespace BB
 
 		Matrix();
 		Matrix(int rows, int cols);
-		Matrix(const std::vector<std::vector<double>>& elements);
+		Matrix(const std::vector<double>& row);
+
+		// Getters
+
+		int Rows() const;
+		int Cols() const;
+		int Size() const;
+
+		Array2D<double>& Elements();
 
 		// Calculations
 
@@ -45,7 +51,8 @@ namespace BB
 
 		// Operators
 
-		std::vector<double>& operator[] (unsigned int row);
+		double& operator() (unsigned int idx);
+		const double& operator() (unsigned int idx) const;
 
 		double& operator() (unsigned int row, unsigned int col);
 		const double& operator() (unsigned int row, unsigned int col) const;
