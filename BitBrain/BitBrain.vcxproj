@@ -138,20 +138,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\AI\ActivationFunctions.cpp" />
-    <ClCompile Include="Source\AI\Network.cpp" />
     <ClCompile Include="Source\AI\CostFunctions.cpp" />
+    <ClCompile Include="Source\AI\Image.cpp" />
+    <ClCompile Include="Source\AI\Network.cpp" />
+    <ClCompile Include="Source\AI\SymbolExtractor.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MNIST\MNIST.cpp" />
+    <ClCompile Include="Source\ThirdParty\stb_image.cpp" />
+    <ClCompile Include="Source\Util\Math\Functions.cpp" />
     <ClCompile Include="Source\Util\Math\Matrix.cpp" />
+    <ClCompile Include="Source\Util\Math\Rectangle.cpp" />
+    <ClCompile Include="Source\Util\Math\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AI\ActivationFunctions.h" />
     <ClInclude Include="Source\AI\CostFunctions.h" />
+    <ClInclude Include="Source\AI\Image.h" />
     <ClInclude Include="Source\AI\Network.h" />
+    <ClInclude Include="Source\AI\SymbolExtractor.h" />
     <ClInclude Include="Source\MNIST\MNIST.h" />
+    <ClInclude Include="Source\ThirdParty\stb_image.h" />
     <ClInclude Include="Source\Util\CoreTypes.h" />
     <ClInclude Include="Source\Util\Endianness.h" />
+    <ClInclude Include="Source\Util\Math\Functions.h" />
     <ClInclude Include="Source\Util\Math\Matrix.h" />
+    <ClInclude Include="Source\Util\Math\Rectangle.h" />
+    <ClInclude Include="Source\Util\Math\Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\MNIST\TestingImages.bin" />

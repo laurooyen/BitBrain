@@ -1,0 +1,14 @@
+/* Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen. All rights reserved. */
+
+*{
+	font-family: "Segoe UI", "Arial", "sans-serif";
+}
+
+body{
+	margin: 15px;
+}
+
+canvas{
+	padding: 15px;
+	border: 1px solid black;
+}
