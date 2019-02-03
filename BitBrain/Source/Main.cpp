@@ -50,22 +50,22 @@ int main()
 void NetworkTest()
 {
 	// Global settings.
-	int epochs = 1;
+	int epochs = 10;
 
 	// Load Data.
 	std::cout << "Loading data.\n" << std::endl;
 
-	MNIST trainData("Resource/MNIST/TrainingImages.bin", "Resource/MNIST/TrainingLabels.bin");
+	MNIST trainData("Resource/MNIST/mnist-train", "Resource/MNIST/mnist-train-lbl");
 	MNIST testData("Resource/MNIST/TestingImages.bin", "Resource/MNIST/TestingLabels.bin");
 
 	// Init network.
 	Network network
 	(
-		{ 784, 15, 10 },			// Layer count
-		{ AF::ReLU, AF::Softmax },	// Activation functions
+		{ 784, 100, 60, 10 },			// Layer count
+        { AF::ReLU, AF::ReLU, AF::Softmax },	// Activation functions
 		CF::CrossEntropy,			// Cost function
-		0.01,						// Learning rate
-		0.0005						// Regularization lambda
+		0.003,// Learning rate
+		0.00115					// Regularization lambda
 	);
 
 	// Train network.
@@ -91,24 +91,31 @@ void NetworkTest()
 		std::cout << std::endl;
 
 		// Test network.
-
-		int correct = 0;
+        int correctTrain = 0;
+		int correctTest = 0;
 
 		for (int i = 0; i < testData.Size(); i++)
 		{
 			ProgressBar("    Testing ", i + 1, testData.Size());
 
-			Matrix m = network.Compute(testData.GetImage(i));
-			int result = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
+			Matrix mTest = network.Compute(testData.GetImage(i));
+			int resultTest = (int)(std::max_element(mTest.Elements().begin(), mTest.Elements().end()) - mTest.Elements().begin());
+            Matrix mTrain = network.Compute(trainData.GetImage(i));
+            int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
+			if (resultTest == testData.GetLabel(i)) correctTest++;
+            if (resultTrain == trainData.GetLabel(i)) correctTrain++;
 
-			if (result == testData.GetLabel(i)) correct++;
 		}
 
 		std::cout << std::endl;
 
 		// Print accuracy.
-		double accuracy = ((double)correct / (double)testData.Size()) * 100.0f;
-		std::cout << "    Accuracy " << accuracy << " %\n";
+		double accuracyTest = ((double)correctTest / (double)testData.Size()) * 100.0f;
+        double accuracyTrain = ((double)correctTrain / (double)testData.Size()) * 100.0f;
+
+		std::cout << "   Test Accuracy " << accuracyTest << " %\n";
+        std::cout << "   Train Accuracy " << accuracyTrain << " %\n";
+
 
 		std::cout << std::endl;
 	}
