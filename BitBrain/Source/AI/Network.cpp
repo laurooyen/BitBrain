@@ -9,7 +9,8 @@
 #include <numeric>
 #include <random>
 #include <chrono>
-#include "../MNIST/MNIST.cpp"
+
+#include <iostream> //TEST voor COUT
 
 namespace BB
 {
@@ -71,7 +72,7 @@ namespace BB
         
         std::default_random_engine rng(seed);
         
-        //std::cout << "  Epoch #" << (i + 1) << "\n\n";
+        std::cout << " Train Epoch" << "\n\n";
         
         std::shuffle(shuffle.begin(), shuffle.end(), rng);
         
@@ -87,7 +88,6 @@ namespace BB
         // TRAIN NETWORK
         for (int j = 0; j < trainData.Size(); j++)
         {
-            //ProgressBar("    Training", j + 1, trainData.Size());
             
             std::vector<double> out(10, 0.0f);
             out[trainData.GetLabel(shuffle[j])] = 1.0f;
@@ -100,8 +100,8 @@ namespace BB
             
             for (int i = 0; i < mLayerCount - 1; i++)
             {
-                wChange[i] += dW[i] * (1.0f/(double)miniBatchSize);
-                bChange[i] += dB[i] * (1.0f/(double)miniBatchSize);
+                wChange[i] += dW[i];
+                bChange[i] += dB[i];
                 
                 // If batch finished do gradient descent
                 if(j % miniBatchSize == miniBatchSize - 1)
@@ -113,6 +113,8 @@ namespace BB
                     bChange[i] *= 0; // ''
                 }
             }
+            if(j % (miniBatchSize*1000) == 0) std::cout << "batch " << (j/miniBatchSize) << "/" << trainData.Size()/miniBatchSize << "\n";
+
         }
     }
     

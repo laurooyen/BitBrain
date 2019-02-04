@@ -67,7 +67,7 @@ void NetworkTest()
 
 	Network network
 	(
-		{ 784, 100, 60, 10 },					// Layer count
+        { 784, 100, 60, 10 },					// Layer count
         { AF::ReLU, AF::ReLU, AF::Softmax },	// Activation functions
 		CF::CrossEntropy,						// Cost function
 		0.003,									// Learning rate
@@ -75,41 +75,46 @@ void NetworkTest()
 	);
 
 	// TRAINING LOOP
-        
-    network.TrainEpoch(trainData, 1);
-
-    // TEST NETWORK
-
-    int correctTrain = 0;
-    int correctTest = 0;
-
-    for (int i = 0; i < testData.Size(); i++)
+    
+    for(int j = 0; j < epochs; j++)
     {
-        ProgressBar("    Testing ", i + 1, testData.Size());
-
-        Matrix mTest = network.FeedForward(testData.GetImage(i));
-        int resultTest = (int)(std::max_element(mTest.Elements().begin(), mTest.Elements().end()) - mTest.Elements().begin());
-        if (resultTest == testData.GetLabel(i)) correctTest++;
-
-        /* not dealing with this yet
-        Matrix mTrain = network.FeedForward(trainData.GetImage(shuffle[i]));
-        int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
-        if (resultTrain == trainData.GetLabel(shuffle[i])) correctTrain++;
-         */
+        network.TrainEpoch(trainData, 10);
+        
+        // TEST NETWORK
+        
+        int correctTrain = 0;
+        int correctTest = 0;
+        
+        for (int i = 0; i < testData.Size(); i++)
+        {
+            ProgressBar("    Testing ", i + 1, testData.Size());
+            
+            Matrix mTest = network.FeedForward(testData.GetImage(i));
+            int resultTest = (int)(std::max_element(mTest.Elements().begin(), mTest.Elements().end()) - mTest.Elements().begin());
+            if (resultTest == testData.GetLabel(i)) correctTest++;
+            
+            /* not dealing with this yet
+             Matrix mTrain = network.FeedForward(trainData.GetImage(shuffle[i]));
+             int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
+             if (resultTrain == trainData.GetLabel(shuffle[i])) correctTrain++;
+             */
+        }
+        
+        std::cout << std::endl;
+        
+        // PRINT ACCURACY
+        
+        double accuracyTest = ((double)correctTest / (double)testData.Size()) * 100.0f;
+        //double accuracyTrain = ((double)correctTrain / (double)testData.Size()) * 100.0f;
+        
+        std::cout << "    Test Accuracy " << accuracyTest << " %\n";
+        //std::cout << "    Train Accuracy " << accuracyTrain << " %\n";
+        
+        std::cout << std::endl;
+        
     }
+    
 
-    std::cout << std::endl;
-
-    // PRINT ACCURACY
-
-    double accuracyTest = ((double)correctTest / (double)testData.Size()) * 100.0f;
-    double accuracyTrain = ((double)correctTrain / (double)testData.Size()) * 100.0f;
-
-    std::cout << "    Test Accuracy " << accuracyTest << " %\n";
-    std::cout << "    Train Accuracy " << accuracyTrain << " %\n";
-
-    std::cout << std::endl;
-	
 }
 
 
