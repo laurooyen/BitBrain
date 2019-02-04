@@ -4,6 +4,9 @@
 #include <time.h>
 #include <iostream>
 #include <algorithm>
+#include <numeric>
+#include <random>
+#include <chrono>
 
 #include "MNIST/MNIST.h"
 #include "AI/Network.h"
@@ -49,48 +52,62 @@ int main()
 
 void NetworkTest()
 {
-	// Global settings.
+	// GLOBAL SETTINGS
+
 	int epochs = 10;
 
-	// Load Data.
+	// LOAD DATA
+
 	std::cout << "Loading data.\n" << std::endl;
 
-	MNIST trainData("Resource/MNIST/mnist-train", "Resource/MNIST/mnist-train-lbl");
+	MNIST trainData("Resource/MNIST/TrainingImages-200k.bin", "Resource/MNIST/TrainingLabels-200k.bin");
 	MNIST testData("Resource/MNIST/TestingImages.bin", "Resource/MNIST/TestingLabels.bin");
 
-	// Init network.
+	// INIT NETWORK
+
 	Network network
 	(
-		{ 784, 100, 60, 10 },			// Layer count
+		{ 784, 100, 60, 10 },					// Layer count
         { AF::ReLU, AF::ReLU, AF::Softmax },	// Activation functions
-		CF::CrossEntropy,			// Cost function
-		0.003,// Learning rate
-		0.00115					// Regularization lambda
+		CF::CrossEntropy,						// Cost function
+		0.003,									// Learning rate
+		0.00115									// Regularization lambda
 	);
 
-	// Train network.
+	// TRAINING LOOP
+
 	std::cout << "Training network:\n" << std::endl;
+
+	std::vector<unsigned int> shuffle(trainData.Size());
+	std::iota(shuffle.begin(), shuffle.end(), 0);
+
+	unsigned int seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+
+	std::default_random_engine rng(seed);
 
 	for (int i = 0; i < epochs; i++)
 	{
 		std::cout << "  Epoch #" << (i + 1) << "\n\n";
 
-		// Train network.
+		std::shuffle(shuffle.begin(), shuffle.end(), rng);
+
+		// TRAIN NETWORK
 
 		for (int j = 0; j < trainData.Size(); j++)
 		{
 			ProgressBar("    Training", j + 1, trainData.Size());
 
 			std::vector<double> out(10, 0.0f);
-			out[trainData.GetLabel(j)] = 1.0f;
+			out[trainData.GetLabel(shuffle[j])] = 1.0f;
 
-			network.Compute(trainData.GetImage(j));
+			network.Compute(trainData.GetImage(shuffle[j]));
 			network.Learn(out);
 		}
 
 		std::cout << std::endl;
 
-		// Test network.
+		// TEST NETWORK
+
         int correctTrain = 0;
 		int correctTest = 0;
 
@@ -98,24 +115,24 @@ void NetworkTest()
 		{
 			ProgressBar("    Testing ", i + 1, testData.Size());
 
-			Matrix mTest = network.Compute(testData.GetImage(i));
+			Matrix mTest = network.Compute(testData.GetImage(shuffle[i]));
 			int resultTest = (int)(std::max_element(mTest.Elements().begin(), mTest.Elements().end()) - mTest.Elements().begin());
-            Matrix mTrain = network.Compute(trainData.GetImage(i));
-            int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
-			if (resultTest == testData.GetLabel(i)) correctTest++;
-            if (resultTrain == trainData.GetLabel(i)) correctTrain++;
+			if (resultTest == testData.GetLabel(shuffle[i])) correctTest++;
 
+            Matrix mTrain = network.Compute(trainData.GetImage(shuffle[i]));
+            int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
+            if (resultTrain == trainData.GetLabel(shuffle[i])) correctTrain++;
 		}
 
 		std::cout << std::endl;
 
-		// Print accuracy.
+		// PRINT ACCURACY
+
 		double accuracyTest = ((double)correctTest / (double)testData.Size()) * 100.0f;
         double accuracyTrain = ((double)correctTrain / (double)testData.Size()) * 100.0f;
 
-		std::cout << "   Test Accuracy " << accuracyTest << " %\n";
-        std::cout << "   Train Accuracy " << accuracyTrain << " %\n";
-
+		std::cout << "    Test Accuracy " << accuracyTest << " %\n";
+        std::cout << "    Train Accuracy " << accuracyTrain << " %\n";
 
 		std::cout << std::endl;
 	}
