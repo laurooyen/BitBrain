@@ -4,6 +4,12 @@
 
 #include <cmath>
 #include <time.h>
+#include <iostream>
+#include <algorithm>
+#include <numeric>
+#include <random>
+#include <chrono>
+#include "../MNIST/MNIST.cpp"
 
 namespace BB
 {
@@ -41,7 +47,7 @@ namespace BB
 		}
 	}
 
-	Matrix Network::Compute(const std::vector<double>& input)
+	Matrix Network::FeedForward(const std::vector<double>& input)
 	{
 		N[0] = Matrix(input);
 
@@ -52,33 +58,86 @@ namespace BB
 
 		return N[mLayerCount - 1];
 	}
-
-	void Network::Learn(const std::vector<double>& output)
+    
+    void Network::TrainEpoch(BB::MNIST trainData, int miniBatchSize)
 	{
-		Matrix dCdO = GCalculateCF[(int)mCF](N[mLayerCount - 1], Matrix(output));
 
-		// Calculate derivatives for biases.
+        std::cout << "Training network:\n" << std::endl;
+        
+        std::vector<unsigned int> shuffle(trainData.Size());
+        std::iota(shuffle.begin(), shuffle.end(), 0);
+        
+        unsigned int seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+        
+        std::default_random_engine rng(seed);
+        
+        //std::cout << "  Epoch #" << (i + 1) << "\n\n";
+        
+        std::shuffle(shuffle.begin(), shuffle.end(), rng);
+        
+        std::vector<Matrix> wChange = std::vector<Matrix>(W.size());
+        std::vector<Matrix> bChange = std::vector<Matrix>(B.size());
+        
+        for (int i = 0; i < mLayerCount - 1; i++)
+        {
+            wChange[i] = Matrix(W[i].Rows(), W[i].Cols());
+            bChange[i] = Matrix(B[i].Rows(), B[i].Cols());
+        }
+        
+        // TRAIN NETWORK
+        for (int j = 0; j < trainData.Size(); j++)
+        {
+            //ProgressBar("    Training", j + 1, trainData.Size());
+            
+            std::vector<double> out(10, 0.0f);
+            out[trainData.GetLabel(shuffle[j])] = 1.0f;
+            
+            FeedForward(trainData.GetImage(shuffle[j]));
+            
+            BackPropagate(out);
+            
+            // Update minibatch change average and if batch completed update the weights and biases.
+            
+            for (int i = 0; i < mLayerCount - 1; i++)
+            {
+                wChange[i] += dW[i] * (1.0f/(double)miniBatchSize);
+                bChange[i] += dB[i] * (1.0f/(double)miniBatchSize);
+                
+                // If batch finished do gradient descent
+                if(j % miniBatchSize == miniBatchSize - 1)
+                {
+                    W[i] -= wChange[i] * mLearningRate;
+                    B[i] -= bChange[i] * mLearningRate;
+                    
+                    wChange[i] *= 0; //EIKES VIES PLS OPTIMIZE ik was te lui om te bedenken hoe ik de matrix deftig reset naar 0
+                    bChange[i] *= 0; // ''
+                }
+            }
+        }
+    }
+    
+    double Network::testAccuracy(BB::MNIST testData, int testAmt) { printf("not implemented yet"); return 0.0; }
 
-		dB[mLayerCount - 2] = dCdO * (GDeriveAF[(int)mAF[mLayerCount - 2]](N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]));
-
-		for (int i = mLayerCount - 3; i >= 0; i--)
-		{
-			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)mAF[i]](N[i] * W[i] + B[i]));
-		}
-
-		// Calculate derivatives for weights.
-
-		for (int i = 0; i < mLayerCount - 1; i++)
-		{
-			dW[i] = N[i].Transposed() * dB[i] + W[i] * mLambda; // + W * lambda = L2 regularization
-		}
-
-		// Change the weights and biases.
-
-		for (int i = 0; i < mLayerCount - 1; i++)
-		{
-			W[i] -= dW[i] * mLearningRate;
-			B[i] -= dB[i] * mLearningRate;
-		}
-	}
+    
+    
+    void Network::BackPropagate(const std::vector<double>& output)
+    {
+        Matrix dCdO = GCalculateCF[(int)mCF](N[mLayerCount - 1], Matrix(output));
+        
+        // Calculate derivatives for biases.
+        
+        dB[mLayerCount - 2] = dCdO * (GDeriveAF[(int)mAF[mLayerCount - 2]](N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]));
+        
+        for (int i = mLayerCount - 3; i >= 0; i--)
+        {
+            dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)mAF[i]](N[i] * W[i] + B[i]));
+        }
+        
+        // Calculate derivatives for weights.
+        
+        for (int i = 0; i < mLayerCount - 1; i++)
+        {
+            dW[i] = N[i].Transposed() * dB[i] + W[i] * mLambda; // + W * lambda = L2 regularization
+        }
+    }
 }

@@ -75,69 +75,47 @@ void NetworkTest()
 	);
 
 	// TRAINING LOOP
+        
+    network.TrainEpoch(trainData, 1);
 
-	std::cout << "Training network:\n" << std::endl;
+    // TEST NETWORK
 
-	std::vector<unsigned int> shuffle(trainData.Size());
-	std::iota(shuffle.begin(), shuffle.end(), 0);
+    int correctTrain = 0;
+    int correctTest = 0;
 
-	unsigned int seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+    for (int i = 0; i < testData.Size(); i++)
+    {
+        ProgressBar("    Testing ", i + 1, testData.Size());
 
-	std::default_random_engine rng(seed);
+        Matrix mTest = network.FeedForward(testData.GetImage(i));
+        int resultTest = (int)(std::max_element(mTest.Elements().begin(), mTest.Elements().end()) - mTest.Elements().begin());
+        if (resultTest == testData.GetLabel(i)) correctTest++;
 
-	for (int i = 0; i < epochs; i++)
-	{
-		std::cout << "  Epoch #" << (i + 1) << "\n\n";
+        /* not dealing with this yet
+        Matrix mTrain = network.FeedForward(trainData.GetImage(shuffle[i]));
+        int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
+        if (resultTrain == trainData.GetLabel(shuffle[i])) correctTrain++;
+         */
+    }
 
-		std::shuffle(shuffle.begin(), shuffle.end(), rng);
+    std::cout << std::endl;
 
-		// TRAIN NETWORK
+    // PRINT ACCURACY
 
-		for (int j = 0; j < trainData.Size(); j++)
-		{
-			ProgressBar("    Training", j + 1, trainData.Size());
+    double accuracyTest = ((double)correctTest / (double)testData.Size()) * 100.0f;
+    double accuracyTrain = ((double)correctTrain / (double)testData.Size()) * 100.0f;
 
-			std::vector<double> out(10, 0.0f);
-			out[trainData.GetLabel(shuffle[j])] = 1.0f;
+    std::cout << "    Test Accuracy " << accuracyTest << " %\n";
+    std::cout << "    Train Accuracy " << accuracyTrain << " %\n";
 
-			network.Compute(trainData.GetImage(shuffle[j]));
-			network.Learn(out);
-		}
-
-		std::cout << std::endl;
-
-		// TEST NETWORK
-
-        int correctTrain = 0;
-		int correctTest = 0;
-
-		for (int i = 0; i < testData.Size(); i++)
-		{
-			ProgressBar("    Testing ", i + 1, testData.Size());
-
-			Matrix mTest = network.Compute(testData.GetImage(i));
-			int resultTest = (int)(std::max_element(mTest.Elements().begin(), mTest.Elements().end()) - mTest.Elements().begin());
-			if (resultTest == testData.GetLabel(i)) correctTest++;
-
-            Matrix mTrain = network.Compute(trainData.GetImage(shuffle[i]));
-            int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
-            if (resultTrain == trainData.GetLabel(shuffle[i])) correctTrain++;
-		}
-
-		std::cout << std::endl;
-
-		// PRINT ACCURACY
-
-		double accuracyTest = ((double)correctTest / (double)testData.Size()) * 100.0f;
-        double accuracyTrain = ((double)correctTrain / (double)testData.Size()) * 100.0f;
-
-		std::cout << "    Test Accuracy " << accuracyTest << " %\n";
-        std::cout << "    Train Accuracy " << accuracyTrain << " %\n";
-
-		std::cout << std::endl;
-	}
+    std::cout << std::endl;
+	
 }
 
+
+
+/* Srry don't wanna deal with this spaghetti yet
+ 
 void HandwritingTest()
 {
 	// Global settings.
@@ -174,7 +152,7 @@ void HandwritingTest()
 			std::vector<double> out(10, 0.0f);
 			out[trainData.GetLabel(j)] = 1.0f;
 
-			network.Compute(trainData.GetImage(j));
+			network.FeedForward(trainData.GetImage(j));
 			network.Learn(out);
 		}
 	}
@@ -216,3 +194,5 @@ void BoundingBoxTest()
 
 	std::cout << std::endl;
 }
+
+*/

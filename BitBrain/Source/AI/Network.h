@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../Util/Math/Matrix.h"
+#include "../MNIST/MNIST.h"
 
 #include "ActivationFunctions.h"
 #include "CostFunctions.h"
@@ -16,14 +17,14 @@ namespace BB
 	class Network
 	{
 	public:
-
 		Network(const std::vector<int>& layers, const std::vector<AF>& af, CF cf, double learningRate, double lambda);
-
-		Matrix Compute(const std::vector<double>& input);
-		void Learn(const std::vector<double>& output);
-
+		Matrix FeedForward(const std::vector<double>& input);
+        void TrainEpoch(BB::MNIST trainData, int miniBatchSize);
+        double testAccuracy(BB::MNIST testData, int testAmt);
+        
 	private:
-
+        void BackPropagate(const std::vector<double>& output);
+        
 		int mLayerCount;
 		double mLearningRate;
 		double mLambda;
