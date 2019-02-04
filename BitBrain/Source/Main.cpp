@@ -115,9 +115,9 @@ void NetworkTest()
 		{
 			ProgressBar("    Testing ", i + 1, testData.Size());
 
-			Matrix mTest = network.Compute(testData.GetImage(shuffle[i]));
+			Matrix mTest = network.Compute(testData.GetImage(i));
 			int resultTest = (int)(std::max_element(mTest.Elements().begin(), mTest.Elements().end()) - mTest.Elements().begin());
-			if (resultTest == testData.GetLabel(shuffle[i])) correctTest++;
+			if (resultTest == testData.GetLabel(i)) correctTest++;
 
             Matrix mTrain = network.Compute(trainData.GetImage(shuffle[i]));
             int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
