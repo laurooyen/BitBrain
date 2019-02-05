@@ -155,6 +155,7 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MNIST\MNIST.cpp" />
     <ClCompile Include="Source\ThirdParty\stb_image.cpp" />
+    <ClCompile Include="Source\Util\Common.cpp" />
     <ClCompile Include="Source\Util\Math\Functions.cpp" />
     <ClCompile Include="Source\Util\Math\Matrix.cpp" />
     <ClCompile Include="Source\Util\Math\Rectangle.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Source\AI\SymbolExtractor.h" />
     <ClInclude Include="Source\MNIST\MNIST.h" />
     <ClInclude Include="Source\ThirdParty\stb_image.h" />
+    <ClInclude Include="Source\Util\Common.h" />
     <ClInclude Include="Source\Util\Containers\Array2D.h" />
     <ClInclude Include="Source\Util\CoreTypes.h" />
     <ClInclude Include="Source\Util\Endianness.h" />

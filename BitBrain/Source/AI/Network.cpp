@@ -2,6 +2,10 @@
 
 #include "Network.h"
 
+#include "../MNIST/MNIST.h"
+
+#include "../Util/Common.h"
+
 #include <cmath>
 #include <time.h>
 #include <iostream>
@@ -9,11 +13,13 @@
 #include <numeric>
 #include <random>
 #include <chrono>
-
-#include <iostream> //TEST voor COUT
+#include <iostream>
 
 namespace BB
 {
+	static unsigned int GSeed;
+	std::default_random_engine GRandom;
+
 	double Random(double x)
 	{
 		return (double)(rand() % 10000 + 1) / 10000 - 0.5;
@@ -21,24 +27,25 @@ namespace BB
 
 	Network::Network(const std::vector<int>& layers, const std::vector<AF>& af, CF cf, double learningRate, double lambda)
 	{
-		srand((unsigned int)time(NULL));
+		GSeed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 
-		mLayerCount = (int)layers.size();
+		srand(GSeed);
+		GRandom.seed(GSeed);
+
+		L = (unsigned int)layers.size();
 		mLearningRate = learningRate;
 		mLambda = lambda;
 		mAF = af;
 		mCF = cf;
 
-		// TODO(Lauro): assert(layers.size() == af.size() + 1);
+		N = std::vector<Matrix>(L);
+		W = std::vector<Matrix>(L - 1);
+		B = std::vector<Matrix>(L - 1);
 
-		N = std::vector<Matrix>(mLayerCount);
-		W = std::vector<Matrix>(mLayerCount - 1);
-		B = std::vector<Matrix>(mLayerCount - 1);
+		dW = std::vector<Matrix>(L - 1);
+		dB = std::vector<Matrix>(L - 1);
 
-		dW = std::vector<Matrix>(mLayerCount - 1);
-		dB = std::vector<Matrix>(mLayerCount - 1);
-
-		for (int i = 0; i < mLayerCount - 1; i++)
+		for (unsigned int i = 0; i < L - 1; i++)
 		{
 			W[i] = Matrix(layers[i], layers[i + 1]);
 			B[i] = Matrix(1, layers[i + 1]);
@@ -52,94 +59,96 @@ namespace BB
 	{
 		N[0] = Matrix(input);
 
-		for (int i = 1; i < mLayerCount; i++)
+		for (unsigned int i = 1; i < L; i++)
 		{
 			N[i] = GCalculateAF[(int)mAF[i - 1]](N[i - 1] * W[i - 1] + B[i - 1]);
 		}
 
-		return N[mLayerCount - 1];
+		return N[L - 1];
 	}
-    
-    void Network::TrainEpoch(BB::MNIST trainData, int miniBatchSize)
+	
+	void Network::BackPropagate(const std::vector<double>& output)
 	{
+		Matrix dCdO = GCalculateCF[(int)mCF](N[L - 1], Matrix(output));
 
-        std::cout << "Training network:\n" << std::endl;
-        
-        std::vector<unsigned int> shuffle(trainData.Size());
-        std::iota(shuffle.begin(), shuffle.end(), 0);
-        
-        unsigned int seed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
-        
-        std::default_random_engine rng(seed);
-        
-        std::cout << " Train Epoch" << "\n\n";
-        
-        std::shuffle(shuffle.begin(), shuffle.end(), rng);
-        
-        std::vector<Matrix> wChange = std::vector<Matrix>(W.size());
-        std::vector<Matrix> bChange = std::vector<Matrix>(B.size());
-        
-        for (int i = 0; i < mLayerCount - 1; i++)
-        {
-            wChange[i] = Matrix(W[i].Rows(), W[i].Cols());
-            bChange[i] = Matrix(B[i].Rows(), B[i].Cols());
-        }
-        
-        // TRAIN NETWORK
-        for (int j = 0; j < trainData.Size(); j++)
-        {
-            
-            std::vector<double> out(10, 0.0f);
-            out[trainData.GetLabel(shuffle[j])] = 1.0f;
-            
-            FeedForward(trainData.GetImage(shuffle[j]));
-            
-            BackPropagate(out);
-            
-            // Update minibatch change average and if batch completed update the weights and biases.
-            
-            for (int i = 0; i < mLayerCount - 1; i++)
-            {
-                wChange[i] += dW[i];
-                bChange[i] += dB[i];
-                
-                // If batch finished do gradient descent
-                if(j % miniBatchSize == miniBatchSize - 1)
-                {
-                    W[i] -= wChange[i] * mLearningRate;
-                    B[i] -= bChange[i] * mLearningRate;
-                    
-                    wChange[i] *= 0; //EIKES VIES PLS OPTIMIZE ik was te lui om te bedenken hoe ik de matrix deftig reset naar 0
-                    bChange[i] *= 0; // ''
-                }
-            }
-            if(j % (miniBatchSize*1000) == 0) std::cout << "batch " << (j/miniBatchSize) << "/" << trainData.Size()/miniBatchSize << "\n";
+		// Calculate derivatives for biases.
 
-        }
-    }
-    
-    double Network::testAccuracy(BB::MNIST testData, int testAmt) { printf("not implemented yet"); return 0.0; }
+		dB[L - 2] = dCdO * (GDeriveAF[(int)mAF[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
 
-    
-    
-    void Network::BackPropagate(const std::vector<double>& output)
-    {
-        Matrix dCdO = GCalculateCF[(int)mCF](N[mLayerCount - 1], Matrix(output));
-        
-        // Calculate derivatives for biases.
-        
-        dB[mLayerCount - 2] = dCdO * (GDeriveAF[(int)mAF[mLayerCount - 2]](N[mLayerCount - 2] * W[mLayerCount - 2] + B[mLayerCount - 2]));
-        
-        for (int i = mLayerCount - 3; i >= 0; i--)
-        {
-            dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)mAF[i]](N[i] * W[i] + B[i]));
-        }
-        
-        // Calculate derivatives for weights.
-        
-        for (int i = 0; i < mLayerCount - 1; i++)
-        {
-            dW[i] = N[i].Transposed() * dB[i] + W[i] * mLambda; // + W * lambda = L2 regularization
-        }
-    }
+		for (int i = L - 3; i >= 0; i--)
+		{
+			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)mAF[i]](N[i] * W[i] + B[i]));
+		}
+
+		// Calculate derivatives for weights.
+
+		for (unsigned int i = 0; i < L - 1; i++)
+		{
+			dW[i] = N[i].Transposed() * dB[i] + W[i] * mLambda; // + W * lambda = L2 regularization.
+		}
+	}
+
+	void Network::TrainEpoch(const MNIST& data, int miniBatchSize)
+	{
+		std::vector<unsigned int> shuffle(data.Size());
+		std::iota(shuffle.begin(), shuffle.end(), 0);
+		std::shuffle(shuffle.begin(), shuffle.end(), GRandom);
+		
+		std::vector<Matrix> wChange = std::vector<Matrix>(W.size());
+		std::vector<Matrix> bChange = std::vector<Matrix>(B.size());
+		
+		for (unsigned int i = 0; i < L - 1; i++)
+		{
+			wChange[i] = Matrix(W[i].Rows(), W[i].Cols());
+			bChange[i] = Matrix(B[i].Rows(), B[i].Cols());
+		}
+
+		for (int j = 0; j < data.Size(); j++)
+		{
+			std::vector<double> out(10, 0.0f);
+			out[data.GetLabel(shuffle[j])] = 1.0f;
+			
+			ProgressBar("    Training Network    ", j + 1, data.Size());
+
+			FeedForward(data.GetImage(shuffle[j]));
+			BackPropagate(out);
+			
+			// Update minibatch change average.
+			
+			for (unsigned int i = 0; i < L - 1; i++)
+			{
+				wChange[i] += dW[i];
+				bChange[i] += dB[i];
+				
+				// Execute gradient descent when batch finished.
+
+				if(j % miniBatchSize == miniBatchSize - 1)
+				{
+					W[i] -= wChange[i] * mLearningRate;
+					B[i] -= bChange[i] * mLearningRate;
+					
+					wChange[i].Fill(0);
+					bChange[i].Fill(0);
+				}
+			}
+		}
+	}
+	
+	double Network::CalculateAccuracy(const MNIST& data, const char* message)
+	{
+		unsigned int correct = 0;
+
+		for (int i = 0; i < data.Size(); i++)
+		{
+			ProgressBar(message, i, data.Size());
+
+			Matrix matrix = FeedForward(data.GetImage(i));
+			int resultTest = (int)(std::max_element(matrix.Elements().begin(), matrix.Elements().end()) - matrix.Elements().begin());
+			if (resultTest == data.GetLabel(i)) correct++;
+		}
+
+		std::cout << std::endl;
+
+		return ((double)correct / (double)data.Size()) * 100.0;
+	}
 }

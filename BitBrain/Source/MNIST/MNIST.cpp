@@ -15,27 +15,27 @@ namespace BB
 		LoadLabels(labelFileName);
 	}
 
-	int MNIST::Size()
+	int MNIST::Size() const
 	{
 		return mSize;
 	}
 
-	int MNIST::Rows()
+	int MNIST::Rows() const
 	{
 		return mRows;
 	}
 
-	int MNIST::Cols()
+	int MNIST::Cols() const
 	{
 		return mCols;
 	}
 
-	std::vector<double> MNIST::GetImage(unsigned int i)
+	std::vector<double> MNIST::GetImage(unsigned int i) const
 	{
 		return mImages[i];
 	}
 
-	int MNIST::GetLabel(unsigned int i)
+	int MNIST::GetLabel(unsigned int i) const
 	{
 		return mLabels[i];
 	}

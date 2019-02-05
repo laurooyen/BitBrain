@@ -49,6 +49,9 @@ namespace BB
 		/// Returns the largest element from the matrix.
 		double LargestElement() const;
 
+		/// Fills the entire matrix with value.
+		void Fill(double value);
+
 		// Operators
 
 		double& operator() (unsigned int idx);

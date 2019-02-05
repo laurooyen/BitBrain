@@ -1,60 +1,27 @@
 // Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen. All rights reserved.
 
-#include <cmath>
-#include <time.h>
-#include <iostream>
-#include <algorithm>
-#include <numeric>
-#include <random>
-#include <chrono>
-
 #include "MNIST/MNIST.h"
 #include "AI/Network.h"
-#include "AI/Image.h"
-#include "AI/SymbolExtractor.h"
+
+#include <iostream>
 
 using namespace BB;
 
-void NetworkTest();
-void HandwritingTest();
-void BoundingBoxTest();
-
-void ProgressBar(const char* text, int progress, int total, int barWidth = 50, int updateFrequency = 50)
-{
-	if (progress % (total / updateFrequency) == 0)
-	{
-		float percentage = (float)progress / (float)total;
-
-		std::cout << text << " [";
-
-		for (int i = 0; i < barWidth; i++)
-		{
-			std::cout << ((i < percentage * barWidth) ? "#" : "-");
-		}
-
-		std::cout << "] " << (percentage * 100) << " %\r" << std::flush;
-	}
-}
-
 int main()
-{
-	NetworkTest();
-	//HandwritingTest();
-	//BoundingBoxTest();
-
-	// Wait to close program.
-	system("PAUSE");
-}
-
-// --------------------------------------------------
-// TEST SUITES
-// --------------------------------------------------
-
-void NetworkTest()
 {
 	// GLOBAL SETTINGS
 
 	int epochs = 10;
+	int miniBatchSize = 10;
+
+	Network network
+	(
+		{ 784, 100, 60, 10 },					// Layer count
+		{ AF::ReLU, AF::ReLU, AF::Softmax },	// Activation functions
+		CF::CrossEntropy,						// Cost function
+		0.003,									// Learning rate
+		0.0012									// Regularization lambda
+	);
 
 	// LOAD DATA
 
@@ -63,141 +30,32 @@ void NetworkTest()
 	MNIST trainData("Resource/MNIST/TrainingImages-200k.bin", "Resource/MNIST/TrainingLabels-200k.bin");
 	MNIST testData("Resource/MNIST/TestingImages.bin", "Resource/MNIST/TestingLabels.bin");
 
-	// INIT NETWORK
-
-	Network network
-	(
-        { 784, 100, 60, 10 },					// Layer count
-        { AF::ReLU, AF::ReLU, AF::Softmax },	// Activation functions
-		CF::CrossEntropy,						// Cost function
-		0.003,									// Learning rate
-		0.00115									// Regularization lambda
-	);
-
 	// TRAINING LOOP
-    
-    for(int j = 0; j < epochs; j++)
-    {
-        network.TrainEpoch(trainData, 10);
-        
-        // TEST NETWORK
-        
-        int correctTrain = 0;
-        int correctTest = 0;
-        
-        for (int i = 0; i < testData.Size(); i++)
-        {
-            ProgressBar("    Testing ", i + 1, testData.Size());
-            
-            Matrix mTest = network.FeedForward(testData.GetImage(i));
-            int resultTest = (int)(std::max_element(mTest.Elements().begin(), mTest.Elements().end()) - mTest.Elements().begin());
-            if (resultTest == testData.GetLabel(i)) correctTest++;
-            
-            /* not dealing with this yet
-             Matrix mTrain = network.FeedForward(trainData.GetImage(shuffle[i]));
-             int resultTrain = (int)(std::max_element(mTrain.Elements().begin(), mTrain.Elements().end()) - mTrain.Elements().begin());
-             if (resultTrain == trainData.GetLabel(shuffle[i])) correctTrain++;
-             */
-        }
-        
-        std::cout << std::endl;
-        
-        // PRINT ACCURACY
-        
-        double accuracyTest = ((double)correctTest / (double)testData.Size()) * 100.0f;
-        //double accuracyTrain = ((double)correctTrain / (double)testData.Size()) * 100.0f;
-        
-        std::cout << "    Test Accuracy " << accuracyTest << " %\n";
-        //std::cout << "    Train Accuracy " << accuracyTrain << " %\n";
-        
-        std::cout << std::endl;
-        
-    }
-    
 
-}
-
-
-
-/* Srry don't wanna deal with this spaghetti yet
- 
-void HandwritingTest()
-{
-	// Global settings.
-	int epochs = 1;
-
-	// Load Data.
-	std::cout << "Loading data.\n" << std::endl;
-
-	MNIST trainData("Resource/MNIST/TrainingImages.bin", "Resource/MNIST/TrainingLabels.bin");
-
-	// Init network.
-	Network network
-	(
-		{ 784, 15, 10 },				// Layer count
-		{ AF::Sigmoid, AF::Sigmoid },	// Activation functions
-		CF::EuclideanDistance,			// Cost function
-		0.75,							// Learning rate
-		0.0005							// Regularization lambda
-	);
-
-	// Train network.
-	std::cout << "Training network:\n" << std::endl;
-
-	for (int i = 0; i < epochs; i++)
+	std::cout << "Training network.\n" << std::endl;
+	
+	for(int i = 0; i < epochs; i++)
 	{
 		std::cout << "  Epoch #" << (i + 1) << "\n\n";
 
-		// Train network.
+		// TRAIN NETWORK
+		
+		network.TrainEpoch(trainData, miniBatchSize);
+		
+		std::cout << std::endl;
+		
+		// GET ACCURACY
+		
+		double accuracyTest = network.CalculateAccuracy(testData, "    Calc Test Accuracy  ");
+		double accuracyTrain = network.CalculateAccuracy(trainData, "    Calc Train accuracy ");
 
-		for (int j = 0; j < trainData.Size(); j++)
-		{
-			ProgressBar("    Training", j + 1, trainData.Size());
-
-			std::vector<double> out(10, 0.0f);
-			out[trainData.GetLabel(j)] = 1.0f;
-
-			network.FeedForward(trainData.GetImage(j));
-			network.Learn(out);
-		}
+		std::cout << "    Test Accuracy        " << accuracyTest << " %\n";
+		std::cout << "    Train Accuracy       " << accuracyTrain << " %\n";
+		
+		std::cout << std::endl;
 	}
 
-	std::cout << "\n" << std::endl;
+	// WAIT TO CLOSE PROGRAM
 
-	// Handwriting test.
-	std::cout << "Handwriting test:\n" << std::endl;
-
-	Image image("Resource/BoundingBox/Three-004.png", 1);
-
-	std::vector<double> myTestData(image.Width() * image.Height());
-
-	for (int i = 0; i < image.Width() * image.Height(); i++)
-	{
-		myTestData[i] = image.GetRaw(i) / 255.0;
-
-		// TODO(Lauro): Test to see if this works better.
-		// myTestData[i] = (image.GetRaw(i) > 0) ? 1.0 : 0.0;
-	}
-
-	Matrix m = network.Compute(myTestData);
-	int myResult = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
-
-	std::cout << "  Classifiction: " << myResult << std::endl;
-
-	std::cout << std::endl;
+	system("PAUSE");
 }
-
-void BoundingBoxTest()
-{
-	Image image("Resource/BoundingBox/Digits.png", 1);
-
-	SymbolExtractor extractor;
-
-	extractor.MarkIslands(&image);
-
-	std::cout << extractor.GetDebugInfo().str() << std::endl;
-
-	std::cout << std::endl;
-}
-
-*/

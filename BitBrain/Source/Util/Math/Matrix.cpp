@@ -5,6 +5,8 @@
 // TODO(Lauro): Use custom assertions.
 #include <cassert>
 
+#include <algorithm>
+
 namespace BB
 {
 	// Constructors
@@ -111,6 +113,11 @@ namespace BB
 		}
 
 		return r;
+	}
+
+	void Matrix::Fill(double value)
+	{
+		std::fill(mElements.begin(), mElements.end(), value);
 	}
 
 	// Operators
