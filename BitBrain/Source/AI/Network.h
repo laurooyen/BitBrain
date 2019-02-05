@@ -19,29 +19,51 @@ namespace BB
 	{
 	public:
 		
-		Network(const std::vector<int>& layers, const std::vector<AF>& af, CF cf, double learningRate, double lambda);
+		Network();
+		Network(const std::vector<int>& layers);
 		
+		void Init();
+
+		void DumpSettings() const;
+
 		Matrix FeedForward(const std::vector<double>& input);
 		void BackPropagate(const std::vector<double>& output);
 
-		void TrainEpoch(const MNIST& data, int miniBatchSize);
+		void TrainEpoch(const MNIST& data, unsigned int miniBatchSize);
 		double CalculateAccuracy(const MNIST& data, const char* message);
         
+	public:
+
+		double learningRate;
+		double lambda;
+
+		std::vector<AF> af;
+		CF cf;
+
 	private:
 
-		double mLearningRate;
-		double mLambda;
+		std::vector<int> mLayers;
 
-		std::vector<AF> mAF;
-		CF mCF;
+		unsigned int L; ///< Layer count.
 
-		unsigned int L; ///< Layer count
+		std::vector<Matrix> N; ///< Neurons.
+		std::vector<Matrix> W; ///< Weights.
+		std::vector<Matrix> B; ///< Biases.
 
-		std::vector<Matrix> N; ///< Neurons
-		std::vector<Matrix> W; ///< Weights
-		std::vector<Matrix> B; ///< Biases
+		std::vector<Matrix> dW; ///< Derivatives of weights.
+		std::vector<Matrix> dB; ///< Derivatives of biases.
 
-		std::vector<Matrix> dW; ///< Derivatives of weights
-		std::vector<Matrix> dB; ///< Derivatives of biases
+	private:
+
+		template<typename Archive>
+		friend void Serialize(Archive&, Network&, unsigned int);
 	};
+
+	// Serialization
+
+	template<typename Archive>
+	void Serialize(Archive& archive, Network& n, unsigned int version)
+	{
+		archive & n.learningRate & n.lambda & n.mLayers & n.af & n.cf & n.L & n.W & n.B;
+	}
 }

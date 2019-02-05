@@ -26,10 +26,20 @@ namespace BB
 	static Matrix LeakyReLU(const Matrix& m);
 	static Matrix DeriveLeakyReLU(const Matrix& m);
 
-	// DETAILS
+	// Internal details
 
 	typedef Matrix(*ActivationFunction)(const Matrix& m);
 
 	extern const ActivationFunction GCalculateAF[];
 	extern const ActivationFunction GDeriveAF[];
+
+	const char* ToString(const AF& af);
+
+	// Serialization
+
+	template<typename Archive>
+	void Serialize(Archive& archive, AF& af, unsigned int version)
+	{
+		archive & reinterpret_cast<unsigned int &>(af);
+	}
 }

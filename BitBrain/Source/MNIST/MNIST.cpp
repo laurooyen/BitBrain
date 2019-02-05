@@ -15,17 +15,17 @@ namespace BB
 		LoadLabels(labelFileName);
 	}
 
-	int MNIST::Size() const
+	unsigned int MNIST::Size() const
 	{
 		return mSize;
 	}
 
-	int MNIST::Rows() const
+	unsigned int MNIST::Rows() const
 	{
 		return mRows;
 	}
 
-	int MNIST::Cols() const
+	unsigned int MNIST::Cols() const
 	{
 		return mCols;
 	}

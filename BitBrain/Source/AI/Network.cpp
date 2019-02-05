@@ -15,6 +15,8 @@
 #include <chrono>
 #include <iostream>
 
+#include <iostream>
+
 namespace BB
 {
 	static unsigned int GSeed;
@@ -25,25 +27,21 @@ namespace BB
 		return (double)(rand() % 10000 + 1) / 10000 - 0.5;
 	}
 
-	Network::Network(const std::vector<int>& layers, const std::vector<AF>& af, CF cf, double learningRate, double lambda)
+	Network::Network() {}
+
+	Network::Network(const std::vector<int>& layers)
 	{
 		GSeed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 
 		srand(GSeed);
 		GRandom.seed(GSeed);
 
-		L = (unsigned int)layers.size();
-		mLearningRate = learningRate;
-		mLambda = lambda;
-		mAF = af;
-		mCF = cf;
+		mLayers = layers;
 
-		N = std::vector<Matrix>(L);
+		L = (unsigned int)layers.size();
+
 		W = std::vector<Matrix>(L - 1);
 		B = std::vector<Matrix>(L - 1);
-
-		dW = std::vector<Matrix>(L - 1);
-		dB = std::vector<Matrix>(L - 1);
 
 		for (unsigned int i = 0; i < L - 1; i++)
 		{
@@ -55,13 +53,51 @@ namespace BB
 		}
 	}
 
+	void Network::Init()
+	{
+		GSeed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
+
+		srand(GSeed);
+		GRandom.seed(GSeed);
+
+		N = std::vector<Matrix>(L);
+
+		dW = std::vector<Matrix>(L - 1);
+		dB = std::vector<Matrix>(L - 1);
+	}
+
+	void Network::DumpSettings() const
+	{
+		std::cout << "  Learning Rate:         " << learningRate << "\n";
+
+		std::cout << "  Regularization Lambda: " << lambda << "\n";
+
+		std::cout << "  Layers:                { ";
+		for (int i = 0; i < mLayers.size(); i++)
+		{
+			if (i != 0) std::cout << ", ";
+			std::cout << mLayers[i];
+		}
+		std::cout << " }\n";
+
+		std::cout << "  Activation Functions:  { ";
+		for (int i = 0; i < af.size(); i++)
+		{
+			if (i != 0) std::cout << ", ";
+			std::cout << ToString(af[i]);
+		}
+		std::cout << " }\n";
+
+		std::cout << "  Cost Function:         " << ToString(cf) << "\n";
+	}
+
 	Matrix Network::FeedForward(const std::vector<double>& input)
 	{
 		N[0] = Matrix(input);
 
 		for (unsigned int i = 1; i < L; i++)
 		{
-			N[i] = GCalculateAF[(int)mAF[i - 1]](N[i - 1] * W[i - 1] + B[i - 1]);
+			N[i] = GCalculateAF[(int)af[i - 1]](N[i - 1] * W[i - 1] + B[i - 1]);
 		}
 
 		return N[L - 1];
@@ -69,26 +105,26 @@ namespace BB
 	
 	void Network::BackPropagate(const std::vector<double>& output)
 	{
-		Matrix dCdO = GCalculateCF[(int)mCF](N[L - 1], Matrix(output));
+		Matrix dCdO = GCalculateCF[(int)cf](N[L - 1], Matrix(output));
 
 		// Calculate derivatives for biases.
 
-		dB[L - 2] = dCdO * (GDeriveAF[(int)mAF[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
+		dB[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
 
 		for (int i = L - 3; i >= 0; i--)
 		{
-			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)mAF[i]](N[i] * W[i] + B[i]));
+			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](N[i] * W[i] + B[i]));
 		}
 
 		// Calculate derivatives for weights.
 
 		for (unsigned int i = 0; i < L - 1; i++)
 		{
-			dW[i] = N[i].Transposed() * dB[i] + W[i] * mLambda; // + W * lambda = L2 regularization.
+			dW[i] = N[i].Transposed() * dB[i] + W[i] * lambda; // + W * lambda = L2 regularization.
 		}
 	}
 
-	void Network::TrainEpoch(const MNIST& data, int miniBatchSize)
+	void Network::TrainEpoch(const MNIST& data, unsigned int miniBatchSize)
 	{
 		std::vector<unsigned int> shuffle(data.Size());
 		std::iota(shuffle.begin(), shuffle.end(), 0);
@@ -103,7 +139,7 @@ namespace BB
 			bChange[i] = Matrix(B[i].Rows(), B[i].Cols());
 		}
 
-		for (int j = 0; j < data.Size(); j++)
+		for (unsigned int j = 0; j < data.Size(); j++)
 		{
 			std::vector<double> out(10, 0.0f);
 			out[data.GetLabel(shuffle[j])] = 1.0f;
@@ -124,8 +160,8 @@ namespace BB
 
 				if(j % miniBatchSize == miniBatchSize - 1)
 				{
-					W[i] -= wChange[i] * mLearningRate;
-					B[i] -= bChange[i] * mLearningRate;
+					W[i] -= wChange[i] * learningRate;
+					B[i] -= bChange[i] * learningRate;
 					
 					wChange[i].Fill(0);
 					bChange[i].Fill(0);
@@ -138,7 +174,7 @@ namespace BB
 	{
 		unsigned int correct = 0;
 
-		for (int i = 0; i < data.Size(); i++)
+		for (unsigned int i = 0; i < data.Size(); i++)
 		{
 			ProgressBar(message, i, data.Size());
 

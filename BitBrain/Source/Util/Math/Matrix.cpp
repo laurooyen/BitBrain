@@ -11,10 +11,7 @@ namespace BB
 {
 	// Constructors
 
-	Matrix::Matrix()
-	{
-		mElements = Array2D<double>(0, 0);
-	}
+	Matrix::Matrix() {}
 
 	Matrix::Matrix(int rows, int cols)
 	{

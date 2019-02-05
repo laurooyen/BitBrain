@@ -177,6 +177,7 @@
     <ClInclude Include="Source\Util\Math\Matrix.h" />
     <ClInclude Include="Source\Util\Math\Rectangle.h" />
     <ClInclude Include="Source\Util\Math\Vector2.h" />
+    <ClInclude Include="Source\Util\Serialization\Archive.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\MNIST\TestingImages.bin" />

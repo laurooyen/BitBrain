@@ -14,9 +14,9 @@ namespace BB
 
 		MNIST(const char* imageFileName, const char* labelFileName);
 
-		int Size() const;
-		int Rows() const;
-		int Cols() const;
+		unsigned int Size() const;
+		unsigned int Rows() const;
+		unsigned int Cols() const;
 
 		std::vector<double> GetImage(unsigned int i) const;
 		int GetLabel(unsigned int i) const;

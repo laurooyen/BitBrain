@@ -106,8 +106,7 @@ namespace BB
 		return r;
 	}
 
-	// INTERNAL DETAILS
-
+	// Internal details.
 	// The order should match the AF enum class order.
 
 	const ActivationFunction GCalculateAF[] =
@@ -125,4 +124,16 @@ namespace BB
 		DeriveReLU,
 		DeriveLeakyReLU
 	};
+
+	const char* ToString(const AF& af)
+	{
+		switch (af)
+		{
+		case AF::Sigmoid:	return "Sigmoid";
+		case AF::Softmax:	return "Softmax";
+		case AF::ReLU:		return "ReLU";
+		case AF::LeakyReLU:	return "Leaky ReLU";
+		default:			return "Unknown";
+		}
+	}
 }

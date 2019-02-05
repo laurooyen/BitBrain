@@ -85,5 +85,18 @@ namespace BB
 
 		bool operator== (const Matrix& rhs) const;
 		bool operator!= (const Matrix& rhs) const;
+
+	private:
+
+		template<typename Archive>
+		friend void Serialize(Archive&, Matrix&, unsigned int);
 	};
+
+	// Serialization
+
+	template<typename Archive>
+	void Serialize(Archive& archive, Matrix& m, unsigned int version)
+	{
+		archive & m.mElements;
+	}
 }

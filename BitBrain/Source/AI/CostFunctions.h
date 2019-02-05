@@ -15,9 +15,19 @@ namespace BB
 	static Matrix EuclideanDistance(const Matrix& Y, const Matrix& T);
 	static Matrix CrossEntropy(const Matrix& Y, const Matrix& T);
 
-	// DETAILS
+	// Internal details
 
 	typedef Matrix(*CostFunction)(const Matrix& Y, const Matrix& T);
 
 	extern const CostFunction GCalculateCF[];
+
+	const char* ToString(const CF& cf);
+
+	// Serialization
+
+	template<typename Archive>
+	void Serialize(Archive& archive, CF& cf, unsigned int version)
+	{
+		archive & reinterpret_cast<unsigned int &>(cf);
+	}
 }

@@ -98,6 +98,9 @@
     <ClInclude Include="Source\Util\Containers\Array2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Util\Serialization\Archive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Util\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>

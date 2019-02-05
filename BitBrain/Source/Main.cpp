@@ -3,27 +3,43 @@
 #include "MNIST/MNIST.h"
 #include "AI/Network.h"
 
+#include "Util/Common.h"
+#include "Util/Serialization/Archive.h"
+
 #include <iostream>
+#include <sstream>
+#include <fstream>
 
 using namespace BB;
+
+void LoadNetwork(Network& network, std::string filename);
 
 int main()
 {
 	// GLOBAL SETTINGS
 
-	int epochs = 10;
-	int miniBatchSize = 10;
+	unsigned int epochs = 10;
+	unsigned int miniBatchSize = 10;
 
-	Network network
-	(
-		{ 784, 100, 60, 10 },					// Layer count
-		{ AF::ReLU, AF::ReLU, AF::Softmax },	// Activation functions
-		CF::CrossEntropy,						// Cost function
-		0.003,									// Learning rate
-		0.0012									// Regularization lambda
-	);
+	Network network({ 784, 100, 60, 10 });
 
-	// LOAD DATA
+	network.af = { AF::ReLU, AF::ReLU, AF::Softmax };
+	network.cf = CF::CrossEntropy;
+	network.learningRate = 0.003;
+	network.lambda = 0.0012;
+
+	// LOAD SAVED NETWORK
+
+	// Change the filename below to load a saved network.
+	// When the file doesn't exist, nothing will happen.
+
+	// Move the network parameters (af, cf, learningRate, lambda) listed above,
+	// below the LoadNetwork() function to overwrite the respective parameters of the loaded network.
+	// Note that the neuron count can't be adjusted since it is passed to the networks constructor.
+
+	LoadNetwork(network, "Resource/Networks/YYYYMMDD-HHMMSS-E0.bin");
+
+	// LOAD TRAINING AND TESTING DATA
 
 	std::cout << "Loading data.\n" << std::endl;
 
@@ -33,8 +49,10 @@ int main()
 	// TRAINING LOOP
 
 	std::cout << "Training network.\n" << std::endl;
+
+	network.Init();
 	
-	for(int i = 0; i < epochs; i++)
+	for(unsigned int i = 0; i < epochs; i++)
 	{
 		std::cout << "  Epoch #" << (i + 1) << "\n\n";
 
@@ -53,9 +71,65 @@ int main()
 		std::cout << "    Train Accuracy       " << accuracyTrain << " %\n";
 		
 		std::cout << std::endl;
+
+		// SAVE NETWORK
+
+		std::stringstream path;
+		path << "Resource/Networks/" << GetTimeStamp() << "-E" << (i + 1) << ".bin";
+
+		std::ofstream file(path.str(), std::ios::binary);
+		Archive<std::ofstream, true> archive(file);
+
+		archive << network << i << miniBatchSize << accuracyTest << accuracyTrain;
+
+		file.close();
+
+		std::cout << "    Saved network: " << path.str() << "\n";
+
+		std::cout << std::endl;
 	}
 
 	// WAIT TO CLOSE PROGRAM
 
 	system("PAUSE");
+}
+
+// --------------------------------------------------
+// HELPER FUNCTIONS
+// --------------------------------------------------
+
+void LoadNetwork(Network& network, std::string filename)
+{
+	std::ifstream file(filename, std::ios::binary);
+
+	if (file.is_open())
+	{
+		Network savedNetwork;
+		unsigned int epoch;
+		unsigned int miniBatchSize;
+		double accuracyTest;
+		double accuracyTrain;
+
+		Archive<std::ifstream, false> archive(file);
+		archive >> savedNetwork >> epoch >> miniBatchSize >> accuracyTest >> accuracyTrain;
+
+		std::cout << "Found a saved network with the follow settings:\n\n";
+		std::cout << "  File Format Version:   " << archive.GetVersion() << "\n\n";
+		std::cout << "  Trained Epochs:        " << (epoch + 1) << "\n";
+		std::cout << "  Mini Batch Size:       " << miniBatchSize << " \n\n";
+		std::cout << "  Test Accuracy:         " << accuracyTest << " %\n";
+		std::cout << "  Train Accuracy:        " << accuracyTrain << " %\n\n";
+		savedNetwork.DumpSettings();
+
+		std::cout << "\nDo you want to load it (Y, N) ?   ";
+
+		char load;
+		std::cin >> load;
+
+		if (load == 'Y') network = savedNetwork;
+
+		system("CLS");
+	}
+
+	file.close();
 }

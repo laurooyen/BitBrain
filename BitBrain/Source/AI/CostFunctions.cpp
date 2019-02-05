@@ -23,8 +23,7 @@ namespace BB
 		return dCdO;
 	}
 
-	// INTERNAL DETAILS
-
+	// Internal details.
 	// The order should match the CF enum class order.
 
 	const CostFunction GCalculateCF[] =
@@ -32,4 +31,14 @@ namespace BB
 		EuclideanDistance,
 		CrossEntropy
 	};
+
+	const char* ToString(const CF& cf)
+	{
+		switch (cf)
+		{
+		case CF::EuclideanDistance:	return "Euclidean Distance";
+		case CF::CrossEntropy:		return "Cross Entropy";
+		default:					return "Unknown";
+		}
+	}
 }

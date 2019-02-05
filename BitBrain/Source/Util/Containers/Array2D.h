@@ -7,6 +7,8 @@
 
 namespace BB
 {
+	/// A 2D array emulator which uses a single allocation.
+
 	template<typename T>
 	class Array2D
 	{
@@ -78,6 +80,11 @@ namespace BB
 		size_type mRows;
 		size_type mCols;
 		data_type mData;
+
+	private:
+
+		template<typename Archive, typename T>
+		friend void Serialize(Archive&, Array2D<T>&, unsigned int);
 	};
 
 	template<class T>
@@ -95,5 +102,13 @@ namespace BB
 	bool operator!= (const Array2D<T>& lhs, const Array2D<T>& rhs)
 	{
 		return !(lhs == rhs);
+	}
+
+	// Serialization
+
+	template<typename Archive, typename T>
+	void Serialize(Archive& archive, Array2D<T>& a, unsigned int version)
+	{
+		archive & a.mRows & a.mCols & a.mData;
 	}
 }
