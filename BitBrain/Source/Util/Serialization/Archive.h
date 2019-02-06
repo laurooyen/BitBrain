@@ -156,6 +156,8 @@ namespace BB
 		SerializePOD(uint32)
 		SerializePOD(uint64)
 
+		SerializePOD(unsigned long int)
+
 		SerializePOD(float)
 		SerializePOD(double)
 

@@ -83,11 +83,11 @@ namespace BB
 
 	private:
 
-		template<typename Archive, typename T>
-		friend void Serialize(Archive&, Array2D<T>&, unsigned int);
+		template<typename Archive, typename Ta>
+		friend void Serialize(Archive&, Array2D<Ta>&, unsigned int);
 	};
 
-	template<class T>
+	template<typename T>
 	bool operator== (const Array2D<T>& lhs, const Array2D<T>& rhs)
 	{
 		if (lhs.Rows() != rhs.Rows() || lhs.Cols() != rhs.Cols())
@@ -98,7 +98,7 @@ namespace BB
 		return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 
-	template<class T>
+	template<typename T>
 	bool operator!= (const Array2D<T>& lhs, const Array2D<T>& rhs)
 	{
 		return !(lhs == rhs);

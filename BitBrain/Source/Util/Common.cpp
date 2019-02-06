@@ -27,11 +27,11 @@ namespace BB
 	std::string GetTimeStamp()
 	{
 		time_t t = time(0);
-		struct tm timeinfo;
-		localtime_s(&timeinfo, &t);
+		struct tm* timeinfo;
+		timeinfo = localtime(&t);
 
 		char buffer[20];
-		strftime(buffer, 20, "%Y%m%d-%H%M%S", &timeinfo);
+		strftime(buffer, 20, "%Y%m%d-%H%M%S", timeinfo);
 
 		return std::string(buffer);
 	}
