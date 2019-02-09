@@ -19,16 +19,19 @@ int main()
 	// GLOBAL SETTINGS
 
 	unsigned int epochs = 10;
-	unsigned int miniBatchSize = 1;
+	unsigned int miniBatchSize = 5;
 
 	Network network({ 784, 100, 60, 10 });
 
 	network.af = { AF::ReLU, AF::ReLU, AF::Softmax };
 	network.cf = CF::EuclideanDistance;
-	network.learningRate = 0.003;
+	network.learningRate = 0.0035;
 	network.lambda = 0.00125;
-	network.mu = 0.2;
+	network.mu = 0.04; //idk still have to test which value is best
 
+	double learningRateScheduleFactor = 0.8; //still have to test which value to use
+	double previousAccuracy = 0;
+	
 	// LOAD SAVED NETWORK
 
 	// Change the filename below to load a saved network.
@@ -47,7 +50,7 @@ int main()
 	
 	// STORE SAVE PATH
 	
-	std::cout << "save trained network epochs to (existing) folder (you can add prefix to filenames after last / ): \n ";
+	std::cout << "save trained network epochs to (existing, absolute) path (you can add prefix to filenames after last / ): \n ";
 	std::string savePath = "";
 	std::cin >> savePath;
 	
@@ -101,6 +104,13 @@ int main()
 		std::cout << "    Saved network: " << filePath.str() << "\n";
 
 		std::cout << std::endl;
+		
+		//learning rate scheduling
+		if(previousAccuracy > accuracyTest)
+		{
+			network.learningRate *= learningRateScheduleFactor;
+			std::cout << "		Learning rate updated: " << network.learningRate;
+		}
 	}
 
 	// WAIT TO CLOSE PROGRAM
