@@ -116,7 +116,6 @@ namespace BB
 	
 	void Network::BackPropagate(const std::vector<double>& output)
 	{
-		std::cout << "backprop";
 		Matrix dCdO = GCalculateCF[(int)cf](N[L - 1], Matrix(output));
 
 		// Calculate 'delta rule'
