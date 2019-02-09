@@ -19,14 +19,14 @@ int main()
 	// GLOBAL SETTINGS
 
 	unsigned int epochs = 10;
-	unsigned int miniBatchSize = 10;
+	unsigned int miniBatchSize = 1;
 
-	Network network({ 784, 100, 60, 10 });
+	Network network({ 784, 15, 10 });
 
-	network.af = { AF::ReLU, AF::ReLU, AF::Softmax };
-	network.cf = CF::CrossEntropy;
-	network.learningRate = 0.003;
-	network.lambda = 0.0012;
+	network.af = { AF::Sigmoid, AF::Sigmoid };
+	network.cf = CF::EuclideanDistance;
+	network.learningRate = 0.3;
+	network.lambda = 0.0005;
 
 	// LOAD SAVED NETWORK
 
@@ -37,7 +37,19 @@ int main()
 	// below the LoadNetwork() function to overwrite the respective parameters of the loaded network.
 	// Note that the neuron count can't be adjusted since it is passed to the networks constructor.
 
-	LoadNetwork(network, "Resource/Networks/YYYYMMDD-HHMMSS-E0.bin");
+	
+	std::cout << "load network?";
+	std::string loadPath = "";
+	std::cin >> loadPath;
+	LoadNetwork(network, loadPath);
+	
+	
+	// STORE SAVE PATH
+	
+	std::cout << "save trained network epochs to (existing) folder (you can add prefix to filenames after last / ): \n ";
+	std::string savePath = "";
+	std::cin >> savePath;
+	
 
 	// LOAD TRAINING AND TESTING DATA
 
@@ -46,6 +58,7 @@ int main()
 	MNIST trainData("Resource/MNIST/TrainingImages-200k.bin", "Resource/MNIST/TrainingLabels-200k.bin");
 	MNIST testData("Resource/MNIST/TestingImages.bin", "Resource/MNIST/TestingLabels.bin");
 
+	
 	// TRAINING LOOP
 
 	std::cout << "Training network.\n" << std::endl;
@@ -73,18 +86,18 @@ int main()
 		std::cout << std::endl;
 
 		// SAVE NETWORK
-
-		std::stringstream path;
-		path << "Resource/Networks/" << GetTimeStamp() << "-E" << (i + 1) << ".bin";
-
-		std::ofstream file(path.str(), std::ios::binary);
+		std::stringstream filePath;
+		filePath << savePath << "" << GetTimeStamp() << "-E" << (i + 1) << ".bin";
+		
+		std::ofstream file(filePath.str(), std::ios::binary);
+		
 		Archive<std::ofstream, true> archive(file);
 
 		archive << network << i << miniBatchSize << accuracyTest << accuracyTrain;
 
 		file.close();
 
-		std::cout << "    Saved network: " << path.str() << "\n";
+		std::cout << "    Saved network: " << filePath.str() << "\n";
 
 		std::cout << std::endl;
 	}
@@ -129,6 +142,10 @@ void LoadNetwork(Network& network, std::string filename)
 		if (load == 'Y') network = savedNetwork;
 
 		system("CLS");
+	}
+	else
+	{
+		std::cout << "file " << filename << " not found\n";
 	}
 
 	file.close();

@@ -20,6 +20,7 @@
 		46A5F3762205A4FB00C01D56 /* Functions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46A5F36D2205A4FB00C01D56 /* Functions.cpp */; };
 		46A5F3772205A4FB00C01D56 /* MNIST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46A5F3712205A4FB00C01D56 /* MNIST.cpp */; };
 		46A5F3802205AC1600C01D56 /* Resource in CopyFiles */ = {isa = PBXBuildFile; fileRef = 46A5F37F2205AC1000C01D56 /* Resource */; };
+		46D7A219220EF7EC006EE289 /* Common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46D7A217220EF7EC006EE289 /* Common.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,6 +64,10 @@
 		46A5F3702205A4FB00C01D56 /* MNIST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MNIST.h; sourceTree = "<group>"; };
 		46A5F3712205A4FB00C01D56 /* MNIST.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MNIST.cpp; sourceTree = "<group>"; };
 		46A5F37F2205AC1000C01D56 /* Resource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resource; sourceTree = "<group>"; };
+		46D7A207220EF7B2006EE289 /* Archive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Archive.h; sourceTree = "<group>"; };
+		46D7A212220EF7B2006EE289 /* Array2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Array2D.h; sourceTree = "<group>"; };
+		46D7A217220EF7EC006EE289 /* Common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Common.cpp; sourceTree = "<group>"; };
+		46D7A218220EF7EC006EE289 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +127,10 @@
 		46A5F3632205A4FB00C01D56 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				46D7A217220EF7EC006EE289 /* Common.cpp */,
+				46D7A218220EF7EC006EE289 /* Common.h */,
+				46D7A211220EF7B2006EE289 /* Containers */,
+				46D7A206220EF7B2006EE289 /* Serialization */,
 				46A5F3642205A4FB00C01D56 /* Endianness.h */,
 				46A5F3652205A4FB00C01D56 /* Math */,
 				46A5F36E2205A4FB00C01D56 /* CoreTypes.h */,
@@ -163,6 +172,22 @@
 				46A5F3502205A4EB00C01D56 /* AI */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		46D7A206220EF7B2006EE289 /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				46D7A207220EF7B2006EE289 /* Archive.h */,
+			);
+			path = Serialization;
+			sourceTree = "<group>";
+		};
+		46D7A211220EF7B2006EE289 /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				46D7A212220EF7B2006EE289 /* Array2D.h */,
+			);
+			path = Containers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,6 +249,7 @@
 				46A5F35D2205A4EB00C01D56 /* CostFunctions.cpp in Sources */,
 				46A5F3772205A4FB00C01D56 /* MNIST.cpp in Sources */,
 				46A5F3732205A4FB00C01D56 /* Vector2.cpp in Sources */,
+				46D7A219220EF7EC006EE289 /* Common.cpp in Sources */,
 				46A5F35C2205A4EB00C01D56 /* Image.cpp in Sources */,
 				46A5F3752205A4FB00C01D56 /* Rectangle.cpp in Sources */,
 				46A5F3762205A4FB00C01D56 /* Functions.cpp in Sources */,
