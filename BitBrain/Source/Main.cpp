@@ -27,7 +27,7 @@ int main()
 	network.cf = CF::EuclideanDistance;
 	network.learningRate = 0.0035;
 	network.lambda = 0.00125;
-	network.mu = 0.04; //idk still have to test which value is best
+	network.mu = 0.01; //idk still have to test which value is best
 
 	double learningRateScheduleFactor = 0.8; //still have to test which value to use
 	double previousAccuracy = 0;
