@@ -111,6 +111,7 @@ int main()
 			network.learningRate *= learningRateScheduleFactor;
 			std::cout << "		Learning rate updated: " << network.learningRate;
 		}
+		previousAccuracy = accuracyTest;
 	}
 
 	// WAIT TO CLOSE PROGRAM
