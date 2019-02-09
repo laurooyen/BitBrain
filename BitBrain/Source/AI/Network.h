@@ -34,8 +34,9 @@ namespace BB
         
 	public:
 
-		double learningRate;
-		double lambda;
+		double learningRate;	///< learning rate
+		double lambda;			///< regularization parameter
+		double mu;				///< momentum parameter
 
 		std::vector<AF> af;
 		CF cf;
@@ -49,10 +50,15 @@ namespace BB
 		std::vector<Matrix> N; ///< Neurons.
 		std::vector<Matrix> W; ///< Weights.
 		std::vector<Matrix> B; ///< Biases.
+		
+		std::vector<Matrix> Delta; ///< Matrices for 'delta rule' (dC/dZ)
 
 		std::vector<Matrix> dW; ///< Derivatives of weights.
 		std::vector<Matrix> dB; ///< Derivatives of biases.
-
+		
+		std::vector<Matrix> momentumW; ///< Momentum of weights.
+		std::vector<Matrix> momentumB; ///< Momentum of biases.
+		
 	private:
 
 		template<typename Archive>

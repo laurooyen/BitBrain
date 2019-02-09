@@ -21,12 +21,13 @@ int main()
 	unsigned int epochs = 10;
 	unsigned int miniBatchSize = 1;
 
-	Network network({ 784, 15, 10 });
+	Network network({ 784, 100, 60, 10 });
 
 	network.af = { AF::Sigmoid, AF::Sigmoid };
 	network.cf = CF::EuclideanDistance;
-	network.learningRate = 0.3;
-	network.lambda = 0.0005;
+	network.learningRate = 0.003;
+	network.lambda = 0.00125;
+	network.mu = 0.1;
 
 	// LOAD SAVED NETWORK
 
@@ -41,7 +42,7 @@ int main()
 	std::cout << "load network?";
 	std::string loadPath = "";
 	std::cin >> loadPath;
-	LoadNetwork(network, loadPath);
+	//LoadNetwork(network, loadPath);
 	
 	
 	// STORE SAVE PATH

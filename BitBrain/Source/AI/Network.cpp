@@ -47,7 +47,7 @@ namespace BB
 		{
 			W[i] = Matrix(layers[i], layers[i + 1]);
 			B[i] = Matrix(1, layers[i + 1]);
-
+			
 			W[i] = W[i].Foreach(Random);
 			B[i] = B[i].Foreach(Random);
 		}
@@ -64,6 +64,17 @@ namespace BB
 
 		dW = std::vector<Matrix>(L - 1);
 		dB = std::vector<Matrix>(L - 1);
+		
+		Delta = std::vector<Matrix>(L - 1);
+		
+		momentumW = std::vector<Matrix>(L - 1);
+		momentumB = std::vector<Matrix>(L - 1);
+		
+		for(unsigned int i = 0; i < L - 1; i++)
+		{
+			momentumW[i] = Matrix(W[i].Rows(), W[i].Cols());
+			momentumB[i] = Matrix(B[i].Rows(), B[i].Cols());
+		}
 	}
 
 	void Network::DumpSettings() const
@@ -105,22 +116,27 @@ namespace BB
 	
 	void Network::BackPropagate(const std::vector<double>& output)
 	{
+		std::cout << "backprop";
 		Matrix dCdO = GCalculateCF[(int)cf](N[L - 1], Matrix(output));
 
-		// Calculate derivatives for biases.
+		// Calculate 'delta rule'
 
-		dB[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
+		Delta[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
 
 		for (int i = L - 3; i >= 0; i--)
 		{
-			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](N[i] * W[i] + B[i]));
+			Delta[i] = (Delta[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](N[i] * W[i] + B[i]));
 		}
 
-		// Calculate derivatives for weights.
+		// Calculate derivatives of the cost w.r.t. weights and biases
 
 		for (unsigned int i = 0; i < L - 1; i++)
 		{
-			dW[i] = N[i].Transposed() * dB[i] + W[i] * lambda; // + W * lambda = L2 regularization.
+			dB[i] = Delta[i] + momentumB[i];
+			dW[i] = N[i].Transposed() * Delta[i] + W[i] * lambda + momentumW[i]; // + W * lambda = L2 regularization.
+			
+			momentumB[i] = (momentumB[i] + dB[i]) * mu;
+			momentumW[i] = (momentumW[i] + dW[i]) * mu;
 		}
 	}
 
