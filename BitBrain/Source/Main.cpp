@@ -18,19 +18,22 @@ int main()
 {
 	// GLOBAL SETTINGS
 
-	unsigned int epochs = 10;
-	unsigned int miniBatchSize = 5;
+	unsigned int epochs = 100;
+	unsigned int miniBatchSize = 1;
 
-	Network network({ 784, 100, 60, 10 });
+	Network network({ 784, 100, 50, 10 });
 
 	network.af = { AF::ReLU, AF::ReLU, AF::Softmax };
-	network.cf = CF::EuclideanDistance;
-	network.learningRate = 0.0035;
-	network.lambda = 0.00125;
-	network.mu = 0.01; //idk still have to test which value is best
+	network.cf = CF::CrossEntropy;
+	network.learningRate = 0.005;
+	network.lambda = 0.0005;
+	network.mu = 0; //idk still have to test which value is best
 
-	double learningRateScheduleFactor = 0.8; //still have to test which value to use
+	double learningRateScheduleFactor = 0.5; //still have to test which value to use
 	double previousAccuracy = 0;
+	double minLearningRate = 0.00000001;
+	double batchSizeScheduleFactor = 2;
+	double maxBatchSize = 10000;
 	
 	// LOAD SAVED NETWORK
 
@@ -106,10 +109,24 @@ int main()
 		std::cout << std::endl;
 		
 		//learning rate scheduling
+		//TODO: do this with Cost of network, not with accuracy.
 		if(previousAccuracy > accuracyTest)
 		{
 			network.learningRate *= learningRateScheduleFactor;
+			if(network.learningRate < minLearningRate)
+			{
+				network.learningRate = minLearningRate;
+			}
 			std::cout << "		Learning rate updated: " << network.learningRate;
+			
+			miniBatchSize *= batchSizeScheduleFactor;
+			
+			if(miniBatchSize > maxBatchSize)
+			{
+				miniBatchSize = maxBatchSize;
+			}
+			std::cout << "		Mini batch size updated: " << miniBatchSize;
+
 		}
 		previousAccuracy = accuracyTest;
 	}
