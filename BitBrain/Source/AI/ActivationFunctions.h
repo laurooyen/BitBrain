@@ -34,12 +34,4 @@ namespace BB
 	extern const ActivationFunction GDeriveAF[];
 
 	const char* ToString(const AF& af);
-
-	// Serialization
-
-	template<typename Archive>
-	void Serialize(Archive& archive, AF& af, unsigned int version)
-	{
-		archive & reinterpret_cast<unsigned int &>(af);
-	}
 }

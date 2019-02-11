@@ -91,12 +91,4 @@ namespace BB
 		template<typename Archive>
 		friend void Serialize(Archive&, Matrix&, unsigned int);
 	};
-
-	// Serialization
-
-	template<typename Archive>
-	void Serialize(Archive& archive, Matrix& m, unsigned int version)
-	{
-		archive & m.mElements;
-	}
 }

@@ -6,16 +6,14 @@
 
 #include "../Util/Common.h"
 
-#include <cmath>
-#include <time.h>
-#include <iostream>
+#include "../Util/FileManager.h"
+
 #include <algorithm>
 #include <numeric>
 #include <random>
 #include <chrono>
 #include <iostream>
-
-#include <iostream>
+#include <cassert>
 
 namespace BB
 {
@@ -37,6 +35,11 @@ namespace BB
 		GRandom.seed(GSeed);
 
 		mLayers = layers;
+
+		mEpoch = 0;
+
+		mAccuracyTest = 0.0;
+		mAccuracyTrain = 0.0;
 
 		L = (unsigned int)layers.size();
 
@@ -60,46 +63,23 @@ namespace BB
 		srand(GSeed);
 		GRandom.seed(GSeed);
 
+		assert(L - 1 == af.size());
+
 		N = std::vector<Matrix>(L);
+
+		Delta = std::vector<Matrix>(L - 1);
 
 		dW = std::vector<Matrix>(L - 1);
 		dB = std::vector<Matrix>(L - 1);
 		
-		Delta = std::vector<Matrix>(L - 1);
-		
-		momentumW = std::vector<Matrix>(L - 1);
-		momentumB = std::vector<Matrix>(L - 1);
+		mW = std::vector<Matrix>(L - 1);
+		mB = std::vector<Matrix>(L - 1);
 		
 		for(unsigned int i = 0; i < L - 1; i++)
 		{
-			momentumW[i] = Matrix(W[i].Rows(), W[i].Cols());
-			momentumB[i] = Matrix(B[i].Rows(), B[i].Cols());
+			mW[i] = Matrix(W[i].Rows(), W[i].Cols());
+			mB[i] = Matrix(B[i].Rows(), B[i].Cols());
 		}
-	}
-
-	void Network::DumpSettings() const
-	{
-		std::cout << "  Learning Rate:         " << learningRate << "\n";
-
-		std::cout << "  Regularization Lambda: " << lambda << "\n";
-
-		std::cout << "  Layers:                { ";
-		for (int i = 0; i < mLayers.size(); i++)
-		{
-			if (i != 0) std::cout << ", ";
-			std::cout << mLayers[i];
-		}
-		std::cout << " }\n";
-
-		std::cout << "  Activation Functions:  { ";
-		for (int i = 0; i < af.size(); i++)
-		{
-			if (i != 0) std::cout << ", ";
-			std::cout << ToString(af[i]);
-		}
-		std::cout << " }\n";
-
-		std::cout << "  Cost Function:         " << ToString(cf) << "\n";
 	}
 
 	Matrix Network::FeedForward(const std::vector<double>& input)
@@ -116,9 +96,12 @@ namespace BB
 	
 	void Network::BackPropagate(const std::vector<double>& output)
 	{
+		// TODO(Lauro): This code can be optimized so we don't have to use Delta matrices.
+		// I've measured a performance increase of 8%. I'm not sure if it produces the same results.
+
 		Matrix dCdO = GCalculateCF[(int)cf](N[L - 1], Matrix(output));
 
-		// Calculate 'delta rule'
+		// Calculate delta rule.
 
 		Delta[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
 
@@ -127,19 +110,66 @@ namespace BB
 			Delta[i] = (Delta[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](N[i] * W[i] + B[i]));
 		}
 
-		// Calculate derivatives of the cost w.r.t. weights and biases
+		// Calculate derivatives of the cost with respect to weights and biases.
 
 		for (unsigned int i = 0; i < L - 1; i++)
 		{
-			dB[i] = Delta[i] + momentumB[i];
-			dW[i] = N[i].Transposed() * Delta[i] + W[i] * lambda + momentumW[i]; // + W * lambda = L2 regularization.
+			dB[i] = Delta[i] + mB[i];
+			dW[i] = N[i].Transposed() * Delta[i] + W[i] * lambda + mW[i];
 			
-			momentumB[i] = (momentumB[i] + dB[i]) * mu;
-			momentumW[i] = (momentumW[i] + dW[i]) * mu;
+			mB[i] = (mB[i] + dB[i]) * mu;
+			mW[i] = (mW[i] + dW[i]) * mu;
 		}
 	}
 
-	void Network::TrainEpoch(const MNIST& data, unsigned int miniBatchSize)
+	void Network::Train(const MNIST& trainData, const MNIST& testData, const FileManager* fileManager)
+	{
+		std::cout << "Training network.\n" << std::endl;
+
+		double previousAccuracy = 0.0;
+
+		for (mEpoch = 0; mEpoch < epochs; mEpoch++)
+		{
+			std::cout << "  Epoch #" << (mEpoch + 1) << "\n\n";
+
+			// Train network
+
+			TrainEpoch(trainData);
+
+			// Test network
+
+			mAccuracyTest = CalculateAccuracy(testData, "    Calc Test Accuracy    ");
+			mAccuracyTrain = CalculateAccuracy(trainData, "    Calc Train accuracy   ");
+
+			std::cout << "    Test Accuracy          " << mAccuracyTest << " %\n";
+			std::cout << "    Train Accuracy         " << mAccuracyTrain << " %\n\n";
+
+			// Save network
+
+			if (fileManager) fileManager->SaveNetwork(*this);
+
+			// Learning rate scheduling
+
+			//TODO(Jonathan): Do this with cost of network, not with accuracy.
+			if (previousAccuracy > mAccuracyTest)
+			{
+				batchSize *= batchSizeFactor;
+				learningRate *= learningRateFactor;
+				
+				if (batchSize > batchSizeMax) batchSize = batchSizeMax;
+				if (learningRate < learningRateMin) learningRate = learningRateMin;
+				
+				std::cout << "    Updated batch size:    " << batchSize << "\n";
+				std::cout << "    Updated learning rate: " << learningRate << "\n\n";
+			}
+
+			previousAccuracy = mAccuracyTest;
+		}
+
+		std::cout << "Finished training network.\n" << std::endl;
+	}
+
+	void Network::TrainEpoch(const MNIST& data)
 	{
 		std::vector<unsigned int> shuffle(data.Size());
 		std::iota(shuffle.begin(), shuffle.end(), 0);
@@ -154,35 +184,37 @@ namespace BB
 			bChange[i] = Matrix(B[i].Rows(), B[i].Cols());
 		}
 
-		for (unsigned int j = 0; j < data.Size(); j++)
+		for (unsigned int i = 0; i < data.Size(); i++)
 		{
-			std::vector<double> out(10, 0.0f);
-			out[data.GetLabel(shuffle[j])] = 1.0f;
-			
-			ProgressBar("    Training Network    ", j + 1, data.Size());
+			ProgressBar("    Training Network      ", i + 1, data.Size());
 
-			FeedForward(data.GetImage(shuffle[j]));
+			std::vector<double> out(10, 0.0);
+			out[data.GetLabel(shuffle[i])] = 1.0;
+
+			FeedForward(data.GetImage(shuffle[i]));
 			BackPropagate(out);
 			
-			// Update minibatch change average.
+			// Update batch change average.
 			
-			for (unsigned int i = 0; i < L - 1; i++)
+			for (unsigned int j = 0; j < L - 1; j++)
 			{
-				wChange[i] += dW[i];
-				bChange[i] += dB[i];
+				wChange[j] += dW[j];
+				bChange[j] += dB[j];
 				
 				// Execute gradient descent when batch finished.
 
-				if(j % miniBatchSize == miniBatchSize - 1)
+				if(i % batchSize == batchSize - 1)
 				{
-					W[i] -= wChange[i] * learningRate;
-					B[i] -= bChange[i] * learningRate;
+					W[j] -= wChange[j] * learningRate;
+					B[j] -= bChange[j] * learningRate;
 					
-					wChange[i].Fill(0);
-					bChange[i].Fill(0);
+					wChange[j].Fill(0);
+					bChange[j].Fill(0);
 				}
 			}
 		}
+
+		std::cout << std::endl;
 	}
 	
 	double Network::CalculateAccuracy(const MNIST& data, const char* message)

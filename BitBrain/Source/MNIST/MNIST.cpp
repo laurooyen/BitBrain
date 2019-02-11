@@ -11,6 +11,8 @@ namespace BB
 {
 	MNIST::MNIST(const char* imageFileName, const char* labelFileName)
 	{
+
+
 		LoadImages(imageFileName);
 		LoadLabels(labelFileName);
 	}

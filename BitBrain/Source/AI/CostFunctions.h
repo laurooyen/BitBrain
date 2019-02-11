@@ -22,12 +22,4 @@ namespace BB
 	extern const CostFunction GCalculateCF[];
 
 	const char* ToString(const CF& cf);
-
-	// Serialization
-
-	template<typename Archive>
-	void Serialize(Archive& archive, CF& cf, unsigned int version)
-	{
-		archive & reinterpret_cast<unsigned int &>(cf);
-	}
 }

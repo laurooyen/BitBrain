@@ -103,12 +103,4 @@ namespace BB
 	{
 		return !(lhs == rhs);
 	}
-
-	// Serialization
-
-	template<typename Archive, typename T>
-	void Serialize(Archive& archive, Array2D<T>& a, unsigned int version)
-	{
-		archive & a.mRows & a.mCols & a.mData;
-	}
 }

@@ -7,6 +7,4 @@
 namespace BB
 {
 	void ProgressBar(const char* text, int progress, int total, int barWidth = 50, int updateFrequency = 50);
-
-	std::string GetTimeStamp();
 }
