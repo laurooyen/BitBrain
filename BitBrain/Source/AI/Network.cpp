@@ -67,8 +67,6 @@ namespace BB
 
 		N = std::vector<Matrix>(L);
 
-		Delta = std::vector<Matrix>(L - 1);
-
 		dW = std::vector<Matrix>(L - 1);
 		dB = std::vector<Matrix>(L - 1);
 		
@@ -96,29 +94,26 @@ namespace BB
 	
 	void Network::BackPropagate(const std::vector<double>& output)
 	{
-		// TODO(Lauro): This code can be optimized so we don't have to use Delta matrices.
-		// I've measured a performance increase of 8%. I'm not sure if it produces the same results.
-
 		Matrix dCdO = GCalculateCF[(int)cf](N[L - 1], Matrix(output));
 
 		// Calculate delta rule.
 
-		Delta[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
+		dB[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
 
 		for (int i = L - 3; i >= 0; i--)
 		{
-			Delta[i] = (Delta[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](N[i] * W[i] + B[i]));
+			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](N[i] * W[i] + B[i]));
 		}
 
 		// Calculate derivatives of the cost with respect to weights and biases.
 
 		for (unsigned int i = 0; i < L - 1; i++)
 		{
-			dB[i] = Delta[i] + mB[i];
-			dW[i] = N[i].Transposed() * Delta[i] + W[i] * lambda + mW[i];
+			dW[i] = N[i].Transposed() * dB[i] + W[i] * lambda + mW[i];
+			dB[i] = dB[i] + mB[i];
 			
-			mB[i] = (mB[i] + dB[i]) * mu;
 			mW[i] = (mW[i] + dW[i]) * mu;
+			mB[i] = (mB[i] + dB[i]) * mu;
 		}
 	}
 

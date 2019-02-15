@@ -41,13 +41,14 @@ namespace BB
 	{
 		Matrix r = m;
 
-		// Make inputs smaller so exponential doesn't explode out of bounds
+		double l = m.LargestElement();
+
 		for (int i = 0; i < r.Cols(); i++)
 		{
-			r(0, i) = exp(r(0, i) - m.LargestElement());
+			r(0, i) = exp(r(0, i) - l);
 		}
 
-		r = r / r.TotalSum();
+		r /= r.TotalSum();
 
 		return r;
 	}

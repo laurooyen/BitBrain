@@ -97,8 +97,6 @@ namespace BB
 		std::vector<Matrix> W;			///< Weights.
 		std::vector<Matrix> B;			///< Biases.
 
-		std::vector<Matrix> Delta;		///< Matrices for delta rule (dC/dZ).
-
 		std::vector<Matrix> dW;			///< Derivatives of weights.
 		std::vector<Matrix> dB;			///< Derivatives of biases.
 

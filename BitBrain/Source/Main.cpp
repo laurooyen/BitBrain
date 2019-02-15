@@ -10,22 +10,22 @@ int main()
 {
 	// NETWORK SETTINGS
 
-	Network network({ 784, 15, 10 });
+	Network network({ 784, 100, 60, 10 });
 
 	network.epochs = 10;
 
-	network.af = { AF::Sigmoid, AF::Sigmoid };
-	network.cf = CF::EuclideanDistance;
+	network.af = { AF::ReLU, AF::ReLU, AF::Softmax };
+	network.cf = CF::CrossEntropy;
 
 	network.batchSize = 1;
 	network.batchSizeFactor = 2;
 	network.batchSizeMax = 10000;
 
-	network.learningRate = 0.75;
+	network.learningRate = 0.003;
 	network.learningRateFactor = 1.0;
 	network.learningRateMin = 0.00000001;
 
-	network.lambda = 0.0;
+	network.lambda = 0.0012;
 	network.mu = 0.0;
 
 	// FILE MANAGER SETTINGS
