@@ -2,15 +2,12 @@
 
 #include "Network.h"
 
-#include "../MNIST/MNIST.h"
+#include "../FileIO/Dataset.h"
+#include "../FileIO/FileManager.h"
 
 #include "../Util/Common.h"
 
-#include "../Util/FileManager.h"
-
 #include <algorithm>
-#include <numeric>
-#include <random>
 #include <chrono>
 #include <iostream>
 #include <cassert>
@@ -18,7 +15,6 @@
 namespace BB
 {
 	static unsigned int GSeed;
-	std::default_random_engine GRandom;
 
 	double Random(double x)
 	{
@@ -32,7 +28,6 @@ namespace BB
 		GSeed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 
 		srand(GSeed);
-		GRandom.seed(GSeed);
 
 		mLayers = layers;
 
@@ -61,7 +56,6 @@ namespace BB
 		GSeed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
 
 		srand(GSeed);
-		GRandom.seed(GSeed);
 
 		assert(L - 1 == af.size());
 
@@ -117,7 +111,7 @@ namespace BB
 		}
 	}
 
-	void Network::Train(const MNIST& trainData, const MNIST& testData, const FileManager* fileManager)
+	void Network::Train(Dataset& trainData, Dataset& testData, const FileManager* fileManager)
 	{
 		std::cout << "Training network.\n" << std::endl;
 
@@ -164,11 +158,9 @@ namespace BB
 		std::cout << "Finished training network.\n" << std::endl;
 	}
 
-	void Network::TrainEpoch(const MNIST& data)
+	void Network::TrainEpoch(Dataset& data)
 	{
-		std::vector<unsigned int> shuffle(data.Size());
-		std::iota(shuffle.begin(), shuffle.end(), 0);
-		std::shuffle(shuffle.begin(), shuffle.end(), GRandom);
+		data.Shuffle();
 		
 		std::vector<Matrix> wChange = std::vector<Matrix>(W.size());
 		std::vector<Matrix> bChange = std::vector<Matrix>(B.size());
@@ -183,10 +175,10 @@ namespace BB
 		{
 			ProgressBar("    Training Network      ", i + 1, data.Size());
 
-			std::vector<double> out(10, 0.0);
-			out[data.GetLabel(shuffle[i])] = 1.0;
+			std::vector<double> out(mLayers.back(), 0.0);
+			out[data.GetLabel(i)] = 1.0;
 
-			FeedForward(data.GetImage(shuffle[i]));
+			FeedForward(data.GetImage(i));
 			BackPropagate(out);
 			
 			// Update batch change average.
@@ -212,7 +204,7 @@ namespace BB
 		std::cout << std::endl;
 	}
 	
-	double Network::CalculateAccuracy(const MNIST& data, const char* message)
+	double Network::CalculateAccuracy(Dataset& data, const char* message)
 	{
 		unsigned int correct = 0;
 

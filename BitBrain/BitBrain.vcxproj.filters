@@ -18,9 +18,6 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MNIST\MNIST.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\AI\Network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -54,14 +51,14 @@
     <ClCompile Include="Source\ImageProcessing\Image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Util\FileManager.cpp">
+    <ClCompile Include="Source\FileIO\Dataset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FileIO\FileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\MNIST\MNIST.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Util\CoreTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -110,7 +107,10 @@
     <ClInclude Include="Source\ImageProcessing\Image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Util\FileManager.h">
+    <ClInclude Include="Source\FileIO\Dataset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FileIO\FileManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

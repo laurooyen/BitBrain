@@ -98,11 +98,11 @@ namespace BB
 			return (a > b) ? a : b;
 		}
 
-		/// Clamps a value within the specified inclusive [min, max] range.
+		/// Clamps a value within the range [min, max].
 		/// @param x The value to be clamped.
 		/// @param min The minimum of the range.
 		/// @param max The maximum of the range.
-		/// @return Returns the value in the inclusive [min, max] range.
+		/// @return Returns the value in the range [min, max].
 		template <typename T>
 		static inline constexpr T Clamp(const T& x, const T& min, const T& max)
 		{

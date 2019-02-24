@@ -11,7 +11,7 @@
 
 namespace BB
 {
-	class MNIST;
+	class Dataset;
 	class FileManager;
 
 	/// Class representing a neural network.
@@ -48,15 +48,15 @@ namespace BB
 		/// @param trainData The data to train the network with.
 		/// @param testData The data to test the network with.
 		/// @param fileManager The filemanager to save the network with.
-		void Train(const MNIST& trainData, const MNIST& testData, const FileManager* fileManager = nullptr);
+		void Train(Dataset& trainData, Dataset& testData, const FileManager* fileManager = nullptr);
 
 		/// Trains a single epoch.
 		/// @param data The data to train the network with.
-		void TrainEpoch(const MNIST& data);
+		void TrainEpoch(Dataset& data);
 
 		/// @param data The data to test the network with.
 		/// @param message The message that should appear in front of the ProgressBar.
-		double CalculateAccuracy(const MNIST& data, const char* message);
+		double CalculateAccuracy(Dataset& data, const char* message);
 
 		// Getters
 
