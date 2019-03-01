@@ -15,7 +15,7 @@ int main()
 	network.epochs = 100;
 
 	network.af = { AF::Sigmoid, AF::Sigmoid };
-	network.cf = CF::EuclideanDistance;
+	network.cf = CF::MeanSquaredError;
 
 	network.batchSize = 1;
 	network.batchSizeFactor = 1;

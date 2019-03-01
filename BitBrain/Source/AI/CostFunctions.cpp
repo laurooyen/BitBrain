@@ -6,7 +6,7 @@ namespace BB
 {
 	// Implementations of the Cost Functions.
 
-	Matrix EuclideanDistance(const Matrix& Y, const Matrix& T)
+	Matrix MeanSquaredError(const Matrix& Y, const Matrix& T)
 	{
 		return (Y - T);
 	}
@@ -28,7 +28,7 @@ namespace BB
 
 	const CostFunction GCalculateCF[] =
 	{
-		EuclideanDistance,
+		MeanSquaredError,
 		CrossEntropy
 	};
 
@@ -36,7 +36,7 @@ namespace BB
 	{
 		switch (cf)
 		{
-		case CF::EuclideanDistance:	return "Euclidean Distance";
+		case CF::MeanSquaredError:	return "Mean Squared Error";
 		case CF::CrossEntropy:		return "Cross Entropy";
 		default:					return "Unknown";
 		}

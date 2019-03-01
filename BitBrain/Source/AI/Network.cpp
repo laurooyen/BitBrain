@@ -59,7 +59,7 @@ namespace BB
 
 		assert(L - 1 == af.size());
 
-		N = std::vector<Matrix>(L);
+		A = std::vector<Matrix>(L);
 
 		dW = std::vector<Matrix>(L - 1);
 		dB = std::vector<Matrix>(L - 1);
@@ -76,34 +76,34 @@ namespace BB
 
 	Matrix Network::FeedForward(const std::vector<double>& input)
 	{
-		N[0] = Matrix(input);
+		A[0] = Matrix(input);
 
 		for (unsigned int i = 1; i < L; i++)
 		{
-			N[i] = GCalculateAF[(int)af[i - 1]](N[i - 1] * W[i - 1] + B[i - 1]);
+			A[i] = GCalculateAF[(int)af[i - 1]](A[i - 1] * W[i - 1] + B[i - 1]);
 		}
 
-		return N[L - 1];
+		return A[L - 1];
 	}
 	
 	void Network::BackPropagate(const std::vector<double>& output)
 	{
-		Matrix dCdO = GCalculateCF[(int)cf](N[L - 1], Matrix(output));
+		Matrix dCdO = GCalculateCF[(int)cf](A[L - 1], Matrix(output));
 
 		// Calculate delta rule.
 
-		dB[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](N[L - 2] * W[L - 2] + B[L - 2]));
+		dB[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](A[L - 2] * W[L - 2] + B[L - 2]));
 
 		for (int i = L - 3; i >= 0; i--)
 		{
-			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](N[i] * W[i] + B[i]));
+			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](A[i] * W[i] + B[i]));
 		}
 
 		// Calculate derivatives of the cost with respect to weights and biases.
 
 		for (unsigned int i = 0; i < L - 1; i++)
 		{
-			dW[i] = N[i].Transposed() * dB[i] + W[i] * lambda + mW[i];
+			dW[i] = A[i].Transposed() * dB[i] + W[i] * lambda + mW[i];
 			dB[i] = dB[i] + mB[i];
 			
 			mW[i] = (mW[i] + dW[i]) * mu;
@@ -137,7 +137,7 @@ namespace BB
 
 			if (fileManager) fileManager->SaveNetwork(*this);
 
-			// Learning rate scheduling
+			// Batch size and learning rate scheduling
 
 			//TODO(Jonathan): Do this with cost of network, not with accuracy.
 			if (previousAccuracy > mAccuracyTest)

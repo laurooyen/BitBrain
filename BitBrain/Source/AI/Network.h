@@ -93,7 +93,7 @@ namespace BB
 
 		unsigned int L;					///< Layer count.
 
-		std::vector<Matrix> N;			///< Neurons.
+		std::vector<Matrix> A;			///< Activations.
 		std::vector<Matrix> W;			///< Weights.
 		std::vector<Matrix> B;			///< Biases.
 

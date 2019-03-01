@@ -8,11 +8,11 @@ namespace BB
 {
 	enum class CF
 	{
-		EuclideanDistance,
+		MeanSquaredError,
 		CrossEntropy
 	};
 
-	static Matrix EuclideanDistance(const Matrix& Y, const Matrix& T);
+	static Matrix MeanSquaredError(const Matrix& Y, const Matrix& T);
 	static Matrix CrossEntropy(const Matrix& Y, const Matrix& T);
 
 	// Internal details
