@@ -22,7 +22,12 @@ namespace BB
 		mNetworkDir = networkDir;
 	}
 
-	void FileManager::RequestName()
+	void FileManager::SetNetworkName(const char* name)
+	{
+		mNetworkName = name;
+	}
+
+	void FileManager::RequestNetworkName()
 	{
 		std::cout << "Enter network name: ";
 		std::cin >> mNetworkName;
@@ -31,7 +36,7 @@ namespace BB
 		if (!IsAlphaNumeric(mNetworkName[0]))
 		{
 			std::cout << "Not a valid network name. Please use a different name.\n" << std::endl;
-			RequestName();
+			RequestNetworkName();
 		}
 		
 		fs::path path(mNetworkDir);
@@ -40,7 +45,7 @@ namespace BB
 		if (fs::exists(path))
 		{
 			std::cout << "Network already exists. Please use a different name.\n" << std::endl;
-			RequestName();
+			RequestNetworkName();
 		}
 	}
 

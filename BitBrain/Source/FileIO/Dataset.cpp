@@ -12,7 +12,7 @@ namespace BB
 {
 	std::default_random_engine GRandom;
 
-	Dataset::Dataset(const char* path, const std::vector<DatasetSymbol>& symbols)
+	Dataset::Dataset(const char* path, const std::vector<DatasetSymbol>& symbols, uint32 max)
 	{
 		mSymbols = symbols;
 
@@ -20,7 +20,7 @@ namespace BB
 		{
 			std::string filename = path + std::string("/") + symbol.filename;
 
-			LoadSymbol(filename.c_str());
+			LoadSymbol(filename.c_str(), max);
 		}
 
 		mIndices = std::vector<uint32>(mImages.size());
@@ -56,7 +56,7 @@ namespace BB
 		return 0;
 	}
 
-	bool Dataset::LoadSymbol(const char* filename)
+	bool Dataset::LoadSymbol(const char* filename, uint32 max)
 	{
 		uint32 magic, size, rows, cols;
 		
@@ -72,6 +72,11 @@ namespace BB
 			std::cout << "Error reading dataset symbol file: " << filename << std::endl;
 			file.close();
 			return false;
+		}
+
+		if (max > 0 && max < size)
+		{
+			size = max;
 		}
 
 		for (unsigned int i = 0; i < size; i++)

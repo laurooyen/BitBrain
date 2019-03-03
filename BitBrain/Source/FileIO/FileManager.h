@@ -16,9 +16,14 @@ namespace BB
 
 		FileManager(const char* networkDir);
 
+		/// Sets a new network name.
+		/// This function does not perform any validation in contrast to RequestNetworkName().
+		/// @param name The name of the network.
+		void SetNetworkName(const char* name);
+
 		/// Gets a new network name from the console.
 		/// If this function doesn't get called, networks will be saved to networkDir itself.
-		void RequestName();
+		void RequestNetworkName();
 
 		/// Loads a network from a binary file.
 		/// Prints the networks settings and asks whether it should be loaded.

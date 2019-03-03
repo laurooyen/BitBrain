@@ -32,7 +32,7 @@ int main()
 
 	FileManager fileManager("Resource/Networks");
 
-	fileManager.RequestName();
+	fileManager.RequestNetworkName();
 
 	// LOAD SAVED NETWORK
 

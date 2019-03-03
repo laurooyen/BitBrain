@@ -27,7 +27,8 @@ namespace BB
 		/// Creates a new dataset.
 		/// @param path The directory with the symbols.
 		/// @param symbols A list of DatasetSymbol.
-		Dataset(const char* path, const std::vector<DatasetSymbol>& symbols);
+		/// @param max The maximum amount of samples to load per symbol.
+		Dataset(const char* path, const std::vector<DatasetSymbol>& symbols, uint32 max = 0);
 
 		// Calculations
 
@@ -51,7 +52,7 @@ namespace BB
 	private:
 
 		/// Loads a single dataset symbol.
-		bool LoadSymbol(const char* filename);
+		bool LoadSymbol(const char* filename, uint32 max);
 
 	private:
 
