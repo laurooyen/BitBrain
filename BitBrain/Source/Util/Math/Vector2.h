@@ -52,7 +52,9 @@ namespace BB
 		// Operators
 
 		TVector2 operator- () const;
+
 		friend TVector2 operator* (T lhs, const TVector2& rhs);
+		friend TVector2 operator/ (T lhs, const TVector2& rhs);
 
 		// Arithmetic operators
 

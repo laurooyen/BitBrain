@@ -22,7 +22,9 @@ namespace BB
 		// Constructors
 
 		TRectangle();
+		TRectangle(T w, T h);
 		TRectangle(T x, T y, T w, T h);
+		TRectangle(const TVector2<T>& size);
 		TRectangle(const TVector2<T>& topLeft, const TVector2<T>& size);
 
 		// Predefined rectangles

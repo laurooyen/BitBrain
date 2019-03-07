@@ -52,6 +52,8 @@ namespace BB
 	private:
 
 		/// Loads a single dataset symbol.
+		/// @param filename The filename of the symbol.
+		/// @param max The maximum amount of samples to load.
 		bool LoadSymbol(const char* filename, uint32 max);
 
 	private:

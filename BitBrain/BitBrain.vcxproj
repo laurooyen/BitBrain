@@ -161,6 +161,8 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\FileIO\Dataset.cpp" />
     <ClCompile Include="Source\ThirdParty\stb_image.cpp" />
+    <ClCompile Include="Source\ThirdParty\stb_image_resize.cpp" />
+    <ClCompile Include="Source\ThirdParty\stb_image_write.cpp" />
     <ClCompile Include="Source\Util\Common.cpp" />
     <ClCompile Include="Source\FileIO\FileManager.cpp" />
     <ClCompile Include="Source\Util\Math\Functions.cpp" />
@@ -176,6 +178,8 @@
     <ClInclude Include="Source\ImageProcessing\SymbolExtractor.h" />
     <ClInclude Include="Source\FileIO\Dataset.h" />
     <ClInclude Include="Source\ThirdParty\stb_image.h" />
+    <ClInclude Include="Source\ThirdParty\stb_image_resize.h" />
+    <ClInclude Include="Source\ThirdParty\stb_image_write.h" />
     <ClInclude Include="Source\Util\Common.h" />
     <ClInclude Include="Source\Util\Containers\Array2D.h" />
     <ClInclude Include="Source\Util\CoreTypes.h" />

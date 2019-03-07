@@ -14,8 +14,6 @@
 
 namespace BB
 {
-	static unsigned int GSeed;
-
 	double Random(double x)
 	{
 		return (double)(rand() % 10000 + 1) / 10000 - 0.5;
@@ -25,9 +23,7 @@ namespace BB
 
 	Network::Network(const std::vector<int>& layers)
 	{
-		GSeed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
-
-		srand(GSeed);
+		srand((unsigned int)std::chrono::system_clock::now().time_since_epoch().count());
 
 		mLayers = layers;
 
@@ -53,10 +49,6 @@ namespace BB
 
 	void Network::Init()
 	{
-		GSeed = (unsigned int)std::chrono::system_clock::now().time_since_epoch().count();
-
-		srand(GSeed);
-
 		assert(L - 1 == af.size());
 
 		A = std::vector<Matrix>(L);

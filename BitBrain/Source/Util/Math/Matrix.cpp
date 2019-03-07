@@ -114,19 +114,22 @@ namespace BB
 
 	void Matrix::Fill(double value)
 	{
-		std::fill(mElements.begin(), mElements.end(), value);
+		for (double& element : mElements)
+		{
+			element = value;
+		}
 	}
 
 	// Operators
 
-	double & Matrix::operator()(unsigned int idx)
+	double & Matrix::operator()(unsigned int index)
 	{
-		return mElements(idx);
+		return mElements(index);
 	}
 
-	const double & Matrix::operator()(unsigned int idx) const
+	const double & Matrix::operator()(unsigned int index) const
 	{
-		return mElements(idx);
+		return mElements(index);
 	}
 
 	double& Matrix::operator() (unsigned int row, unsigned int col)

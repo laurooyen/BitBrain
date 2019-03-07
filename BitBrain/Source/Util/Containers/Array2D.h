@@ -38,7 +38,7 @@ namespace BB
 		Array2D(size_type rows, size_type cols, const_reference value)
 			: mRows(rows), mCols(cols), mData(rows * cols, value) {}
 
-		Array2D(const std::vector<double>& row)
+		Array2D(const std::vector<T>& row)
 			: mRows(1), mCols(row.size()), mData(row) {}
 
 		// Iterators
@@ -59,6 +59,10 @@ namespace BB
 		const_reverse_iterator rend() const { return mData.rend(); }
 		const_reverse_iterator crend() const { return mData.crend(); }
 
+		// Functions
+
+		void clear() { mData.clear(); }
+
 		// Getters
 
 		size_type Rows() const { return mRows; }
@@ -69,8 +73,8 @@ namespace BB
 
 		// Operators
 
-		reference operator() (const size_type idx) { return mData[idx]; }
-		const_reference operator() (const size_type idx) const { return mData[idx]; }
+		reference operator() (const size_type index) { return mData[index]; }
+		const_reference operator() (const size_type index) const { return mData[index]; }
 
 		reference operator() (const size_type row, const size_type col) { return mData[mCols * row + col]; }
 		const_reference operator() (const size_type row, const size_type col) const { return mData[mCols * row + col]; }

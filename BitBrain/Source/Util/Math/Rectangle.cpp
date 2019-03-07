@@ -14,8 +14,16 @@ namespace BB
 		: xMin(T(0)), yMin(T(0)), xMax(T(0)), yMax(T(0)) {}
 
 	template<typename T>
+	TRectangle<T>::TRectangle(T w, T h)
+		: xMin(T(0)), yMin(T(0)), xMax(w), yMax(h) {}
+
+	template<typename T>
 	TRectangle<T>::TRectangle(T x, T y, T w, T h)
 		: xMin(x), yMin(y), xMax(x + w), yMax(y + h) {}
+
+	template<typename T>
+	TRectangle<T>::TRectangle(const TVector2<T>& size)
+		: xMin(T(0)), yMin(T(0)), xMax(size.x), yMax(size.y) {}
 
 	template<typename T>
 	TRectangle<T>::TRectangle(const TVector2<T>& topLeft, const TVector2<T>& size)

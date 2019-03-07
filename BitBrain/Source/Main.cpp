@@ -4,53 +4,64 @@
 #include "FileIO/Dataset.h"
 #include "FileIO/FileManager.h"
 
+#include "ImageProcessing/Image.h"
+#include "ImageProcessing/SymbolExtractor.h"
+
+#include "Util/Math/Functions.h"
+
+#include <iostream>
+
 using namespace BB;
 
-int main()
+std::stringstream GetDebugInfo(const std::vector<RectangleI>& rectangles)
 {
-	// NETWORK SETTINGS
+	std::stringstream stream;
 
-	Network network({ 784, 15, 10 });
+	stream << "[";
 
-	network.epochs = 100;
+	for (int i = 0; i < rectangles.size(); i++)
+	{
+		stream << "[" << rectangles[i].X() << "," << rectangles[i].Y() << "," << rectangles[i].Width() << "," << rectangles[i].Height() << "]";
 
-	network.af = { AF::Sigmoid, AF::Sigmoid };
-	network.cf = CF::MeanSquaredError;
+		if (i < rectangles.size() - 1) stream << ",";
+	}
 
-	network.batchSize = 1;
-	network.batchSizeFactor = 1;
-	network.batchSizeMax = 10000;
+	stream << "]";
 
-	network.learningRate = 0.75;
-	network.learningRateFactor = 1.0;
-	network.learningRateMin = 0.0;
+	return stream;
+}
 
-	network.lambda = 0.0;
-	network.mu = 0.0;
+int main(int argc, char* argv[])
+{
+	// LOAD TRAINED NETWORK
 
-	// FILE MANAGER SETTINGS
+	Network network;
 
 	FileManager fileManager("Resource/Networks");
 
-	fileManager.RequestNetworkName();
-
-	// LOAD SAVED NETWORK
-
-	fileManager.LoadNetwork(network, "FOLDER/YYYYMMDD-HHMMSS-E0.bin");
-
-	// LOAD TRAINING AND TESTING DATA
-	
-	std::vector<DatasetSymbol> symbols =
-	{
-		{ "0", "D0.bin" }, { "1", "D1.bin" }, { "2", "D2.bin" }, { "3", "D3.bin" }, { "4", "D4.bin" },
-		{ "5", "D5.bin" }, { "6", "D6.bin" }, { "7", "D7.bin" }, { "8", "D8.bin" }, { "9", "D9.bin" },
-	};
-
-	Dataset trainData("Resource/Dataset/Training", symbols);
-	Dataset testData("Resource/Dataset/Testing", symbols);
-
-	// TRAIN NETWORK
+	fileManager.LoadNetwork(network, "Network.bin", false);
 
 	network.Init();
-	network.Train(trainData, testData, &fileManager);
+
+	// HANDWRITING TEST
+
+	Image image("Resource/BoundingBox/RealWorld.jpg");
+
+	SymbolExtractor extractor(image);
+	extractor.Threshold();
+	extractor.CalculateBounds();
+	extractor.CleanBounds();
+	extractor.SortBounds();
+
+	std::cout << GetDebugInfo(extractor.Bounds()).str() << std::endl;
+
+	for (unsigned int i = 0; i < extractor.Size(); i++)
+	{
+		Matrix m = network.FeedForward(extractor.GetImage(i));
+		int myResult = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
+
+		std::cout << "Classifiction: " << myResult << std::endl;
+	}
+
+	system("PAUSE");
 }

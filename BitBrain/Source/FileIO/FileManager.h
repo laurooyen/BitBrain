@@ -8,12 +8,14 @@ namespace BB
 {
 	class Network;
 
-	/// Manager responsible for loading and saving data.
+	/// Manager responsible for loading and saving network data.
 
 	class FileManager
 	{
 	public:
 
+		/// Creates a new filemanager.
+		/// @param networkDir The directory where networks should be loaded from or saved to.
 		FileManager(const char* networkDir);
 
 		/// Sets a new network name.
@@ -29,7 +31,7 @@ namespace BB
 		/// Prints the networks settings and asks whether it should be loaded.
 		/// @param network The network in which to load the saved data.
 		/// @param name The filename (relative to networkDir) of the network which should be loaded.
-		void LoadNetwork(Network& network, std::string name) const;
+		void LoadNetwork(Network& network, std::string name, bool confirm = true) const;
 
 		/// Saves a network to a binary file.
 		/// @param network The network to be saved.

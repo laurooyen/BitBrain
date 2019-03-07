@@ -49,7 +49,7 @@ namespace BB
 		}
 	}
 
-	void FileManager::LoadNetwork(Network& network, std::string name) const
+	void FileManager::LoadNetwork(Network& network, std::string name, bool confirm) const
 	{
 		fs::path path(mNetworkDir);
 		path.append(name);
@@ -63,17 +63,23 @@ namespace BB
 			Archive<std::ifstream, false> archive(file);
 			archive >> savedNetwork;
 
-			std::cout << "Found a saved network with the follow settings:\n\n";
-			std::cout << "  File Format Version:   " << archive.GetVersion() << "\n\n";
+			if (confirm)
+			{
+				std::cout << "Found a saved network with the follow settings:\n\n";
+				std::cout << "  File Format Version:   " << archive.GetVersion() << "\n\n";
 
-			DumpNetwork(savedNetwork);
+				DumpNetwork(savedNetwork);
 
-			std::cout << "\nDo you want to load it (Y, N) ?   ";
+				std::cout << "\nDo you want to load it (Y, N) ?   ";
 
-			char load;
-			std::cin >> load;
-
-			if (load == 'Y') network = savedNetwork;
+				char input;
+				std::cin >> input;
+				if (input == 'Y') network = savedNetwork;
+			}
+			else
+			{
+				network = savedNetwork;
+			}
 		}
 		else
 		{

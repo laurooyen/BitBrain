@@ -83,6 +83,12 @@ namespace BB
 		return TVector2(lhs * rhs.x, lhs * rhs.y);
 	}
 
+	template<typename T>
+	TVector2<T> operator/ (T lhs, const TVector2<T>& rhs)
+	{
+		return TVector2(lhs / rhs.x, lhs / rhs.y);
+	}
+
 	// Arithmetic operators
 
 	template<typename T>

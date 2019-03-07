@@ -26,7 +26,7 @@ namespace BB
 	public:
 
 		const uint32 Magic = 0x41494442;
-		const uint32 Version = 1;
+		const uint32 Version = 0;
 
 	public:
 

@@ -2,19 +2,10 @@
 
 #include "ActivationFunctions.h"
 
-#include <cmath>
+#include "../Util/Math/Functions.h"
 
 namespace BB
 {
-	// TODO(Lauro): This doesn't belong here.
-
-	/// Returns the largest of two values.
-	template <typename T>
-	static inline constexpr T Max(const T& a, const T& b)
-	{
-		return (a > b) ? a : b;
-	}
-
 	// Implementations of the Activation Functions.
 
 	static Matrix Sigmoid(const Matrix& m)
@@ -72,7 +63,7 @@ namespace BB
 	Matrix ReLU(const Matrix& m)
 	{
 		return m.Foreach([](double x) {
-			return Max(0.0, x);
+			return Math::Max(0.0, x);
 		});
 	}
 
