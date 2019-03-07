@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include "../Util/CoreTypes.h"
+#include "../Utility/CoreTypes.h"
 
-#include "../Util/Math/Vector2.h"
-#include "../Util/Math/Rectangle.h"
+#include "../Utility/Math/Vector2.h"
+#include "../Utility/Math/Rectangle.h"
 
 #include <vector>
 

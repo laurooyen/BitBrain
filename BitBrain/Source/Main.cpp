@@ -7,7 +7,7 @@
 #include "ImageProcessing/Image.h"
 #include "ImageProcessing/SymbolExtractor.h"
 
-#include "Util/Math/Functions.h"
+#include "Utility/Math/Functions.h"
 
 #include <iostream>
 

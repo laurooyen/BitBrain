@@ -5,9 +5,9 @@
 #include <vector>
 #include <sstream>
 
-#include "../Util/CoreTypes.h"
-#include "../Util/Math/Rectangle.h"
-#include "../Util/Containers/Array2D.h"
+#include "../Utility/CoreTypes.h"
+#include "../Utility/Math/Rectangle.h"
+#include "../Utility/Containers/Array2D.h"
 
 #include "Image.h"
 

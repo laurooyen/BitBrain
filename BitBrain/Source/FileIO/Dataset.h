@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../Util/CoreTypes.h"
+#include "../Utility/CoreTypes.h"
 
 #include <vector>
 

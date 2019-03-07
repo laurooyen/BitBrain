@@ -2,7 +2,7 @@
 
 #include "SymbolExtractor.h"
 
-#include "../Util/Math/Functions.h"
+#include "../Utility/Math/Functions.h"
 
 #include <queue>
 #include <iostream>

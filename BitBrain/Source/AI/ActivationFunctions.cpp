@@ -2,7 +2,7 @@
 
 #include "ActivationFunctions.h"
 
-#include "../Util/Math/Functions.h"
+#include "../Utility/Math/Functions.h"
 
 namespace BB
 {

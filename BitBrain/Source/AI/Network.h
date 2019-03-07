@@ -4,7 +4,7 @@
 
 #include <vector>
 
-#include "../Util/Math/Matrix.h"
+#include "../Utility/Math/Matrix.h"
 
 #include "ActivationFunctions.h"
 #include "CostFunctions.h"

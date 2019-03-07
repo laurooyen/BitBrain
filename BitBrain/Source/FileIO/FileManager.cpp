@@ -4,8 +4,8 @@
 
 #include "../AI/Network.h"
 
-#include "../Util/Serialization/Types.h"
-#include "../Util/Serialization/Archive.h"
+#include "../Utility/Serialization/Types.h"
+#include "../Utility/Serialization/Archive.h"
 
 #include <filesystem>
 #include <iostream>

@@ -163,12 +163,12 @@
     <ClCompile Include="Source\ThirdParty\stb_image.cpp" />
     <ClCompile Include="Source\ThirdParty\stb_image_resize.cpp" />
     <ClCompile Include="Source\ThirdParty\stb_image_write.cpp" />
-    <ClCompile Include="Source\Util\Common.cpp" />
+    <ClCompile Include="Source\Utility\Common.cpp" />
     <ClCompile Include="Source\FileIO\FileManager.cpp" />
-    <ClCompile Include="Source\Util\Math\Functions.cpp" />
-    <ClCompile Include="Source\Util\Math\Matrix.cpp" />
-    <ClCompile Include="Source\Util\Math\Rectangle.cpp" />
-    <ClCompile Include="Source\Util\Math\Vector2.cpp" />
+    <ClCompile Include="Source\Utility\Math\Functions.cpp" />
+    <ClCompile Include="Source\Utility\Math\Matrix.cpp" />
+    <ClCompile Include="Source\Utility\Math\Rectangle.cpp" />
+    <ClCompile Include="Source\Utility\Math\Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AI\ActivationFunctions.h" />
@@ -180,17 +180,17 @@
     <ClInclude Include="Source\ThirdParty\stb_image.h" />
     <ClInclude Include="Source\ThirdParty\stb_image_resize.h" />
     <ClInclude Include="Source\ThirdParty\stb_image_write.h" />
-    <ClInclude Include="Source\Util\Common.h" />
-    <ClInclude Include="Source\Util\Containers\Array2D.h" />
-    <ClInclude Include="Source\Util\CoreTypes.h" />
-    <ClInclude Include="Source\Util\Endianness.h" />
+    <ClInclude Include="Source\Utility\Common.h" />
+    <ClInclude Include="Source\Utility\Containers\Array2D.h" />
+    <ClInclude Include="Source\Utility\CoreTypes.h" />
+    <ClInclude Include="Source\Utility\Endianness.h" />
     <ClInclude Include="Source\FileIO\FileManager.h" />
-    <ClInclude Include="Source\Util\Math\Functions.h" />
-    <ClInclude Include="Source\Util\Math\Matrix.h" />
-    <ClInclude Include="Source\Util\Math\Rectangle.h" />
-    <ClInclude Include="Source\Util\Math\Vector2.h" />
-    <ClInclude Include="Source\Util\Serialization\Archive.h" />
-    <ClInclude Include="Source\Util\Serialization\Types.h" />
+    <ClInclude Include="Source\Utility\Math\Functions.h" />
+    <ClInclude Include="Source\Utility\Math\Matrix.h" />
+    <ClInclude Include="Source\Utility\Math\Rectangle.h" />
+    <ClInclude Include="Source\Utility\Math\Vector2.h" />
+    <ClInclude Include="Source\Utility\Serialization\Archive.h" />
+    <ClInclude Include="Source\Utility\Serialization\Types.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resource\MNIST\TestingImages.bin" />

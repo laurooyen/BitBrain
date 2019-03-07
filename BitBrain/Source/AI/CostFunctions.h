@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../Util/Math/Matrix.h"
+#include "../Utility/Math/Matrix.h"
 
 namespace BB
 {
