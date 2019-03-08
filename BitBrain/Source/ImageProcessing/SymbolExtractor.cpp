@@ -16,7 +16,7 @@ namespace BB
 
 	void SymbolExtractor::Threshold()
 	{
-		mImage.Threshold(70);
+		mImage.AdaptiveThreshold(101, 15);
 	}
 
 	void SymbolExtractor::CalculateBounds()
@@ -40,7 +40,7 @@ namespace BB
 	void SymbolExtractor::CleanBounds()
 	{
 		mBounds.erase(std::remove_if(mBounds.begin(), mBounds.end(), [](RectangleI r) {
-			return r.Width() <= 3 || r.Height() <= 3;
+			return r.Width() <= 5 || r.Height() <= 5;
 		}), mBounds.end());
 	}
 

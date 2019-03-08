@@ -8,6 +8,8 @@
 #include "../ThirdParty/stb_image_write.h"
 #include "../ThirdParty/stb_image_resize.h"
 
+#include "../Utility/Containers/Array2D.h"
+
 namespace BB
 {
 	// Constructors
@@ -82,9 +84,9 @@ namespace BB
 		{
 			for (int x = 0; x < srcRect.Width(); x++)
 			{
-				for (unsigned int i = 0; i < src.Channels(); i++)
+				for (unsigned int c = 0; c < src.Channels(); c++)
 				{
-					dst(x + dstVec.x, y + dstVec.y, i) = src(x + srcRect.X(), y + srcRect.Y(), i);
+					dst(x + dstVec.x, y + dstVec.y, c) = src(x + srcRect.X(), y + srcRect.Y(), c);
 				}
 			}
 		}
@@ -111,6 +113,54 @@ namespace BB
 		for (uint8& pixel : mPixels)
 		{
 			pixel = ((pixel <= threshold) ? 0 : 255);
+		}
+	}
+
+	void Image::AdaptiveThreshold(uint8 size, uint8 constant)
+	{
+		int halfSize = size / 2;
+
+		Array2D<uint64> integral(mWidth, mHeight);
+
+		for (unsigned int y = 0; y < mHeight; y++)
+		{
+			uint64 sum = 0;
+
+			for (unsigned int x = 0; x < mWidth; x++)
+			{
+				sum += mPixels[y * mWidth + x];
+
+				if (y == 0)
+				{
+					integral(x, y) = sum;
+				}
+				else
+				{
+					integral(x, y) = integral(x, y - 1) + sum;
+				}
+			}
+		}
+
+		for (unsigned int y = 0; y < mHeight; y++)
+		{
+			for (unsigned int x = 0; x < mWidth; x++)
+			{
+				int x1 = x - halfSize;
+				int x2 = x + halfSize;
+				int y1 = y - halfSize;
+				int y2 = y + halfSize;
+
+				if (x1 < 0) x1 = 0;
+				if (y1 < 0) y1 = 0;
+				if (x2 >= (int)mWidth) x2 = mWidth - 1;
+				if (y2 >= (int)mHeight) y2 = mHeight - 1;
+
+				int count = (x2 - x1) * (y2 - y1);
+
+				uint64 sum = integral(x1, y1) - integral(x1, y2) - integral(x2, y1) + integral(x2, y2);
+
+				mPixels[y * mWidth + x] = (mPixels[y * mWidth + x] > ((sum / count) - constant)) ? 255 : 0;
+			}
 		}
 	}
 

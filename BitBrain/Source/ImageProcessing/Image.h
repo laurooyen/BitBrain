@@ -56,6 +56,11 @@ namespace BB
 		/// @param threshold The threshold value.
 		void Threshold(uint8 threshold);
 
+		/// Converts the image to a binary image.
+		/// @param size Size of the pixel area that is used to calculate a threshold value for the pixel.
+		/// @param constant Constant subtracted from the mean pixel value.
+		void AdaptiveThreshold(uint8 size, uint8 constant);
+
 		// Operators
 
 		uint8& operator() (unsigned int index);
