@@ -202,7 +202,7 @@ namespace BB
 
 		for (unsigned int i = 0; i < data.Size(); i++)
 		{
-			ProgressBar(message, i, data.Size());
+			ProgressBar(message, i + 1, data.Size());
 
 			Matrix matrix = FeedForward(data.GetImage(i));
 			int resultTest = (int)(std::max_element(matrix.Elements().begin(), matrix.Elements().end()) - matrix.Elements().begin());

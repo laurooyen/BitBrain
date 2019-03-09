@@ -3,12 +3,13 @@
 #include "Common.h"
 
 #include <iostream>
+#include <cmath>
 
 namespace BB
 {
-	void ProgressBar(const char* text, int progress, int total, int barWidth, int updateFrequency)
+	void ProgressBar(const char* text, int progress, int total, int barWidth)
 	{
-		if (progress % (total / updateFrequency) == 0)
+		if (progress % (total / barWidth) == 0)
 		{
 			float percentage = (float)progress / (float)total;
 
@@ -19,7 +20,7 @@ namespace BB
 				std::cout << ((i < percentage * barWidth) ? "#" : "-");
 			}
 
-			std::cout << "] " << (percentage * 100) << " %\r" << std::flush;
+			std::cout << "] " << std::ceil(percentage * 100) << " %\r" << std::flush;
 		}
 	}
 }
