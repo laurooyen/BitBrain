@@ -6,12 +6,14 @@
 
 namespace BB
 {
+	/// Activation Functions for a network.
+
 	enum class AF
 	{
 		Sigmoid,
 		Softmax,
 		ReLU,
-		LeakyReLU // TODO(Jonathan): Test this (not sure if it works well).
+		LeakyReLU
 	};
 
 	static Matrix Sigmoid(const Matrix& m);

@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include <vector>
-
 #include "../Containers/Array2D.h"
+
+#include <vector>
 
 namespace BB
 {

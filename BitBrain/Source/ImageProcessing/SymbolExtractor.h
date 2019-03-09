@@ -2,14 +2,14 @@
 
 #pragma once
 
-#include <vector>
-#include <sstream>
+#include "Image.h"
 
 #include "../Utility/CoreTypes.h"
 #include "../Utility/Math/Rectangle.h"
 #include "../Utility/Containers/Array2D.h"
 
-#include "Image.h"
+#include <vector>
+#include <sstream>
 
 namespace BB
 {
@@ -23,6 +23,8 @@ namespace BB
 
 		// Constructors
 
+		/// Creates a new symbol extractor.
+		/// @param image The image to process.
 		SymbolExtractor(const Image& image);
 
 		// Calculations

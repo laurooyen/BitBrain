@@ -2,7 +2,6 @@
 
 #pragma once
 
-// TODO(Lauro): Remove this.
 #include <cmath>
 
 namespace BB
@@ -146,7 +145,7 @@ namespace BB
 
 		/// Solves a quadtratic equation. Ax² + Bx + C = 0.
 		/// @param a,b,c The equation parameters.
-		/// @param root1, root2 The root that was found.
+		/// @param root1,root2 The root that was found.
 		/// @return The number of roots that were found.
 		static int SolveQuadratic(float a, float b, float c, float& root1, float& root2)
 		{

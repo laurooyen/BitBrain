@@ -6,6 +6,8 @@
 
 namespace BB
 {
+	/// Cost Functions for a neural netowrk.
+
 	enum class CF
 	{
 		MeanSquaredError,

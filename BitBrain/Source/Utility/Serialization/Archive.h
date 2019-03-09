@@ -2,10 +2,7 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <string>
-#include <cassert>
-#include <algorithm>
+#include "../CoreTypes.h"
 
 #include <vector>
 #include <deque>
@@ -15,8 +12,6 @@
 
 #include <exception>
 #include <stdexcept>
-
-#include "../CoreTypes.h"
 
 namespace BB
 {

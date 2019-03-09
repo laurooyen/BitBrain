@@ -47,11 +47,15 @@ namespace BB
 
 	private:
 
-		std::string mNetworkDir;
-		std::string mNetworkName;
+		std::string mNetworkDir;	///< Dirictory in which networks get stored.
+		std::string mNetworkName;	///< Name of the current network folder.
 
+		/// Returns true when the character is alpha numeric.
+		/// Alpha numeric characters include all digits, lower and uppercase letters and an underscore.
 		bool IsAlphaNumeric(char c) const;
 
+		/// Returns a timestamp as a string.
+		/// The format is "YYYYMMDD-hhmmss".
 		std::string GetTimeStamp() const;
 	};
 }

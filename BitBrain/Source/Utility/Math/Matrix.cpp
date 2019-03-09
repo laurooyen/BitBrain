@@ -2,9 +2,7 @@
 
 #include "Matrix.h"
 
-// TODO(Lauro): Use custom assertions.
 #include <cassert>
-
 #include <algorithm>
 
 namespace BB

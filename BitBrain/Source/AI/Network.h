@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include <vector>
-
 #include "../Utility/Math/Matrix.h"
 
 #include "ActivationFunctions.h"
 #include "CostFunctions.h"
+
+#include <vector>
 
 namespace BB
 {

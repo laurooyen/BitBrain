@@ -2,13 +2,13 @@
 
 #include "Image.h"
 
-#include <iostream>
-
-#include "../ThirdParty/stb_image.h"
-#include "../ThirdParty/stb_image_write.h"
-#include "../ThirdParty/stb_image_resize.h"
-
 #include "../Utility/Containers/Array2D.h"
+
+#include "../ThirdParty/stb/stb_image.h"
+#include "../ThirdParty/stb/stb_image_write.h"
+#include "../ThirdParty/stb/stb_image_resize.h"
+
+#include <iostream>
 
 namespace BB
 {
@@ -77,9 +77,6 @@ namespace BB
 
 	void Image::Blit(const Image& src, Image& dst, const RectangleI& srcRect, const Vector2I& dstVec)
 	{
-		// TODO(Lauro): src and dst should be large enough to hold the data.
-		// TODO(Lauro): src and dst should have the same amount of channels.
-
 		for (int y = 0; y < srcRect.Height(); y++)
 		{
 			for (int x = 0; x < srcRect.Width(); x++)

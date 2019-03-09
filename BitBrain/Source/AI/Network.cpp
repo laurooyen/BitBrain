@@ -2,10 +2,10 @@
 
 #include "Network.h"
 
+#include "../Utility/Common.h"
+
 #include "../FileIO/Dataset.h"
 #include "../FileIO/FileManager.h"
-
-#include "../Utility/Common.h"
 
 #include <algorithm>
 #include <chrono>
@@ -131,7 +131,7 @@ namespace BB
 
 			// Batch size and learning rate scheduling
 
-			//TODO(Jonathan): Do this with cost of network, not with accuracy.
+			//TODO: Do this with cost of network, not with accuracy.
 			if (previousAccuracy > mAccuracyTest)
 			{
 				batchSize *= batchSizeFactor;
