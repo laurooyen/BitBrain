@@ -83,7 +83,7 @@ namespace BB
 		}
 		else
 		{
-			std::cout << "Network <" << name << "> does not exist.\n" << std::endl;
+			std::cerr << "Network <" << name << "> does not exist.\n" << std::endl;
 		}
 
 		file.close();

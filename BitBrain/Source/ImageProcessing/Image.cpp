@@ -41,7 +41,7 @@ namespace BB
 
 		if (!pixels)
 		{
-			std::cout << "Failed to load image file: " << filename << std::endl;
+			std::cerr << "Failed to load image file: " << filename << std::endl;
 		}
 
 		if (channels > 0)
@@ -60,7 +60,7 @@ namespace BB
 
 		if (!succes)
 		{
-			std::cout << "Failed to save image file: " << filename << std::endl;
+			std::cerr << "Failed to save image file: " << filename << std::endl;
 		}
 	}
 

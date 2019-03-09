@@ -69,7 +69,7 @@ namespace BB
 
 		if (magic != 0x41494442 || rows != mRows || cols != mCols)
 		{
-			std::cout << "Error reading dataset symbol file: " << filename << std::endl;
+			std::cerr << "Error reading dataset symbol file: " << filename << std::endl;
 			file.close();
 			return false;
 		}
