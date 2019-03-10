@@ -58,7 +58,7 @@ namespace BB
 
 		float scale = Math::Min(22 / (float)tempImage.Width(), 22 / (float)tempImage.Height());
 
-		tempImage = Image::Resize(tempImage, Vector2I(tempImage.Width() * (int)scale, tempImage.Height() * (int)scale));
+		tempImage = Image::Resize(tempImage, Vector2I((int)((float)tempImage.Width() * scale), (int)((float)tempImage.Height() * scale)));
 
 		Image finalImage(28, 28);
 
