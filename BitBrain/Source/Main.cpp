@@ -13,7 +13,7 @@
 
 using namespace BB;
 
-std::stringstream GetDebugInfo(const std::vector<RectangleI>& rectangles)
+std::stringstream GetDebugInfo(const std::vector<RectangleI>& rectangles, const std::vector<int>& classifications, const std::vector<std::string>& symbols)
 {
 	std::stringstream stream;
 
@@ -21,7 +21,7 @@ std::stringstream GetDebugInfo(const std::vector<RectangleI>& rectangles)
 
 	for (int i = 0; i < rectangles.size(); i++)
 	{
-		stream << "[" << rectangles[i].X() << "," << rectangles[i].Y() << "," << rectangles[i].Width() << "," << rectangles[i].Height() << "]";
+		stream << "[" << "\"" << symbols[classifications[i]] << "\"" << "," << rectangles[i].X() << "," << rectangles[i].Y() << "," << rectangles[i].Width() << "," << rectangles[i].Height() << "]";
 
 		if (i < rectangles.size() - 1) stream << ",";
 	}
@@ -33,19 +33,34 @@ std::stringstream GetDebugInfo(const std::vector<RectangleI>& rectangles)
 
 int main(int argc, char* argv[])
 {
-	// LOAD TRAINED NETWORK
+	const char* imagePath;
+	const char* networkPath;
+
+	if (argc == 3)
+	{
+		imagePath = argv[1];
+		networkPath = argv[2];
+	}
+	else
+	{
+		imagePath = "Resource/BoundingBox/RealWorld.jpg";
+		networkPath = "Resource/Networks";
+	}
 
 	Network network;
 
-	FileManager fileManager("Resource/Networks");
+	FileManager fileManager(networkPath);
 
 	fileManager.LoadNetwork(network, "Network.bin", false);
 
 	network.Init();
 
-	// HANDWRITING TEST
+	std::vector<std::string> symbols =
+	{
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+	};
 
-	Image image("Resource/BoundingBox/RealWorld.jpg");
+	Image image(imagePath);
 
 	SymbolExtractor extractor(image);
 	extractor.Threshold();
@@ -53,15 +68,15 @@ int main(int argc, char* argv[])
 	extractor.CleanBounds();
 	extractor.SortBounds();
 
-	std::cout << GetDebugInfo(extractor.Bounds()).str() << std::endl;
+	std::vector<int> results;
 
 	for (unsigned int i = 0; i < extractor.Size(); i++)
 	{
 		Matrix m = network.FeedForward(extractor.GetImage(i));
-		int myResult = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
+		int result = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
 
-		std::cout << "Classifiction: " << myResult << std::endl;
+		results.push_back(result);
 	}
 
-	system("PAUSE");
+	std::cout << GetDebugInfo(extractor.Bounds(), results, symbols).str() << std::endl;
 }

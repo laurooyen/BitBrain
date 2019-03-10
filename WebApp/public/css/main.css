@@ -1,0 +1,212 @@
+/* -------------------------------- */
+/* GLOBAL                           */
+/* -------------------------------- */
+
+* {
+	font-family: 'Lato', Arial, sans-serif;
+	font-weight: 400;
+	user-select: none;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	background: #000;
+	overflow: hidden;
+	height: 100%;
+	margin: 0px;
+}
+
+/* -------------------------------- */
+/* COMMON FIXES                     */
+/* -------------------------------- */
+
+canvas {
+	display: block
+}
+
+input, button {
+	border: none;
+	outline: none;
+	box-sizing: border-box;
+}
+
+input[type="file"],
+input[type="checkbox"] {
+	display: none;
+}
+
+/* -------------------------------- */
+/* COMMON CLASSES                   */
+/* -------------------------------- */
+
+.left {
+	position:absolute;
+	left:20px;
+	top:20px;
+}
+
+.right {
+	position:absolute;
+	right:20px;
+	top:20px;
+}
+
+/* -------------------------------- */
+/* INPUT AND BUTTONS                */
+/* -------------------------------- */
+
+.input {
+	width: 100%;
+	padding: 10px;
+	margin-top: 15px;
+	font-size: 15px;
+	background-color: transparent;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	transition: all 0.3s ease;
+}
+
+	.input:focus {
+		border: 1px solid #2196f3;
+	}
+
+.button {
+	width: 100%;
+	padding: 10px;
+	margin-top: 15px;
+	color:#2196f3;
+	background-color: transparent;
+	border-radius: 5px;
+	font-weight: bold;
+	font-size: 16px;
+	border: 1px solid #2196f3;
+	transition: all 0.3s ease;
+}
+
+	.button:hover {
+		border-color: #1a7fe4;
+		background-color: #1a7fe412;
+	}
+
+.button-fab {
+	width: 50px;
+	height: 50px;
+	color: #fff;
+	background-color: #2196f3;
+	border-radius: 50%;
+	font-size: 25px;
+	line-height: 25px;
+	text-align: center;
+	box-shadow: 0px 1px 5px 0px #00000033, 0px 2px 2px 0px #00000024, 0px 3px 1px -2px #0000001f;
+	transition: all 0.3s ease;
+}
+
+	.button-fab:hover {
+		background-color: #1a7fe4;
+	}
+
+/* -------------------------------- */
+/* OVERLAY                          */
+/* -------------------------------- */
+
+.overlay {
+	overflow: auto;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	top: 0;
+	background: #000000cc;
+	visibility: hidden;
+	opacity: 0;
+	transition: all 0.3s ease;
+}
+
+	.overlay.open {
+		visibility: visible;
+		opacity: 1;
+	}
+
+/* -------------------------------- */
+/* POPUP                            */
+/* -------------------------------- */
+
+.popup {
+	margin: 70px auto;
+	padding: 20px;
+	background: #fff;
+	border-radius: 5px;
+	max-width: 500px;
+	position: relative;
+	overflow: hidden;
+	color: #333;
+}
+
+.popup h2 {
+	margin-top: 0;
+	font-weight: bold;
+}
+
+.popup .close {
+	position: absolute;
+	right: 30px;
+	top: 20px;
+	font-size: 30px;
+	font-weight: bold;
+	color: #2196f3;
+	background-color: transparent;
+	transition: all 0.3s ease;
+}
+
+	.popup .close:hover {
+		color: #1a7fe4;
+	}
+
+@media only screen and (max-width: 600px), (max-height: 300px) {
+	.popup {
+		max-width: 100%;
+		margin: 0px;
+		border-radius: 0px;
+	}
+}
+
+/* -------------------------------- */
+/* COLLAPSIBLE ELEMENTS             */
+/* -------------------------------- */
+
+.collapsible {
+	display: block;
+	text-align:center;
+	margin-bottom: 0px;
+	margin-top: 25px;
+	color: #AAA;
+}
+
+	.open.collapsible {
+		margin-bottom: 0px;
+	}
+	
+.collapsible::after {
+	content: ' ';
+	display: inline-block;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid currentColor;
+	vertical-align: middle;
+	margin-left: 10px;
+	transform: translateY(-1px);
+}
+
+	.open.collapsible::after {
+		transform: rotate(-180deg) translateY(1px);
+	}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  padding-bottom: 1px;
+  transition: all 0.3s ease-out;
+}

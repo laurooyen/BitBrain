@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8"/>
+	<title>BitBrain</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+
+	<div>
+		<input id="fileInput" type="file" accept="image/*" capture>
+		
+		<button id="uploadButton" class="button-fab left"><i class="fa fa-camera"></i></button>
+		<button id="settingsButton" class="button-fab right"><i class="fa fa-cog"></i></button>
+		
+		<canvas id="canvas">
+			HTML5 Canvas not supported by this browser.
+		</canvas>
+	</div>
+	
+	<div id="settingsPanel" class="overlay">
+		<div class="popup">
+
+			<h2>BitBrain</h2>
+			<button class="close" onclick="ToggleSettingsPanel();">&times;</button>
+
+			<input type="text" id="username" class="input" autocomplete="off" placeholder="First Name">
+
+			<label class="collapsible">Advanced settings</label>
+
+			<div class="collapsible-content">
+				<input type="text" id="arguments" class="input" autocomplete="off" placeholder="CMD Arguments">
+				<button class="button" id="evaluateButton">Evaluate</button>
+			</div>
+
+		</div>
+	</div>
+
+	<script src="/js/main.js"></script>
+	
+</body>
+
+</html>

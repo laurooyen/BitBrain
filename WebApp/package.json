@@ -1,0 +1,31 @@
+{
+  "name": "bitbrain-webapp",
+  "description": "An AI project for maths.",
+  "version": "1.0.0",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lauro Oyen",
+  "contributors": [
+    "Jonathan Swinnen"
+  ],
+  "keywords": [
+    "cpp",
+    "ai",
+    "neural-network",
+    "machine-learning"
+  ],
+  "license": "",
+  "repository": "github:laurooyen/BitBrain",
+  "homepage": "https://github.com/laurooyen/BitBrain",
+  "bugs": "https://github.com/laurooyen/BitBrain/issues",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "moment": "^2.24.0",
+    "opn": "^5.4.0",
+    "socket.io": "^2.2.0"
+  }
+}
