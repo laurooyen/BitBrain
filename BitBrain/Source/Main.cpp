@@ -3,11 +3,8 @@
 #include "AI/Network.h"
 #include "FileIO/Dataset.h"
 #include "FileIO/FileManager.h"
-
 #include "ImageProcessing/Image.h"
 #include "ImageProcessing/SymbolExtractor.h"
-
-#include "Utility/Math/Functions.h"
 
 #include <iostream>
 
