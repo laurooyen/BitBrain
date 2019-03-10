@@ -1,4 +1,5 @@
-// Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen. All rights reserved.
+// Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen, BitBrain contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt for full terms. This notice is not to be removed.
 
 #include "AI/Network.h"
 #include "FileIO/Dataset.h"
@@ -40,7 +41,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		imagePath = "Resource/BoundingBox/RealWorld.jpg";
+		imagePath = "Resource/Images/Example Image.jpg";
 		networkPath = "Resource/Networks";
 	}
 

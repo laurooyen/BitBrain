@@ -1,4 +1,5 @@
-// Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen. All rights reserved.
+// Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen, BitBrain contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt for full terms. This notice is not to be removed.
 
 #include "AI/Network.h"
 #include "FileIO/Dataset.h"
@@ -29,7 +30,7 @@ int main()
 		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
 	};
 
-	Image image("Resource/Images/Example 1.jpg");
+	Image image("Resource/Images/Example Image.jpg");
 
 	// EXTRACT SYMBOLS
 

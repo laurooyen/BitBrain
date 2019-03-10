@@ -17,7 +17,7 @@
     "neural-network",
     "machine-learning"
   ],
-  "license": "",
+  "license": "MIT",
   "repository": "github:laurooyen/BitBrain",
   "homepage": "https://github.com/laurooyen/BitBrain",
   "bugs": "https://github.com/laurooyen/BitBrain/issues",

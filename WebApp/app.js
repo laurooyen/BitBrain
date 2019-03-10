@@ -1,7 +1,10 @@
-// Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen. All rights reserved.
+// Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen, BitBrain contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt for full terms. This notice is not to be removed.
 
 console.log('BitBrain - Web Application Server.');
-console.log('Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen. All rights reserved.');
+console.log('');
+console.log('Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen, BitBrain contributors. All rights reserved.');
+console.log('Licensed under the MIT license. See LICENSE.txt for full terms. This notice is not to be removed.');
 
 // --------------------------------
 // REQUIRES

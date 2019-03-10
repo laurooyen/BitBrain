@@ -1,4 +1,5 @@
-// Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen. All rights reserved.
+// Copyright (c) 2019 Lauro Oyen, Jonathan Swinnen, BitBrain contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt for full terms. This notice is not to be removed.
 
 #pragma once
 
@@ -143,7 +144,7 @@ namespace BB
 			return (x < T(0)) ? T(-1) : T(1);
 		}
 
-		/// Solves a quadtratic equation. Ax² + Bx + C = 0.
+		/// Solves a quadtratic equation. Axï¿½ + Bx + C = 0.
 		/// @param a,b,c The equation parameters.
 		/// @param root1,root2 The root that was found.
 		/// @return The number of roots that were found.
