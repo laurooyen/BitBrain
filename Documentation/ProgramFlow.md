@@ -8,7 +8,7 @@ Below is a detailed overview of the most important steps. The programming langua
 
 ## Web Application (HTML, CSS, JS)
 
-Files [[main.ejs](WebApp/views/main.ejs) - [main.js](WebApp/public/js/main.js)]
+Files [[main.ejs](https://github.com/laurooyen/BitBrain/blob/master/WebApp/views/main.ejs) - [main.js](https://github.com/laurooyen/BitBrain/blob/master/WebApp/public/js/main.js)]
 
 The web application is responsible for sending an image to the server. For non-programmers to be able to use our program, it was crucial that we had a simple user interface. By writing this with web technologies such as HTML and CSS we could easily run it on desktop and mobile devices.
 
@@ -24,7 +24,7 @@ On completion, the user can select a new image.
 
 ## Server (JS - Node.js)
 
-Files [[app.js](WebApp/app.js)]
+Files [[app.js](https://github.com/laurooyen/BitBrain/blob/master/WebApp/app.js)]
 
 The server is responsible for the communication between the web application and the C++ program. We could have embed a WebSocket server in the C++ program, but even then we would still need a webserver to serve the web application itself to our clients. This made the choice for Node.js rather obvious.
 
@@ -42,7 +42,7 @@ On completion, the server processes the next image in queue. If there is none, i
 
 ## Symbol Extractor (C++)
 
-Files [[SymbolExtractor.h](BitBrain/Source/ImageProcessing/SymbolExtractor.h) - [SymbolExtractor.cpp](BitBrain/Source/ImageProcessing/SymbolExtractor.cpp)]
+Files [[SymbolExtractor.h](https://github.com/laurooyen/BitBrain/blob/master/BitBrain/Source/ImageProcessing/SymbolExtractor.h) - [SymbolExtractor.cpp](https://github.com/laurooyen/BitBrain/blob/master/BitBrain/Source/ImageProcessing/SymbolExtractor.cpp)]
 
 The symbol extractor is responsible for extracting the individual symbols (digits or math operators) out of an image with multiple symbols. Technically speaking we could have done this with artificial intelligence as well but this would have complicated things a lot. Instead we opted for a more classic approach using image processing. Whilst not perfect, it offered a good balance between development time and accuracy.
 
@@ -66,7 +66,7 @@ On completion, the individual images are passed one by one to the network class.
 
 ## Network (C++)
 
-Files [[Network.h](BitBrain/Source/AI/Network.h) - [Network.cpp](BitBrain/Source/AI/Network.cpp)]
+Files [[Network.h](https://github.com/laurooyen/BitBrain/blob/master/BitBrain/Source/AI/Network.h) - [Network.cpp](https://github.com/laurooyen/BitBrain/blob/master/BitBrain/Source/AI/Network.cpp)]
 
 The network is responsible for classifying images of a single symbol. It does this using artificial intelligence and more specifically a neural network that is build out of fully connected layers. At startup, the weight matrices and bias vectors of a pre-trained network get loaded. This allows for quick feed-forwards of images trough the network and makes sure users don't have to wait to get the classification results for their images.
 

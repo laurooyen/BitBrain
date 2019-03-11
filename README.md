@@ -1,6 +1,6 @@
 # BitBrain
 
-An AI project for maths. Developed by Lauro Oyen and Jonathan Swinnen.
+An AI project for maths developed by Lauro Oyen and Jonathan Swinnen.
 
 ## Getting Started
 
@@ -10,9 +10,13 @@ Download BitBrain or learn how to compile it from source code in the Getting Sta
 
 ## Documentation
 
-Read everything about how the BitBrain works in the Program Flow manual. This document gives an overview of the most important steps and files in the Web App as well as the C++ program.
+Learn how BitBrain works in the Program Flow manual.
 
 [Program Flow](Documentation/ProgramFlow.md)
+
+Basic code examples can be found in the Examples folder.
+
+[Examples](BitBrain/Examples)
 
 ## License
 
