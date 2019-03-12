@@ -112,7 +112,7 @@ namespace BB
 		LeakyReLU
 	};
 
-	const ActivationFunction GDeriveAF[] =
+	const DeriveActivationFunction GDeriveAF[] =
 	{
 		DeriveSigmoid,
 		DeriveSoftmax,

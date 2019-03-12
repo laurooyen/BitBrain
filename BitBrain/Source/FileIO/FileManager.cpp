@@ -128,6 +128,8 @@ namespace BB
 			csvFile << "Trained Epochs;";
 			csvFile << "Test Accuracy;";
 			csvFile << "Train Accuracy;";
+			csvFile << "Test Cost;";
+			csvFile << "Train Cost;";
 			csvFile << "Layers;";
 			csvFile << "Activation Functions;";
 			csvFile << "Cost Function;";
@@ -153,6 +155,8 @@ namespace BB
 				csvFile << (network.Epoch() + 1) << ";";
 				csvFile << network.AccuracyTest() << " %;";
 				csvFile << network.AccuracyTrain() << " %;";
+				csvFile << network.CostTest() << ";";
+				csvFile << network.CostTrain() << ";";
 
 				csvFile << "{ ";
 				for (int l : network.Layers()) csvFile << l << " ";
@@ -185,6 +189,9 @@ namespace BB
 
 		std::cout << "  Test Accuracy:         " << network.AccuracyTest() << " %\n";
 		std::cout << "  Train Accuracy:        " << network.AccuracyTrain() << " %\n\n";
+
+		std::cout << "  Test Cost:             " << network.CostTest() << "\n";
+		std::cout << "  Train Cost:            " << network.CostTrain() << "\n\n";
 
 		std::cout << "  Layers:                { ";
 		for (int l : network.Layers()) std::cout << l << " ";

@@ -43,7 +43,7 @@ namespace BB
 
 		/// Back Propagate.
 		/// @param output The expected networks output vector.
-		void BackPropagate(const std::vector<double>& output);
+		void BackPropagate(const std::vector<double>& target);
 
 		/// Trains the network.
 		/// @param trainData The data to train the network with.
@@ -55,9 +55,12 @@ namespace BB
 		/// @param data The data to train the network with.
 		void TrainEpoch(Dataset& data);
 
+		/// Calculates the accuracy and cost of the network.
 		/// @param data The data to test the network with.
 		/// @param message The message that should appear in front of the ProgressBar.
-		double CalculateAccuracy(Dataset& data, const char* message);
+		/// @param accuracy Variable in which to store the calculated accuracy.
+		/// @param cost Variable in which to store the calculated cost.
+		void CalculatePerformance(Dataset& data, const char* message, double& accuracy, double& cost);
 
 		// Getters
 
@@ -67,6 +70,9 @@ namespace BB
 
 		double AccuracyTest() const { return mAccuracyTest; }
 		double AccuracyTrain() const { return mAccuracyTrain; }
+
+		double CostTest() const { return mCostTest; }
+		double CostTrain() const { return mCostTrain; }
         
 	public:
 		
@@ -114,6 +120,9 @@ namespace BB
 
 		double mAccuracyTest;			///< Networks accuracy on test data.
 		double mAccuracyTrain;			///< Networks accuracy on train data.
+
+		double mCostTest;				///< Networks cost on test data.
+		double mCostTrain;				///< Networks cost on train data.
 
 	private:
 

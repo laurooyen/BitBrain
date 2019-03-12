@@ -53,7 +53,9 @@ namespace BB
 	template<typename Archive>
 	void Serialize(Archive& archive, Network& n, unsigned int version)
 	{
-		archive & n.mEpoch & n.mAccuracyTest & n.mAccuracyTrain;
+		archive & n.mEpoch;
+		archive & n.mAccuracyTest & n.mAccuracyTrain;
+		archive & n.mCostTest & n.mCostTrain;
 		archive & n.mLayers & n.af & n.cf;
 		archive & n.batchSize & n.batchSizeFactor & n.batchSizeMax;
 		archive & n.learningRate & n.learningRateFactor & n.learningRateMin;

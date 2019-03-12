@@ -7,12 +7,22 @@ namespace BB
 {
 	// Implementations of the Cost Functions.
 
-	Matrix MeanSquaredError(const Matrix& Y, const Matrix& T)
+	double MeanSquaredError(const Matrix& Y, const Matrix& T)
+	{
+		return 0.5 * ((Y - T).MultiplyEntries(Y - T)).TotalSum();
+	}
+
+	Matrix DeriveMeanSquaredError(const Matrix& Y, const Matrix& T)
 	{
 		return (Y - T);
 	}
 
-	Matrix CrossEntropy(const Matrix& Y, const Matrix& T)
+	double CrossEntropy(const Matrix& Y, const Matrix& T)
+	{
+		return -1.0 * (T.MultiplyEntries(Y.Foreach(log10))).TotalSum();
+	}
+
+	Matrix DeriveCrossEntropy(const Matrix& Y, const Matrix& T)
 	{
 		Matrix dCdO = -T;
 
@@ -31,6 +41,12 @@ namespace BB
 	{
 		MeanSquaredError,
 		CrossEntropy
+	};
+
+	const DeriveCostFunction GDeriveCF[] =
+	{
+		DeriveMeanSquaredError,
+		DeriveCrossEntropy
 	};
 
 	const char* ToString(const CF& cf)

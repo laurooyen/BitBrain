@@ -32,9 +32,10 @@ namespace BB
 	// Internal details
 
 	typedef Matrix(*ActivationFunction)(const Matrix& m);
+	typedef Matrix(*DeriveActivationFunction)(const Matrix& m);
 
 	extern const ActivationFunction GCalculateAF[];
-	extern const ActivationFunction GDeriveAF[];
+	extern const DeriveActivationFunction GDeriveAF[];
 
 	const char* ToString(const AF& af);
 }

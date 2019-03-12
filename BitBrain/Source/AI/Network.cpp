@@ -33,6 +33,9 @@ namespace BB
 		mAccuracyTest = 0.0;
 		mAccuracyTrain = 0.0;
 
+		mCostTest = 0.0;
+		mCostTrain = 0.0;
+
 		L = (unsigned int)layers.size();
 
 		W = std::vector<Matrix>(L - 1);
@@ -79,9 +82,9 @@ namespace BB
 		return A[L - 1];
 	}
 	
-	void Network::BackPropagate(const std::vector<double>& output)
+	void Network::BackPropagate(const std::vector<double>& target)
 	{
-		Matrix dCdO = GCalculateCF[(int)cf](A[L - 1], Matrix(output));
+		Matrix dCdO = GDeriveCF[(int)cf](A[L - 1], Matrix(target));
 
 		// Calculate delta rule.
 
@@ -118,13 +121,15 @@ namespace BB
 
 			TrainEpoch(trainData);
 
-			// Test network
+			// Test network performance
 
-			mAccuracyTest = CalculateAccuracy(testData, "    Calc Test Accuracy    ");
-			mAccuracyTrain = CalculateAccuracy(trainData, "    Calc Train accuracy   ");
+			CalculatePerformance(testData,  "    Calc Test Performance ", mAccuracyTest, mCostTest);
+			CalculatePerformance(trainData, "    Calc Train Performance", mAccuracyTrain, mCostTrain);
 
 			std::cout << "    Test Accuracy          " << mAccuracyTest << " %\n";
-			std::cout << "    Train Accuracy         " << mAccuracyTrain << " %\n\n";
+			std::cout << "    Train Accuracy         " << mAccuracyTrain << " %\n";
+			std::cout << "    Test Cost              " << mCostTest << "\n";
+			std::cout << "    Train Cost             " << mCostTrain << "\n\n";
 
 			// Save network
 
@@ -132,7 +137,8 @@ namespace BB
 
 			// Batch size and learning rate scheduling
 
-			//TODO: Do this with cost of network, not with accuracy.
+			//TODO(Lauro): Do this with mCostTest, not with mAccuracyTest.
+
 			if (previousAccuracy > mAccuracyTest)
 			{
 				batchSize *= batchSizeFactor;
@@ -168,11 +174,11 @@ namespace BB
 		{
 			ProgressBar("    Training Network      ", i + 1, data.Size());
 
-			std::vector<double> out(mLayers.back(), 0.0);
-			out[data.GetLabel(i)] = 1.0;
+			std::vector<double> target(mLayers.back(), 0.0);
+			target[data.GetLabel(i)] = 1.0;
 
 			FeedForward(data.GetImage(i));
-			BackPropagate(out);
+			BackPropagate(target);
 			
 			// Update batch change average.
 			
@@ -197,21 +203,30 @@ namespace BB
 		std::cout << std::endl;
 	}
 	
-	double Network::CalculateAccuracy(Dataset& data, const char* message)
+	void Network::CalculatePerformance(Dataset& data, const char* message, double& accuracy, double& cost)
 	{
 		unsigned int correct = 0;
+
+		double totalCost = 0.0;
 
 		for (unsigned int i = 0; i < data.Size(); i++)
 		{
 			ProgressBar(message, i + 1, data.Size());
 
-			Matrix matrix = FeedForward(data.GetImage(i));
-			int resultTest = (int)(std::max_element(matrix.Elements().begin(), matrix.Elements().end()) - matrix.Elements().begin());
-			if (resultTest == data.GetLabel(i)) correct++;
+			Matrix m = FeedForward(data.GetImage(i));
+
+			int result = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
+			if (result == data.GetLabel(i)) correct++;
+
+			std::vector<double> target(mLayers.back(), 0.0);
+			target[data.GetLabel(i)] = 1.0;
+
+			totalCost += GCalculateCF[(int)cf](m, target);
 		}
 
 		std::cout << std::endl;
 
-		return ((double)correct / (double)data.Size()) * 100.0;
+		accuracy =  ((double)correct / (double)data.Size()) * 100.0;
+		cost = (totalCost / (double)data.Size());
 	}
 }

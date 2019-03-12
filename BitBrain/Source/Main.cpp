@@ -4,77 +4,57 @@
 #include "AI/Network.h"
 #include "FileIO/Dataset.h"
 #include "FileIO/FileManager.h"
-#include "ImageProcessing/Image.h"
-#include "ImageProcessing/SymbolExtractor.h"
-
-#include <iostream>
 
 using namespace BB;
 
-std::stringstream GetDebugInfo(const std::vector<RectangleI>& rectangles, const std::vector<int>& classifications, const std::vector<std::string>& symbols)
+int main()
 {
-	std::stringstream stream;
+	// NETWORK SETTINGS
 
-	stream << "[";
+	Network net02({ 784, 15, 10 });
 
-	for (int i = 0; i < rectangles.size(); i++)
+	net02.epochs = 50;
+
+	net02.af = { AF::Sigmoid, AF::Sigmoid };
+	net02.cf = CF::MeanSquaredError;
+
+	net02.batchSize = 1;
+	net02.batchSizeFactor = 1;
+	net02.batchSizeMax = 1;
+
+	net02.learningRate = 0.75;
+	net02.learningRateFactor = 1.0;
+	net02.learningRateMin = 0.75;
+
+	net02.lambda = 0.0;
+	net02.mu = 0.0;
+
+	// FILE MANAGER SETTINGS
+
+	FileManager fileManager("Resource/Networks");
+
+	// UNCOMMENT TO CREATE CSV FILES
+	// fileManager.SaveNetworkCSV();
+
+	fileManager.RequestNetworkName();
+
+	// LOAD TRAINING AND TESTING DATA
+
+	std::vector<DatasetSymbol> symbols =
 	{
-		stream << "[" << "\"" << symbols[classifications[i]] << "\"" << "," << rectangles[i].X() << "," << rectangles[i].Y() << "," << rectangles[i].Width() << "," << rectangles[i].Height() << "]";
-
-		if (i < rectangles.size() - 1) stream << ",";
-	}
-
-	stream << "]";
-
-	return stream;
-}
-
-int main(int argc, char* argv[])
-{
-	const char* imagePath;
-	const char* networkPath;
-
-	if (argc == 3)
-	{
-		imagePath = argv[1];
-		networkPath = argv[2];
-	}
-	else
-	{
-		imagePath = "Resource/Images/Example Image.jpg";
-		networkPath = "Resource/Networks";
-	}
-
-	Network network;
-
-	FileManager fileManager(networkPath);
-
-	fileManager.LoadNetwork(network, "Network.bin", false);
-
-	network.Init();
-
-	std::vector<std::string> symbols =
-	{
-		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+		{ "0", "D0.bin" }, { "1", "D1.bin" }, { "2", "D2.bin" }, { "3", "D3.bin" }, { "4", "D4.bin" },
+		{ "5", "D5.bin" }, { "6", "D6.bin" }, { "7", "D7.bin" }, { "8", "D8.bin" }, { "9", "D9.bin" },
 	};
 
-	Image image(imagePath);
+	Dataset trainData("Resource/Dataset/Training", symbols, 6000);
+	Dataset testData("Resource/Dataset/Testing", symbols, 6000);
 
-	SymbolExtractor extractor(image);
-	extractor.Threshold();
-	extractor.CalculateBounds();
-	extractor.CleanBounds();
-	extractor.SortBounds();
+	// TRAIN NETWORK
 
-	std::vector<int> results;
+	net02.Init();
+	net02.Train(trainData, testData, &fileManager);
 
-	for (unsigned int i = 0; i < extractor.Size(); i++)
-	{
-		Matrix m = network.FeedForward(extractor.GetImage(i));
-		int result = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
+	// WAIT FOR USER TO CLOSE APP
 
-		results.push_back(result);
-	}
-
-	std::cout << GetDebugInfo(extractor.Bounds(), results, symbols).str() << std::endl;
+	system("PAUSE");
 }
