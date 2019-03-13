@@ -111,7 +111,7 @@ namespace BB
 	{
 		std::cout << "Training network.\n" << std::endl;
 
-		double previousAccuracy = 0.0;
+		double previousCost = 1.0;
 
 		for (mEpoch = 0; mEpoch < epochs; mEpoch++)
 		{
@@ -137,9 +137,7 @@ namespace BB
 
 			// Batch size and learning rate scheduling
 
-			//TODO(Lauro): Do this with mCostTest, not with mAccuracyTest.
-
-			if (previousAccuracy > mAccuracyTest)
+			if (previousCost < mCostTest)
 			{
 				batchSize *= batchSizeFactor;
 				learningRate *= learningRateFactor;
@@ -151,7 +149,7 @@ namespace BB
 				std::cout << "    Updated learning rate: " << learningRate << "\n\n";
 			}
 
-			previousAccuracy = mAccuracyTest;
+			previousCost = mCostTest;
 		}
 
 		std::cout << "Finished training network.\n" << std::endl;
