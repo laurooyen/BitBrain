@@ -5,7 +5,7 @@
 
 #include "../Utility/Common.h"
 
-#include "../FileIO/Dataset.h"
+#include "../Dataset/IDataset.h"
 #include "../FileIO/FileManager.h"
 
 #include <algorithm>
@@ -107,7 +107,7 @@ namespace BB
 		}
 	}
 
-	void Network::Train(Dataset& trainData, Dataset& testData, const FileManager* fileManager)
+	void Network::Train(IDataset& trainData, IDataset& testData, const FileManager* fileManager)
 	{
 		std::cout << "Training network.\n" << std::endl;
 
@@ -155,7 +155,7 @@ namespace BB
 		std::cout << "Finished training network.\n" << std::endl;
 	}
 
-	void Network::TrainEpoch(Dataset& data)
+	void Network::TrainEpoch(IDataset& data)
 	{
 		data.Shuffle();
 		
@@ -175,7 +175,7 @@ namespace BB
 			std::vector<double> target(mLayers.back(), 0.0);
 			target[data.GetLabel(i)] = 1.0;
 
-			FeedForward(data.GetImage(i));
+			FeedForward(data.GetData(i));
 			BackPropagate(target);
 			
 			// Update batch change average.
@@ -201,7 +201,7 @@ namespace BB
 		std::cout << std::endl;
 	}
 	
-	void Network::CalculatePerformance(Dataset& data, const char* message, double& accuracy, double& cost)
+	void Network::CalculatePerformance(IDataset& data, const char* message, double& accuracy, double& cost)
 	{
 		unsigned int correct = 0;
 
@@ -211,7 +211,7 @@ namespace BB
 		{
 			ProgressBar(message, i + 1, data.Size());
 
-			Matrix m = FeedForward(data.GetImage(i));
+			Matrix m = FeedForward(data.GetData(i));
 
 			int result = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
 			if (result == data.GetLabel(i)) correct++;

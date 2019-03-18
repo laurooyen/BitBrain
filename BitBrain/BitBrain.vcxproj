@@ -155,11 +155,13 @@
   <ItemGroup>
     <ClCompile Include="Source\AI\ActivationFunctions.cpp" />
     <ClCompile Include="Source\AI\CostFunctions.cpp" />
+    <ClCompile Include="Source\Dataset\DatasetBinary.cpp" />
+    <ClCompile Include="Source\Dataset\DatasetSymbols.cpp" />
+    <ClCompile Include="Source\Dataset\IDataset.cpp" />
     <ClCompile Include="Source\ImageProcessing\Image.cpp" />
     <ClCompile Include="Source\AI\Network.cpp" />
     <ClCompile Include="Source\ImageProcessing\SymbolExtractor.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\FileIO\Dataset.cpp" />
     <ClCompile Include="Source\ThirdParty\stb\stb_image.cpp" />
     <ClCompile Include="Source\ThirdParty\stb\stb_image_resize.cpp" />
     <ClCompile Include="Source\ThirdParty\stb\stb_image_write.cpp" />
@@ -173,10 +175,12 @@
   <ItemGroup>
     <ClInclude Include="Source\AI\ActivationFunctions.h" />
     <ClInclude Include="Source\AI\CostFunctions.h" />
+    <ClInclude Include="Source\Dataset\DatasetBinary.h" />
+    <ClInclude Include="Source\Dataset\DatasetSymbols.h" />
+    <ClInclude Include="Source\Dataset\IDataset.h" />
     <ClInclude Include="Source\ImageProcessing\Image.h" />
     <ClInclude Include="Source\AI\Network.h" />
     <ClInclude Include="Source\ImageProcessing\SymbolExtractor.h" />
-    <ClInclude Include="Source\FileIO\Dataset.h" />
     <ClInclude Include="Source\ThirdParty\stb\stb_image.h" />
     <ClInclude Include="Source\ThirdParty\stb\stb_image_resize.h" />
     <ClInclude Include="Source\ThirdParty\stb\stb_image_write.h" />

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE.txt for full terms. This notice is not to be removed.
 
 #include "AI/Network.h"
-#include "FileIO/Dataset.h"
+#include "Dataset/DatasetSymbols.h"
 #include "FileIO/FileManager.h"
 
 using namespace BB;
@@ -36,15 +36,14 @@ int main()
 	fileManager.RequestNetworkName();
 
 	// LOAD TRAINING AND TESTING DATA
-	
-	std::vector<DatasetSymbol> symbols =
+
+	std::vector<const char*> symbols =
 	{
-		{ "0", "D0.bin" }, { "1", "D1.bin" }, { "2", "D2.bin" }, { "3", "D3.bin" }, { "4", "D4.bin" },
-		{ "5", "D5.bin" }, { "6", "D6.bin" }, { "7", "D7.bin" }, { "8", "D8.bin" }, { "9", "D9.bin" },
+		"D0.bin", "D1.bin", "D2.bin", "D3.bin", "D4.bin", "D5.bin", "D6.bin", "D7.bin", "D8.bin", "D9.bin"
 	};
 
-	Dataset trainData("Resource/Dataset/Training", symbols, 6000);
-	Dataset testData("Resource/Dataset/Testing", symbols, 6000);
+	DatasetSymbols trainData("Resource/Dataset/Training", symbols, 6000);
+	DatasetSymbols testData("Resource/Dataset/Testing", symbols, 6000);
 
 	// TRAIN NETWORK
 

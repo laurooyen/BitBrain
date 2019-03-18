@@ -12,7 +12,7 @@
 
 namespace BB
 {
-	class Dataset;
+	class IDataset;
 	class FileManager;
 
 	/// Class representing a neural network.
@@ -49,18 +49,18 @@ namespace BB
 		/// @param trainData The data to train the network with.
 		/// @param testData The data to test the network with.
 		/// @param fileManager The filemanager to save the network with.
-		void Train(Dataset& trainData, Dataset& testData, const FileManager* fileManager = nullptr);
+		void Train(IDataset& trainData, IDataset& testData, const FileManager* fileManager = nullptr);
 
 		/// Trains a single epoch.
 		/// @param data The data to train the network with.
-		void TrainEpoch(Dataset& data);
+		void TrainEpoch(IDataset& data);
 
 		/// Calculates the accuracy and cost of the network.
 		/// @param data The data to test the network with.
 		/// @param message The message that should appear in front of the ProgressBar.
 		/// @param accuracy Variable in which to store the calculated accuracy.
 		/// @param cost Variable in which to store the calculated cost.
-		void CalculatePerformance(Dataset& data, const char* message, double& accuracy, double& cost);
+		void CalculatePerformance(IDataset& data, const char* message, double& accuracy, double& cost);
 
 		// Getters
 

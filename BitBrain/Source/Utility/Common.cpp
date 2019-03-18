@@ -10,6 +10,11 @@ namespace BB
 {
 	void ProgressBar(const char* text, int progress, int total, int barWidth)
 	{
+		if (barWidth > total)
+		{
+			barWidth = total;
+		}
+
 		if (progress % (total / barWidth) == 0)
 		{
 			float percentage = (float)progress / (float)total;

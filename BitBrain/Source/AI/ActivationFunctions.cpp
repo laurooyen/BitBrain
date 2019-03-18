@@ -80,8 +80,6 @@ namespace BB
 		return r;
 	}
 
-	// TODO(Jonathan): Test this (not sure if it works well).
-
 	Matrix LeakyReLU(const Matrix& m)
 	{
 		return m.Foreach([](double x) {

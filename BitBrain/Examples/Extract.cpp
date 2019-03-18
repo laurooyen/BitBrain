@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE.txt for full terms. This notice is not to be removed.
 
 #include "AI/Network.h"
-#include "FileIO/Dataset.h"
 #include "FileIO/FileManager.h"
 #include "ImageProcessing/Image.h"
 #include "ImageProcessing/SymbolExtractor.h"
@@ -23,9 +22,9 @@ int main()
 
 	network.Init();
 
-	// LOAD DATA
+	// DEFINE DATA
 
-	std::vector<std::string> symbols =
+	std::vector<const char*> symbols =
 	{
 		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
 	};
