@@ -59,7 +59,7 @@ namespace BB
 		archive & n.mLayers & n.af & n.cf;
 		archive & n.batchSize & n.batchSizeFactor & n.batchSizeMax;
 		archive & n.learningRate & n.learningRateFactor & n.learningRateMin;
-		archive & n.lambda & n.mu;
+		archive & n.lambda;
 		archive & n.L & n.W & n.B;
 	}
 }

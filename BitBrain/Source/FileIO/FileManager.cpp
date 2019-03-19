@@ -139,8 +139,7 @@ namespace BB
 			csvFile << "Learning Rate;";
 			csvFile << "Learning Rate Factor;";
 			csvFile << "Learning Rate Max;";
-			csvFile << "Regularization Lambda;";
-			csvFile << "Momentum\n";
+			csvFile << "Regularization Lambda\n";
 
 			for (const auto & entry : fs::directory_iterator(directory))
 			{
@@ -174,7 +173,6 @@ namespace BB
 				csvFile << network.learningRateFactor << ";";
 				csvFile << network.learningRateMin << ";";
 				csvFile << network.lambda << ";";
-				csvFile << network.mu << "\n";
 
 				networkFile.close();
 			}
@@ -212,7 +210,6 @@ namespace BB
 		std::cout << "  Learning Rate Min:     " << network.learningRateMin << "\n\n";
 
 		std::cout << "  Regularization Lambda: " << network.lambda << "\n";
-		std::cout << "  Momentum:              " << network.mu << "\n";
 	}
 
 	bool FileManager::IsAlphaNumeric(char c) const

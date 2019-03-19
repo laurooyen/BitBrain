@@ -89,7 +89,6 @@ namespace BB
 		double learningRateMin;			///< Minimum learning rate.
 
 		double lambda;					///< Regularization parameter.
-		double mu;						///< Momentum parameter.
 
 		std::vector<AF> af;				///< Activation functions.
 		CF cf;							///< Cost function.
@@ -106,9 +105,6 @@ namespace BB
 
 		std::vector<Matrix> dW;			///< Derivatives of weights.
 		std::vector<Matrix> dB;			///< Derivatives of biases.
-
-		std::vector<Matrix> mW;			///< Momentum of weights.
-		std::vector<Matrix> mB;			///< Momentum of biases.
 
 	private:
 

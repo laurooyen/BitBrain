@@ -59,15 +59,6 @@ namespace BB
 
 		dW = std::vector<Matrix>(L - 1);
 		dB = std::vector<Matrix>(L - 1);
-		
-		mW = std::vector<Matrix>(L - 1);
-		mB = std::vector<Matrix>(L - 1);
-		
-		for(unsigned int i = 0; i < L - 1; i++)
-		{
-			mW[i] = Matrix(W[i].Rows(), W[i].Cols());
-			mB[i] = Matrix(B[i].Rows(), B[i].Cols());
-		}
 	}
 
 	Matrix Network::FeedForward(const std::vector<double>& input)
@@ -86,7 +77,7 @@ namespace BB
 	{
 		Matrix dCdO = GDeriveCF[(int)cf](A[L - 1], Matrix(target));
 
-		// Calculate delta rule.
+		// Calculate derivatives for biases.
 
 		dB[L - 2] = dCdO * (GDeriveAF[(int)af[L - 2]](A[L - 2] * W[L - 2] + B[L - 2]));
 
@@ -95,15 +86,11 @@ namespace BB
 			dB[i] = (dB[i + 1] * W[i + 1].Transposed()) * (GDeriveAF[(int)af[i]](A[i] * W[i] + B[i]));
 		}
 
-		// Calculate derivatives of the cost with respect to weights and biases.
+		// Calculate derivatives for weights.
 
 		for (unsigned int i = 0; i < L - 1; i++)
 		{
-			dW[i] = A[i].Transposed() * dB[i] + W[i] * lambda + mW[i];
-			dB[i] = dB[i] + mB[i];
-			
-			mW[i] = (mW[i] + dW[i]) * mu;
-			mB[i] = (mB[i] + dB[i]) * mu;
+			dW[i] = A[i].Transposed() * dB[i] + W[i] * lambda;
 		}
 	}
 
