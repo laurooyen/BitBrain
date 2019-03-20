@@ -40,7 +40,7 @@ namespace BB
 		for (int i = 0; i < (mRows * mCols); i++)
 		{
 			if ((i % mCols) == 0) std::cout << "\n";
-			std::cout << ((mData[index][i] >= threshold) ? "#" : ".") << " ";
+			std::cout << ((data[i] >= threshold) ? "#" : ".") << " ";
 		}
 
 		std::cout << GetLabel(index) << std::endl << std::endl;
