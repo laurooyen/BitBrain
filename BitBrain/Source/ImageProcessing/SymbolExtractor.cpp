@@ -53,7 +53,7 @@ namespace BB
 
 	std::vector<double> SymbolExtractor::GetImage(uint32 index)
 	{
-		Image tempImage(mBounds[index].Size());
+		Image tempImage(mBounds[index].Size().x, mBounds[index].Size().y);
 
 		Image::Blit(mImage, tempImage, mBounds[index], Vector2I::Zero);
 

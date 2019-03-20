@@ -22,18 +22,18 @@ namespace BB
 		, mPixels(std::vector<uint8>())
 	{}
 
-	Image::Image(const Vector2I & size, unsigned int channels)
-		: mWidth(size.x)
-		, mHeight(size.y)
-		, mChannels(channels)
-		, mPixels(std::vector<uint8>(size.x * size.y * channels))
-	{}
-
 	Image::Image(unsigned int w, unsigned int h, unsigned int channels)
 		: mWidth(w)
 		, mHeight(h)
 		, mChannels(channels)
-		, mPixels(std::vector<uint8>(w * h * channels))
+		, mPixels(std::vector<uint8>(w * h * channels, 0))
+	{}
+
+	Image::Image(const std::vector<uint8>& data, unsigned int w, unsigned int h, unsigned int channels)
+		: mWidth(w)
+		, mHeight(h)
+		, mChannels(channels)
+		, mPixels(data)
 	{}
 
 	Image::Image(const char* filename, unsigned int channels)

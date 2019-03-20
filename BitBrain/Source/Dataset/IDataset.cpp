@@ -15,7 +15,7 @@ namespace BB
 
 	std::vector<double> IDataset::GetData(uint32 index) const
 	{
-		std::vector<double> data(InputSize());
+		std::vector<double> data(mData[index].size());
 
 		std::transform(mData[mIndices[index]].begin(), mData[mIndices[index]].end(), data.begin(), [](uint8 x) -> double { return x / 255.0; });
 
@@ -24,27 +24,12 @@ namespace BB
 
 	uint32 IDataset::GetLabel(uint32 index) const
 	{
-		for (int i = 0; i < mLabels.size(); i++)
-		{
-			if (mIndices[index] < mLabels[i]) return i;
-		}
-
-		return 0;
+		return mLabels[mIndices[index]];
 	}
 
 	uint32 IDataset::Size() const
 	{
 		return (uint32)mData.size();
-	}
-
-	uint32 IDataset::InputSize() const
-	{
-		return (uint32)mData[0].size();
-	}
-
-	uint32 IDataset::OutputSize() const
-	{
-		return (uint32)mLabels.size();
 	}
 
 	void IDataset::FinishDataset()

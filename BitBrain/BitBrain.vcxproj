@@ -156,6 +156,7 @@
     <ClCompile Include="Source\AI\ActivationFunctions.cpp" />
     <ClCompile Include="Source\AI\CostFunctions.cpp" />
     <ClCompile Include="Source\Dataset\DatasetBinary.cpp" />
+    <ClCompile Include="Source\Dataset\MNIST.cpp" />
     <ClCompile Include="Source\Dataset\DatasetSymbols.cpp" />
     <ClCompile Include="Source\Dataset\IDataset.cpp" />
     <ClCompile Include="Source\ImageProcessing\Image.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Source\AI\ActivationFunctions.h" />
     <ClInclude Include="Source\AI\CostFunctions.h" />
     <ClInclude Include="Source\Dataset\DatasetBinary.h" />
+    <ClInclude Include="Source\Dataset\MNIST.h" />
     <ClInclude Include="Source\Dataset\DatasetSymbols.h" />
     <ClInclude Include="Source\Dataset\IDataset.h" />
     <ClInclude Include="Source\ImageProcessing\Image.h" />
@@ -188,6 +190,7 @@
     <ClInclude Include="Source\Utility\Containers\Array2D.h" />
     <ClInclude Include="Source\Utility\CoreTypes.h" />
     <ClInclude Include="Source\FileIO\FileManager.h" />
+    <ClInclude Include="Source\Utility\Endianness.h" />
     <ClInclude Include="Source\Utility\Math\Functions.h" />
     <ClInclude Include="Source\Utility\Math\Matrix.h" />
     <ClInclude Include="Source\Utility\Math\Rectangle.h" />

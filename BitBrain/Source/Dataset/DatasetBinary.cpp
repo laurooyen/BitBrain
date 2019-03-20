@@ -26,8 +26,7 @@ namespace BB
 
 		std::reverse(number.begin(), number.end());
 
+		mLabels.push_back(value);
 		mData.push_back(number);
-
-		mLabels.push_back(mLabels.empty() ? 1 : mLabels.back() + 1);
 	}
 }

@@ -19,12 +19,21 @@ namespace BB
 		/// @param max The maximum amount of samples to load per symbol.
 		DatasetSymbols(const char* path, const std::vector<const char*>& symbols, uint32 max = 0);
 
+		void AppendMNIST(const char* imageFileName, const char* labelFileName);
+
+		/// Prints a single symbol to the console.
+		/// Foreground pixels get represented by a hastag, background pixels by a dot.
+		/// @param index The symbol index in the range [0, Size() - 1].
+		/// @param threshold Threshold to determine whether a pixel is foreground or background.
+		void PrintSymbol(uint32 index, double threshold = 0.5) const;
+
 	private:
 
 		/// Loads a single dataset symbol.
 		/// @param filename The filename of the symbol.
 		/// @param max The maximum amount of samples to load.
-		bool LoadSymbol(const char* filename, uint32 max);
+		/// @param label The label for the symbol.
+		bool LoadSymbol(const char* filename, uint32 max, uint32 label);
 
 	private:
 

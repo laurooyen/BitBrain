@@ -23,16 +23,18 @@ namespace BB
 		/// Creates an empty image.
 		Image();
 
-		/// Creates a new image.
-		/// @param size The size of the image.
-		/// @param channels The desired amount of channels to load. 1 = G, 2 = GA, 3 = RGB, 4 = RGBA.
-		Image(const Vector2I& size, unsigned int channels = 1);
-
-		/// Creates a new image.
+		/// Creates a new black image.
 		/// @param w The width of the image.
 		/// @param h The height of the image.
 		/// @param channels The desired amount of channels to load. 1 = G, 2 = GA, 3 = RGB, 4 = RGBA.
 		Image(unsigned int w, unsigned int h, unsigned int channels = 1);
+
+		/// Loads an image file from memory.
+		/// @param data The raw image data in row-major format.
+		/// @param w The width of the image.
+		/// @param h The height of the image.
+		/// @param channels The desired amount of channels to load. 1 = G, 2 = GA, 3 = RGB, 4 = RGBA.
+		Image(const std::vector<uint8>& data, unsigned int w, unsigned int h, unsigned int channels = 1);
 
 		/// Loads an image file from disk.
 		/// @param filename The filename of the image.

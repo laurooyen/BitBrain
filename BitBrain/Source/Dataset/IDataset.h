@@ -32,12 +32,6 @@ namespace BB
 		/// Returns the amount of data in this dataset.
 		uint32 Size() const;
 
-		/// Returns the size of the input layer.
-		uint32 InputSize() const;
-
-		/// Returns the size of the output layer.
-		uint32 OutputSize() const;
-
 	protected:
 
 		/// Initializes the internal state.
@@ -48,7 +42,7 @@ namespace BB
 
 		std::vector<std::vector<uint8>> mData;	///< Raw data.
 		std::vector<uint32> mIndices;			///< Random indices to index into data.
-		std::vector<uint32> mLabels;			///< Start index for every label.
+		std::vector<uint32> mLabels;			///< Labels for the data entries.
 
 	private:
 

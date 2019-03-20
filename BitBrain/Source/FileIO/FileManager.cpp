@@ -172,7 +172,7 @@ namespace BB
 				csvFile << network.learningRate << ";";
 				csvFile << network.learningRateFactor << ";";
 				csvFile << network.learningRateMin << ";";
-				csvFile << network.lambda << ";";
+				csvFile << network.lambda << "\n";
 
 				networkFile.close();
 			}

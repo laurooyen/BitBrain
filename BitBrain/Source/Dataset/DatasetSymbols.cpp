@@ -6,21 +6,47 @@
 #include <fstream>
 #include <iostream>
 
+#include "MNIST.h"
+
 namespace BB
 {
 	DatasetSymbols::DatasetSymbols(const char* path, const std::vector<const char*>& symbols, uint32 max)
 	{
-		for (const char* symbol : symbols)
+		for (int i = 0; i < symbols.size(); i++)
 		{
-			std::string filename = path + std::string("/") + symbol;
+			std::string filename = path + std::string("/") + symbols[i];
 
-			LoadSymbol(filename.c_str(), max);
+			LoadSymbol(filename.c_str(), max, i + 10);
+		}
+	}
+
+	void DatasetSymbols::AppendMNIST(const char* imageFileName, const char* labelFileName)
+	{
+		MNIST mnist(imageFileName, labelFileName);
+
+		for (int i = 0; i < mnist.Size(); i++)
+		{
+			mData.push_back(mnist.GetImage(i));
+			mLabels.push_back(mnist.GetLabel(i));
 		}
 
 		FinishDataset();
 	}
 
-	bool DatasetSymbols::LoadSymbol(const char * filename, uint32 max)
+	void DatasetSymbols::PrintSymbol(uint32 index, double threshold) const
+	{
+		std::vector<double> data = GetData(index);
+
+		for (int i = 0; i < (mRows * mCols); i++)
+		{
+			if ((i % mCols) == 0) std::cout << "\n";
+			std::cout << ((mData[index][i] >= threshold) ? "#" : ".") << " ";
+		}
+
+		std::cout << GetLabel(index) << std::endl << std::endl;
+	}
+
+	bool DatasetSymbols::LoadSymbol(const char* filename, uint32 max, uint32 label)
 	{
 		uint32 magic, size, rows, cols;
 
@@ -50,7 +76,10 @@ namespace BB
 			mData.push_back(image);
 		}
 
-		mLabels.push_back(mLabels.empty() ? size : mLabels.back() + size);
+		for (unsigned int i = 0; i < size; i++)
+		{
+			mLabels.push_back(label);
+		}
 
 		file.close();
 		return true;

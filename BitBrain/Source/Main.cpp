@@ -2,78 +2,77 @@
 // Licensed under the MIT license. See LICENSE.txt for full terms. This notice is not to be removed.
 
 #include "AI/Network.h"
+#include "Dataset/DatasetSymbols.h"
 #include "FileIO/FileManager.h"
-#include "ImageProcessing/Image.h"
-#include "ImageProcessing/SymbolExtractor.h"
 
 #include <iostream>
 
+#include "Dataset/MNIST.h"
+
 using namespace BB;
 
-std::stringstream GetDebugInfo(const std::vector<RectangleI>& rectangles, const std::vector<int>& classifications, const std::vector<const char*>& symbols)
+int main()
 {
-	std::stringstream stream;
+	// FILE MANAGER SETTINGS
 
-	stream << "[";
+	FileManager fileManager("Resource/Networks");
 
-	for (int i = 0; i < rectangles.size(); i++)
-	{
-		stream << "[" << "\"" << symbols[classifications[i]] << "\"" << "," << rectangles[i].X() << "," << rectangles[i].Y() << "," << rectangles[i].Width() << "," << rectangles[i].Height() << "]";
-
-		if (i < rectangles.size() - 1) stream << ",";
-	}
-
-	stream << "]";
-
-	return stream;
-}
-
-int main(int argc, char* argv[])
-{
-	const char* imagePath;
-	const char* networkPath;
-
-	if (argc == 3)
-	{
-		imagePath = argv[1];
-		networkPath = argv[2];
-	}
-	else
-	{
-		imagePath = "Resource/Images/Example Image.jpg";
-		networkPath = "Resource/Networks";
-	}
-
-	Network network;
-
-	FileManager fileManager(networkPath);
-
-	fileManager.LoadNetwork(network, "Network.bin", false);
-
-	network.Init();
+	// LOAD TRAINING AND TESTING DATA
 
 	std::vector<const char*> symbols =
 	{
-		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+		// Digits 0-9 get loaded using the AppendMNIST() function below.
+		"ADD.bin", "SUB.bin", "MUL.bin", "SLASH.bin"
 	};
 
-	Image image(imagePath);
+	DatasetSymbols trainData("Resource/Dataset/Training", symbols, 20000);
+	trainData.AppendMNIST("Resource/MNIST/TrainingImages-200k.bin", "Resource/MNIST/TrainingLabels-200k.bin");
 
-	SymbolExtractor extractor(image);
-	extractor.Threshold();
-	extractor.CalculateBounds();
-	extractor.CleanBounds();
-	extractor.SortBounds();
+	DatasetSymbols testData("Resource/Dataset/Testing", symbols, 6000);
+	testData.AppendMNIST("Resource/MNIST/TestingImages.bin", "Resource/MNIST/TestingLabels.bin");
 
-	std::vector<int> results;
+	// TRAIN NETWORKS
 
-	for (unsigned int i = 0; i < extractor.Size(); i++)
+	// IMPORTANT NOTICE !!!
+	// Duplicate the code block below to train multiple networks at once.
+	// It is important that the surrounding scope {} gets duplicated as well.
+	// Don't forget to give the network a UNIQUE name in the SetNetworkName() function.
+
 	{
-		Matrix m = network.FeedForward(extractor.GetImage(i));
-		int result = (int)(std::max_element(m.Elements().begin(), m.Elements().end()) - m.Elements().begin());
+		// Network name
 
-		results.push_back(result);
+		fileManager.SetNetworkName("NET01");
+
+		// Network settings
+
+		Network network({ 784, 100, 50, 14 });
+
+		network.epochs = 50;
+
+		network.af = { AF::ReLU, AF::ReLU, AF::Softmax };
+		network.cf = CF::CrossEntropy;
+
+		network.batchSize = 1;
+		network.batchSizeFactor = 2;
+		network.batchSizeMax = 10000;
+
+		network.learningRate = 0.005;
+		network.learningRateFactor = 0.5;
+		network.learningRateMin = 0.00000001;
+
+		network.lambda = 0.0005;
+
+		// Train network
+
+		network.Init();
+		network.Train(trainData, testData, &fileManager);
+
+		// Save CSV files
+
+		fileManager.SaveNetworkCSV();
 	}
 
-	std::cout << GetDebugInfo(extractor.Bounds(), results, symbols).str() << std::endl;
+	// WAIT FOR USER TO CLOSE APP
+
+	system("PAUSE");
 }
