@@ -27,7 +27,6 @@ int main()
 	network.learningRateMin = 0.75;
 
 	network.lambda = 0.0;
-	network.mu = 0.0;
 
 	// FILE MANAGER SETTINGS
 
@@ -37,13 +36,13 @@ int main()
 
 	// LOAD TRAINING AND TESTING DATA
 
-	std::vector<const char*> symbols =
-	{
-		"D0.bin", "D1.bin", "D2.bin", "D3.bin", "D4.bin", "D5.bin", "D6.bin", "D7.bin", "D8.bin", "D9.bin"
-	};
+	DatasetSymbols trainData;
+	trainData.AppendMNIST("Resource/MNIST/TrainingImages.bin", "Resource/MNIST/TrainingLabels.bin");
+	trainData.FinishDataset();
 
-	DatasetSymbols trainData("Resource/Dataset/Training", symbols, 6000);
-	DatasetSymbols testData("Resource/Dataset/Testing", symbols, 6000);
+	DatasetSymbols testData;
+	testData.AppendMNIST("Resource/MNIST/TestingImages.bin", "Resource/MNIST/TestingLabels.bin");
+	testData.FinishDataset();
 
 	// TRAIN NETWORK
 

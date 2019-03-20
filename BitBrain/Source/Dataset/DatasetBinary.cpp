@@ -11,8 +11,6 @@ namespace BB
 		{
 			GenerateNumber(i, length);
 		}
-
-		FinishDataset();
 	}
 
 	void DatasetBinary::GenerateNumber(unsigned int value, unsigned int length)

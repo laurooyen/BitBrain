@@ -7,6 +7,16 @@
 
 namespace BB
 {
+	void IDataset::FinishDataset()
+	{
+		mIndices = std::vector<uint32>(mData.size());
+
+		mData.shrink_to_fit();
+		mLabels.shrink_to_fit();
+
+		Shuffle();
+	}
+
 	void IDataset::Shuffle()
 	{
 		std::iota(mIndices.begin(), mIndices.end(), 0);
@@ -30,15 +40,5 @@ namespace BB
 	uint32 IDataset::Size() const
 	{
 		return (uint32)mData.size();
-	}
-
-	void IDataset::FinishDataset()
-	{
-		mIndices = std::vector<uint32>(mData.size());
-
-		mData.shrink_to_fit();
-		mLabels.shrink_to_fit();
-
-		Shuffle();
 	}
 }

@@ -40,7 +40,7 @@ namespace BB
 	void SymbolExtractor::CleanBounds()
 	{
 		mBounds.erase(std::remove_if(mBounds.begin(), mBounds.end(), [](RectangleI r) {
-			return r.Width() <= 5 || r.Height() <= 5;
+			return r.Width() <= 15 || r.Height() <= 15;
 		}), mBounds.end());
 	}
 

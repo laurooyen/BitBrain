@@ -18,7 +18,7 @@ int main()
 
 	FileManager fileManager("Resource/Networks");
 
-	fileManager.LoadNetwork(network, "Network.bin", false);
+	fileManager.LoadNetwork(network, "Network10.bin", false);
 
 	network.Init();
 

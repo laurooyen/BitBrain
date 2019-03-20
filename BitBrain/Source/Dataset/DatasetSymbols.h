@@ -13,12 +13,15 @@ namespace BB
 	{
 	public:
 
-		/// Creates a new dataset.
+		/// Adds symbols using our own dataset format.
 		/// @param path The directory with the symbols.
 		/// @param symbols A list of symbol file names.
 		/// @param max The maximum amount of samples to load per symbol.
-		DatasetSymbols(const char* path, const std::vector<const char*>& symbols, uint32 max = 0);
+		void AppendCustom(const char* path, const std::vector<const char*>& symbols, uint32 max = 0);
 
+		/// Adds symbols using the original MNIST file format.
+		/// @param imageFileName The name of the file containing the images.
+		/// @param labelFileName The name of the file containing the labels.
 		void AppendMNIST(const char* imageFileName, const char* labelFileName);
 
 		/// Prints a single symbol to the console.

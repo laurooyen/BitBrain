@@ -10,7 +10,7 @@
 
 namespace BB
 {
-	DatasetSymbols::DatasetSymbols(const char* path, const std::vector<const char*>& symbols, uint32 max)
+	void DatasetSymbols::AppendCustom(const char* path, const std::vector<const char*>& symbols, uint32 max)
 	{
 		for (int i = 0; i < symbols.size(); i++)
 		{
@@ -24,20 +24,18 @@ namespace BB
 	{
 		MNIST mnist(imageFileName, labelFileName);
 
-		for (int i = 0; i < mnist.Size(); i++)
+		for (unsigned int i = 0; i < mnist.Size(); i++)
 		{
 			mData.push_back(mnist.GetImage(i));
 			mLabels.push_back(mnist.GetLabel(i));
 		}
-
-		FinishDataset();
 	}
 
 	void DatasetSymbols::PrintSymbol(uint32 index, double threshold) const
 	{
 		std::vector<double> data = GetData(index);
 
-		for (int i = 0; i < (mRows * mCols); i++)
+		for (unsigned int i = 0; i < (mRows * mCols); i++)
 		{
 			if ((i % mCols) == 0) std::cout << "\n";
 			std::cout << ((data[i] >= threshold) ? "#" : ".") << " ";

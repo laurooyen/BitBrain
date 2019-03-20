@@ -16,6 +16,10 @@ namespace BB
 	{
 	public:
 
+		/// Initializes the internal state.
+		/// This function should be called before using the dataset.
+		void FinishDataset();
+		
 		/// Randomly shuffles the data order.
 		void Shuffle();
 
@@ -31,12 +35,6 @@ namespace BB
 
 		/// Returns the amount of data in this dataset.
 		uint32 Size() const;
-
-	protected:
-
-		/// Initializes the internal state.
-		/// Should be called at the end of the derived class constructor.
-		void FinishDataset();
 
 	protected:
 
