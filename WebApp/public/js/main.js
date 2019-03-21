@@ -96,6 +96,7 @@ function RenderCanvas() {
 		ctx.textAlign = 'left';
 
 		var expression = '';
+		var result = 0;
 
 		for(var i = 0; i < GBounds.length; i++) {
 			var r = GBounds[i];
@@ -104,7 +105,11 @@ function RenderCanvas() {
 			expression += r[0];
 		}
 
-		var result = eval(expression);
+		try {
+			result = eval(expression);
+		} catch (e) {
+			result = 'ERROR';
+		}
 
 		var text = expression + ' = ' + result;
 
@@ -136,7 +141,6 @@ function FileUpload(file) {
 
 socket.on('extraction', function(message) {
 	GBounds = message;
-	console.log(message);
 	RenderCanvas();
 });
 
