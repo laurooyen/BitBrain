@@ -10,7 +10,7 @@
 
 using namespace BB;
 
-std::stringstream GetDebugInfo(const std::vector<RectangleI>& rectangles, const std::vector<int>& classifications, const std::vector<const char*>& symbols)
+std::stringstream ConvertToJson(const std::vector<RectangleI>& rectangles, const std::vector<int>& classifications, const std::vector<const char*>& symbols)
 {
 	std::stringstream stream;
 
@@ -48,13 +48,13 @@ int main(int argc, char* argv[])
 
 	FileManager fileManager(networkPath);
 
-	fileManager.LoadNetwork(network, "Network10.bin", false);
+	fileManager.LoadNetwork(network, "Network13.bin", false);
 
 	network.Init();
 
 	std::vector<const char*> symbols =
 	{
-		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "*"
 	};
 
 	Image image(imagePath);
@@ -75,5 +75,5 @@ int main(int argc, char* argv[])
 		results.push_back(result);
 	}
 
-	std::cout << GetDebugInfo(extractor.Bounds(), results, symbols).str() << std::endl;
+	std::cout << ConvertToJson(extractor.Bounds(), results, symbols).str() << std::endl;
 }
