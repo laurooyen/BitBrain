@@ -16,7 +16,7 @@ Enter your first name in the dialog window that pops up and close it by clicking
 
 Download and install the following programs:
 
-- [Visual Studio 2017](https://visualstudio.microsoft.com/downloads/)
+- [Visual Studio](https://visualstudio.microsoft.com/downloads/)
 - [Node.js](https://nodejs.org/en/download/)
 
 ### Project Setup
@@ -29,7 +29,7 @@ Download and install the following programs:
 
 - Install the Node.js modules by opening a terminal in the `WebApp` folder and executing the `npm install` command.
 
-- Open the Visual Studio 2017 solution file `BitBrain.sln` and compile the C++ program in x64 Release mode. This is the build configuration the Node.js app references.
+- Open the Visual Studio solution file `BitBrain.sln` and compile the C++ program in x64 Release mode. This is the build configuration the Node.js app references.
 
 - Start the Web App by opening a terminal in the `WebApp` folder and executing the `node app.js` command.
 
