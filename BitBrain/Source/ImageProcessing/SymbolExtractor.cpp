@@ -39,8 +39,9 @@ namespace BB
 
 	void SymbolExtractor::CleanBounds()
 	{
-		mBounds.erase(std::remove_if(mBounds.begin(), mBounds.end(), [](RectangleI r) {
-			return r.Width() <= 15 || r.Height() <= 15;
+		mBounds.erase(std::remove_if(mBounds.begin(), mBounds.end(), [&](RectangleI r)
+		{
+			return (float)r.Width() / (float)mImage.Width() <= 0.05f && (float)r.Height() / (float)mImage.Height() <= 0.05f;
 		}), mBounds.end());
 	}
 
